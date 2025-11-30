@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "GraphQL Network",
+  "version": "1.0.0",
+  "description": "Extensión de DevTools para monitorear peticiones GraphQL",
+  "devtools_page": "chrome/devtools.html",
+  "permissions": []
+}
