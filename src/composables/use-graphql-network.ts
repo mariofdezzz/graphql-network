@@ -1,7 +1,7 @@
 import { useDevtoolsNetwork } from '@/composables/use-devtools-network'
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { GraphQLRequest } from '@/types/graphql-request'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 const GraphQLPayloadKeys = ['query', 'variables', 'operationName', 'extensions']
 const GraphQLOperations = ['query', 'mutation', 'subscription']
@@ -10,10 +10,12 @@ export function useGraphqlNetwork() {
   useDevtoolsNetwork({ onRequestFinished })
 
   const requests = reactive<GraphQLRequest[]>([])
+  const recording = ref(true)
 
   const readonlyRequests = computed(() => requests)
 
   function onRequestFinished(request: ChromeNetworkRequest) {
+    if (!recording.value) return
     if (request.request.method !== 'POST') return
 
     const payload = JSON.parse(request.request.postData?.text ?? '{}')
@@ -44,7 +46,13 @@ export function useGraphqlNetwork() {
     })
   }
 
+  function clearRequests() {
+    requests.splice(0, requests.length)
+  }
+
   return {
     requests: readonlyRequests,
+    recording,
+    clearRequests,
   }
 }

@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import AppHeader from '@/components/app-header.vue'
 import { useGraphqlNetwork } from '@/composables/use-graphql-network'
-import { ref } from 'vue'
 import AppMain from '@/components/app-main.vue'
 import AppFooter from '@/components/app-footer.vue'
 
-const { requests } = useGraphqlNetwork()
-const recording = ref(true)
+const { requests, recording, clearRequests } = useGraphqlNetwork()
 </script>
 
 <template>
   <div class="h-full bg-base text-on-base flex flex-col text-xs">
-    <AppHeader v-model:recording="recording" />
+    <AppHeader v-model:recording="recording" @clear="clearRequests" />
 
     <!-- <WaterfallTimeline :requests /> -->
 
