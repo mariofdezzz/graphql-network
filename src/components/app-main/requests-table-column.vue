@@ -25,7 +25,7 @@ function updateSort(column: Column) {
   <div
     v-for="(column, index) in columns"
     :key="index"
-    class="px-2 py-1 border-b border-on-base-disabled first:border-l last:border-r hover:bg-on-base-hover flex items-center justify-between select-none"
+    class="px-2 py-1 border-b border-on-base-disabled hover:bg-on-base-hover flex items-center justify-between select-none"
     @click="updateSort(column)"
   >
     <span>

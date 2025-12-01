@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRequestDetailStore } from '@/stores/request-detail'
 import type { Column } from '@/types/components/shared/table/column'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed } from 'vue'
@@ -9,12 +10,20 @@ const props = defineProps<{
   selected: boolean
 }>()
 
+const requestDetailStore = useRequestDetailStore()
+
 const rowHasErrors = computed(() => props.row.status >= 400)
 const totalTime = computed(() =>
   [props.row.timings.send, props.row.timings.wait, props.row.timings.receive]
     .filter((n): n is number => typeof n === 'number')
     .reduce((acc, curr) => acc + curr, 0),
 )
+
+function onRowClick(column: Column) {
+  if (column.key === 'name') {
+    requestDetailStore.requestDetail = props.row
+  }
+}
 </script>
 
 <template>
@@ -29,6 +38,7 @@ const totalTime = computed(() =>
       v-for="(column, index) in columns"
       :key="index"
       class="flex-1 px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px]"
+      @click="onRowClick(column)"
     >
       <span v-if="column.key === 'time'"> {{ Math.ceil(totalTime) }}ms </span>
 

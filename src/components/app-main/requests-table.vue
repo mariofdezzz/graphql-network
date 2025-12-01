@@ -4,15 +4,22 @@ import { useColumns } from '@/composables/app-main/use-columns'
 import RequestsTableColumn from './requests-table-column.vue'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import RequestsTableRow from './requests-table-row.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useRequestDetailStore } from '@/stores/request-detail'
 
 defineProps<{
   rows: GraphQLRequest[]
   sort?: Sort
 }>()
 
-const { columns } = useColumns()
+const { columns: rawColumns } = useColumns()
 const selectedRow = ref<GraphQLRequest['id']>()
+
+const requestDetailStore = useRequestDetailStore()
+
+const columns = computed(() => {
+  return requestDetailStore.requestDetail ? rawColumns.slice(0, 1) : rawColumns
+})
 </script>
 
 <template>

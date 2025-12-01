@@ -21,4 +21,6 @@ body,
   --color-table-alternate-row: light-dark(#fff, #1f1f1f);
   --color-table-selected-row: light-dark(#d3e4fd, #004a76);
   --color-table-error-row: light-dark(#b2271e, #f1b9b6);
+  --color-header-base: light-dark(#fff, #3c3c3c); /* TODO: light color */
+  --color-on-base-hover: light-dark(#f2f2f2, #4f4f4f); /* TODO */
 }
