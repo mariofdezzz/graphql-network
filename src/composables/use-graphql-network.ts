@@ -43,6 +43,17 @@ export function useGraphqlNetwork() {
         startedAt: request.startedDateTime,
         total: request.time,
       },
+      headers: {
+        general: {
+          url: request.request.url,
+          method: request.request.method,
+          status: request.response.status,
+          remoteAddress: request._ip_addr ?? undefined,
+          referer: '', // TODO
+        },
+        response: request.response.headers,
+        request: request.request.headers,
+      },
     })
   }
 

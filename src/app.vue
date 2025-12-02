@@ -12,16 +12,19 @@ const { requestDetail } = storeToRefs(requestDetailStore)
 
 const { requests, recording, clearRequests } = useGraphqlNetwork()
 
-// const mainWidth
+function clearRequestsEffect() {
+  clearRequests()
+  requestDetail.value = undefined
+}
 </script>
 
 <template>
   <div class="h-full bg-base text-on-base flex flex-col text-xs">
-    <AppHeader v-model:recording="recording" @clear="clearRequests" />
+    <AppHeader v-model:recording="recording" @clear="clearRequestsEffect" />
 
     <!-- <WaterfallTimeline :requests /> -->
 
-    <div class="flex-1 flex">
+    <div class="flex-1 flex min-h-0">
       <div class="flex flex-col" :class="[requestDetail ? 'flex-[0_0_300px]' : 'flex-1']">
         <AppMain class="flex-1" :requests />
 

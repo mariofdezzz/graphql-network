@@ -14,4 +14,15 @@ export type GraphQLRequest = {
       total: number
     } & ChromeNetworkRequest['timings']
   >
+  headers: {
+    general: {
+      url: string
+      method: string
+      status: number
+      remoteAddress?: string
+      referer: string
+    }
+    response: ChromeNetworkRequest['response']['headers']
+    request: ChromeNetworkRequest['request']['headers']
+  }
 }

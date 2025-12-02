@@ -23,4 +23,5 @@ body,
   --color-table-error-row: light-dark(#b2271e, #f1b9b6);
   --color-header-base: light-dark(#fff, #3c3c3c); /* TODO: light color */
   --color-on-base-hover: light-dark(#f2f2f2, #4f4f4f); /* TODO */
+  --color-on-header-active: light-dark(#f2f2f2, #a7c6fa); /* TODO */
 }
