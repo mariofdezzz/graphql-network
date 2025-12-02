@@ -40,7 +40,7 @@ function onRowClick(column: Column) {
       class="flex-1 px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px]"
       @click="onRowClick(column)"
     >
-      <span v-if="column.key === 'time'"> {{ Math.ceil(totalTime) }}ms </span>
+      <span v-if="column.key === 'time'"> {{ Math.round(totalTime) }}ms </span>
 
       <span v-else-if="column.key === 'status'">
         <template v-if="row.errors > 0"> {{ row.errors }} errors </template>

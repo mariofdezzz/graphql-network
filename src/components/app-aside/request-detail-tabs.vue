@@ -4,11 +4,11 @@ const selected = defineModel<string>()
 const tabs = [
   'Headers',
   'Payload',
-  'Preview',
+  // 'Preview',
   'Response',
-  'Initiator',
-  'Timing',
-  // 'Cookies'
+  // 'Initiator',
+  // 'Timing',
+  // 'Cookies' // TODO
 ]
 </script>
 
@@ -25,7 +25,5 @@ const tabs = [
     >
       {{ tab }}
     </button>
-
-    <div class="absolute top-0 left-0 w"></div>
   </div>
 </template>

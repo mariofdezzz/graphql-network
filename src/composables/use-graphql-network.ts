@@ -54,6 +54,8 @@ export function useGraphqlNetwork() {
         response: request.response.headers,
         request: request.request.headers,
       },
+      payload: request.request.postData?.text,
+      response: request.getContent,
     })
   }
 

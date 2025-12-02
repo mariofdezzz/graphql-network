@@ -25,4 +25,6 @@ export type GraphQLRequest = {
     response: ChromeNetworkRequest['response']['headers']
     request: ChromeNetworkRequest['request']['headers']
   }
+  payload?: string
+  response: (callback: (text: string) => void) => void
 }

@@ -6,6 +6,8 @@ import { Icon } from '@iconify/vue'
 import RequestDetailTabs from './app-aside/request-detail-tabs.vue'
 import { ref } from 'vue'
 import RequestDetailHeaders from './app-aside/request-detail-headers.vue'
+import RequestDetailPayload from './app-aside/request-detail-payload.vue'
+import RequestDetailResponse from './app-aside/request-detail-response.vue'
 
 const requestDetailStore = useRequestDetailStore()
 const { requestDetail } = storeToRefs(requestDetailStore)
@@ -37,6 +39,10 @@ function closeDetail() {
 
     <div class="flex-1 min-h-0 overflow-auto">
       <RequestDetailHeaders v-if="selectedTab === 'Headers'" :request="requestDetail" />
+
+      <RequestDetailPayload v-else-if="selectedTab === 'Payload'" :request="requestDetail" />
+
+      <RequestDetailResponse v-else-if="selectedTab === 'Response'" :request="requestDetail" />
     </div>
   </aside>
 </template>
