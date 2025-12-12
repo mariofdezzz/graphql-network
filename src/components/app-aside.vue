@@ -8,6 +8,11 @@ import { ref } from 'vue'
 import RequestDetailHeaders from './app-aside/request-detail-headers.vue'
 import RequestDetailPayload from './app-aside/request-detail-payload.vue'
 import RequestDetailResponse from './app-aside/request-detail-response.vue'
+import RequestDetailTiming from './app-aside/request-detail-timing.vue'
+
+defineProps<{
+  timelineStartAt: Date
+}>()
 
 const requestDetailStore = useRequestDetailStore()
 const { requestDetail } = storeToRefs(requestDetailStore)
@@ -24,7 +29,10 @@ function closeDetail() {
 </script>
 
 <template>
-  <aside v-if="requestDetail" class="border-l border-on-base-disabled flex flex-col h-full">
+  <aside
+    v-if="requestDetail"
+    class="border-l border-on-base-disabled flex flex-col h-full overflow-x-hidden"
+  >
     <div class="flex gap-1 px-2 bg-header-base border-b border-on-base-disabled">
       <button
         class="rounded-full hover:bg-on-base-hover active:bg-on-base-active p-1"
@@ -37,12 +45,18 @@ function closeDetail() {
       <RequestDetailTabs v-model="selectedTab" />
     </div>
 
-    <div class="flex-1 min-h-0 overflow-auto">
+    <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
       <RequestDetailHeaders v-if="selectedTab === 'Headers'" :request="requestDetail" />
 
       <RequestDetailPayload v-else-if="selectedTab === 'Payload'" :request="requestDetail" />
 
       <RequestDetailResponse v-else-if="selectedTab === 'Response'" :request="requestDetail" />
+
+      <RequestDetailTiming
+        v-else-if="selectedTab === 'Timing'"
+        :request="requestDetail"
+        :timelineStartAt
+      />
     </div>
   </aside>
 </template>

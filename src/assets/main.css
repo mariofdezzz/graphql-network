@@ -24,4 +24,5 @@ body,
   --color-header-base: light-dark(#fff, #3c3c3c); /* TODO: light color */
   --color-on-base-hover: light-dark(#f2f2f2, #4f4f4f); /* TODO */
   --color-on-header-active: light-dark(#f2f2f2, #a7c6fa); /* TODO */
+  --color-request-timing-header: light-dark(#f0f4ff, #8e8e8e); /* TODO light color */
 }

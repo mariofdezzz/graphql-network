@@ -7,7 +7,7 @@ const tabs = [
   // 'Preview',
   'Response',
   // 'Initiator',
-  // 'Timing',
+  'Timing',
   // 'Cookies' // TODO
 ]
 </script>

@@ -2,6 +2,7 @@ import { useDevtoolsNetwork } from '@/composables/use-devtools-network'
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed, reactive, ref } from 'vue'
+import { mockRequests } from '@/constants/mock/requests'
 
 const GraphQLPayloadKeys = ['query', 'variables', 'operationName', 'extensions']
 const GraphQLOperations = ['query', 'mutation', 'subscription']
@@ -12,7 +13,7 @@ export function useGraphqlNetwork() {
   const requests = reactive<GraphQLRequest[]>([])
   const recording = ref(true)
 
-  const readonlyRequests = computed(() => requests)
+  const readonlyRequests = computed(() => (import.meta.env.DEV ? mockRequests : requests))
 
   function onRequestFinished(request: ChromeNetworkRequest) {
     if (!recording.value) return
@@ -30,6 +31,8 @@ export function useGraphqlNetwork() {
     const response = JSON.parse(request.response.content.text ?? '{}')
 
     const errors = response.errors?.length ?? 0
+
+    console.log('Request finished:', request)
 
     requests.push({
       id: crypto.randomUUID(),

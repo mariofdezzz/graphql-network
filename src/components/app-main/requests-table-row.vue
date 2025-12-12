@@ -37,7 +37,7 @@ function onRowClick(column: Column) {
     <div
       v-for="(column, index) in columns"
       :key="index"
-      class="flex-1 px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px]"
+      class="flex-1 px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] overflow-hidden text-ellipsis min-w-0"
       @click="onRowClick(column)"
     >
       <span v-if="column.key === 'time'"> {{ Math.round(totalTime) }}ms </span>

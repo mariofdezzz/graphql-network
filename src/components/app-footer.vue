@@ -34,7 +34,7 @@ const transferred = computed(() => {
         Perform a request or reload the page by using the "Reload page" button or by pressing ⌘ R.
         <a
           href="https://developer.chrome.com/docs/devtools/network"
-          class="text-blue-600 underline"
+          class="text-blue-600 dark:text-blue-200 underline"
         >
           Learn more
         </a>

@@ -6,11 +6,23 @@ import AppMain from '@/components/app-main.vue'
 import { useGraphqlNetwork } from '@/composables/use-graphql-network'
 import { useRequestDetailStore } from '@/stores/request-detail'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
 const requestDetailStore = useRequestDetailStore()
 const { requestDetail } = storeToRefs(requestDetailStore)
 
 const { requests, recording, clearRequests } = useGraphqlNetwork()
+
+const timelineStartAt = computed(() => {
+  return new Date(
+    requests.value
+      .map((req) => new Date(req.timings.startedAt).getTime() - req.timings.wait)
+      .reduce(
+        (current, startedAt) => (startedAt < current ? startedAt : current),
+        new Date().getTime(),
+      ),
+  )
+})
 
 function clearRequestsEffect() {
   clearRequests()
@@ -31,7 +43,7 @@ function clearRequestsEffect() {
         <AppFooter :requests />
       </div>
 
-      <AppAside class="flex-1" :requestDetail />
+      <AppAside class="flex-1" :timelineStartAt />
     </div>
   </div>
 </template>
