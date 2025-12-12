@@ -75,6 +75,51 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
         null,
         2,
       ),
+      initiator: {
+        type: 'script',
+        stack: {
+          callFrames: [
+            {
+              functionName: faker.hacker.verb() + pascalCase(faker.hacker.noun()),
+              scriptId: faker.number.int({ min: 1, max: 100 }).toString(),
+              url: faker.internet.url(),
+              lineNumber: faker.number.int({ min: 1, max: 500 }),
+              columnNumber: faker.number.int({ min: 1, max: 100 }),
+            },
+            {
+              functionName: faker.hacker.verb() + pascalCase(faker.hacker.noun()),
+              scriptId: faker.number.int({ min: 1, max: 100 }).toString(),
+              url: faker.internet.url(),
+              lineNumber: faker.number.int({ min: 1, max: 500 }),
+              columnNumber: faker.number.int({ min: 1, max: 100 }),
+            },
+          ],
+          parent: {
+            description: 'Parent stack frame',
+            callFrames: [
+              {
+                functionName: faker.hacker.verb() + pascalCase(faker.hacker.noun()),
+                scriptId: faker.number.int({ min: 1, max: 100 }).toString(),
+                url: faker.internet.url(),
+                lineNumber: faker.number.int({ min: 1, max: 500 }),
+                columnNumber: faker.number.int({ min: 1, max: 100 }),
+              },
+            ],
+            parent: {
+              description: 'Grandparent stack frame',
+              callFrames: [
+                {
+                  functionName: faker.hacker.verb() + pascalCase(faker.hacker.noun()),
+                  scriptId: faker.number.int({ min: 1, max: 100 }).toString(),
+                  url: faker.internet.url(),
+                  lineNumber: faker.number.int({ min: 1, max: 500 }),
+                  columnNumber: faker.number.int({ min: 1, max: 100 }),
+                },
+              ],
+            },
+          },
+        },
+      },
       response: (callback: (text: string) => void) => {
         const responseBody = {
           data: {

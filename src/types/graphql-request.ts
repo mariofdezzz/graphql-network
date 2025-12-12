@@ -27,5 +27,35 @@ export type GraphQLRequest = {
     request: ChromeNetworkRequest['request']['headers']
   }
   payload?: string
+  initiator: Initiator
   response: (callback: (text: string) => void) => void
+}
+
+export type Initiator = {
+  type: string
+  stack: Stack
+}
+
+export type Stack = {
+  callFrames: CallFrame[]
+  parent: StackParent
+}
+
+export type CallFrame = {
+  functionName: string
+  scriptId: string
+  url: string
+  lineNumber: number
+  columnNumber: number
+}
+
+export type StackParent = {
+  description: string
+  callFrames: CallFrame[]
+  parent: ParentParent
+}
+
+export type ParentParent = {
+  description: string
+  callFrames: CallFrame[]
 }

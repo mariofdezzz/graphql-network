@@ -9,6 +9,7 @@ import RequestDetailHeaders from './app-aside/request-detail-headers.vue'
 import RequestDetailPayload from './app-aside/request-detail-payload.vue'
 import RequestDetailResponse from './app-aside/request-detail-response.vue'
 import RequestDetailTiming from './app-aside/request-detail-timing.vue'
+import RequestDetailInitiator from './app-aside/request-detail-initiator.vue'
 
 defineProps<{
   timelineStartAt: Date
@@ -42,7 +43,7 @@ function closeDetail() {
         <Icon icon="material-symbols:close" class="h-4 w-4" />
       </button>
 
-      <RequestDetailTabs v-model="selectedTab" />
+      <RequestDetailTabs v-model="selectedTab" :request="requestDetail" />
     </div>
 
     <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
@@ -51,6 +52,8 @@ function closeDetail() {
       <RequestDetailPayload v-else-if="selectedTab === 'Payload'" :request="requestDetail" />
 
       <RequestDetailResponse v-else-if="selectedTab === 'Response'" :request="requestDetail" />
+
+      <RequestDetailInitiator v-else-if="selectedTab === 'Initiator'" :request="requestDetail" />
 
       <RequestDetailTiming
         v-else-if="selectedTab === 'Timing'"

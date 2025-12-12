@@ -58,6 +58,7 @@ export function useGraphqlNetwork() {
         request: request.request.headers,
       },
       payload: request.request.postData?.text,
+      initiator: request._initiator as GraphQLRequest['initiator'],
       response: request.getContent,
     })
   }

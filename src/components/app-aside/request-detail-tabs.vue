@@ -1,15 +1,25 @@
 <script setup lang="ts">
+import type { GraphQLRequest } from '@/types/graphql-request'
+import { computed } from 'vue'
+
 const selected = defineModel<string>()
 
-const tabs = [
-  'Headers',
-  'Payload',
-  // 'Preview',
-  'Response',
-  // 'Initiator',
-  'Timing',
-  // 'Cookies' // TODO
-]
+const props = defineProps<{
+  request: GraphQLRequest
+}>()
+
+const tabs = computed(() =>
+  [
+    'Headers',
+    'Payload',
+    // 'Preview',
+    'Response',
+    props.request.initiator ? 'Initiator' : null,
+    // 'Initiator',
+    'Timing',
+    // 'Cookies' // TODO
+  ].filter((tab): tab is string => tab !== null),
+)
 </script>
 
 <template>
