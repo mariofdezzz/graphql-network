@@ -5,6 +5,7 @@ import type { GraphQLRequest } from '@/types/graphql-request'
 
 defineProps<{
   requests: GraphQLRequest[]
+  timelineStartAt: Date
 }>()
 
 const sort = { column: 'waterfall', direction: 'asc' } as Sort
@@ -12,6 +13,6 @@ const sort = { column: 'waterfall', direction: 'asc' } as Sort
 
 <template>
   <main>
-    <RequestsTable :rows="requests" :sort />
+    <RequestsTable :rows="requests" :sort :timelineStartAt />
   </main>
 </template>

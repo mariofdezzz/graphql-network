@@ -10,6 +10,7 @@ import { useRequestDetailStore } from '@/stores/request-detail'
 defineProps<{
   rows: GraphQLRequest[]
   sort?: Sort
+  timelineStartAt: Date
 }>()
 
 const { columns: rawColumns } = useColumns()
@@ -35,6 +36,7 @@ const columns = computed(() => {
       :key="row.id"
       :row
       :columns
+      :timelineStartAt
       :selected="selectedRow === row.id"
       :class="[index % 2 === 1 ? '*:bg-table-alternate-row' : '*:bg-table-base']"
       @click="selectedRow = row.id"

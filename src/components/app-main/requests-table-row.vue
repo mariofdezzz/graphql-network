@@ -3,11 +3,13 @@ import { useRequestDetailStore } from '@/stores/request-detail'
 import type { Column } from '@/types/components/shared/table/column'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed } from 'vue'
+import RequestTableRowWaterfall from './request-table-row-waterfall.vue'
 
 const props = defineProps<{
   row: GraphQLRequest
   columns: Column[]
   selected: boolean
+  timelineStartAt: Date
 }>()
 
 const requestDetailStore = useRequestDetailStore()
@@ -49,6 +51,10 @@ function onRowClick(column: Column) {
       </span>
 
       <span v-else-if="column.key === 'size'"> {{ (row.size / 1024).toFixed(1) }} kb </span>
+
+      <span v-else-if="column.key === 'waterfall'">
+        <RequestTableRowWaterfall :request="row" :timelineStartAt />
+      </span>
 
       <span v-else>
         {{ row[column.key as keyof GraphQLRequest] }}

@@ -38,7 +38,7 @@ function clearRequestsEffect() {
 
     <div class="flex-1 flex min-h-0">
       <div class="flex flex-col" :class="[requestDetail ? 'flex-[0_0_300px]' : 'flex-1']">
-        <AppMain class="flex-1" :requests />
+        <AppMain class="flex-1" :requests :timelineStartAt />
 
         <AppFooter :requests />
       </div>

@@ -54,7 +54,7 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
     datasets: [
       {
         data: [[queueing.value, queueing.value + stalled.value]],
-        backgroundColor: 'white',
+        backgroundColor: '#fff',
       },
     ],
   }))
