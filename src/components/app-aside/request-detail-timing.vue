@@ -3,29 +3,18 @@
 import { useCharts } from '@/composables/app-aside/request-detail-timing/use-charts'
 import { useRequestTimings } from '@/composables/app-aside/request-detail-timing/use-request-timings'
 import type { GraphQLRequest } from '@/types/graphql-request'
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-  Tooltip,
-} from 'chart.js'
 import { toRefs } from 'vue'
 import { Bar } from 'vue-chartjs'
-
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const props = defineProps<{
   request: GraphQLRequest
   timelineStartAt: Date
 }>()
 
-const { request, timelineStartAt } = toRefs(props)
+const { request } = toRefs(props)
 
-const { queueing, stalled, sent, wait, download, total, requestStartedAt, formatTime } =
-  useRequestTimings(request, timelineStartAt)
+const { queueing, stalled, sent, wait, download, total, requestStartedAt, timespan, formatTime } =
+  useRequestTimings(request)
 
 const { options, queuingData, stalledData, sentData, waitData, downloadData } = useCharts({
   queueing,
@@ -35,6 +24,7 @@ const { options, queuingData, stalledData, sentData, waitData, downloadData } = 
   download,
   total,
   requestStartedAt,
+  timespan,
 })
 </script>
 <template>

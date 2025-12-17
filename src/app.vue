@@ -3,15 +3,12 @@ import AppAside from '@/components/app-aside.vue'
 import AppFooter from '@/components/app-footer.vue'
 import AppHeader from '@/components/app-header.vue'
 import AppMain from '@/components/app-main.vue'
-import { useGraphqlNetwork } from '@/composables/use-graphql-network'
-import { useRequestDetailStore } from '@/stores/request-detail'
+import { useRequestStore } from '@/stores/request'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-const requestDetailStore = useRequestDetailStore()
-const { requestDetail } = storeToRefs(requestDetailStore)
-
-const { requests, recording, clearRequests } = useGraphqlNetwork()
+const requestStore = useRequestStore()
+const { requests, selectedRequest, recording } = storeToRefs(requestStore)
 
 const timelineStartAt = computed(() => {
   return new Date(
@@ -25,8 +22,8 @@ const timelineStartAt = computed(() => {
 })
 
 function clearRequestsEffect() {
-  clearRequests()
-  requestDetail.value = undefined
+  requestStore.clearRequests()
+  selectedRequest.value = undefined
 }
 </script>
 
@@ -37,7 +34,7 @@ function clearRequestsEffect() {
     <!-- <WaterfallTimeline :requests /> -->
 
     <div class="flex-1 flex min-h-0">
-      <div class="flex flex-col" :class="[requestDetail ? 'flex-[0_0_300px]' : 'flex-1']">
+      <div class="flex flex-col" :class="[selectedRequest ? 'flex-[0_0_300px]' : 'flex-1']">
         <AppMain class="flex-1" :requests :timelineStartAt />
 
         <AppFooter :requests />

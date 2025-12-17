@@ -59,7 +59,7 @@ function onRowClick(column: Column) {
       <span v-else-if="column.key === 'size'"> {{ (row.size / 1024).toFixed(1) }} kb </span>
 
       <span v-else-if="column.key === 'waterfall'">
-        <RequestTableRowWaterfall :request="row" :timelineStartAt />
+        <RequestTableRowWaterfall :request="row" />
       </span>
 
       <span v-else>

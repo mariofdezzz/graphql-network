@@ -3,11 +3,9 @@ import type { ChartData, ChartOptions } from 'chart.js'
 import { computed, type Ref } from 'vue'
 import { useRequestTimings } from '../app-aside/request-detail-timing/use-request-timings'
 
-export function useWaterfallChart(request: Ref<GraphQLRequest>, timelineStartAt: Ref<Date>) {
-  const { queueing, stalled, sent, wait, download, total } = useRequestTimings(
-    request,
-    timelineStartAt,
-  )
+export function useWaterfallChart(request: Ref<GraphQLRequest>) {
+  const { queueing, stalled, sent, wait, download, timespan, requestStartedAt } =
+    useRequestTimings(request)
 
   const blocked = computed(() => queueing.value + stalled.value)
 
@@ -16,6 +14,7 @@ export function useWaterfallChart(request: Ref<GraphQLRequest>, timelineStartAt:
     responsive: true,
     maintainAspectRatio: false,
     animation: false,
+    devicePixelRatio: window.devicePixelRatio,
     hover: { mode: null },
     plugins: {
       legend: {
@@ -29,9 +28,8 @@ export function useWaterfallChart(request: Ref<GraphQLRequest>, timelineStartAt:
     indexAxis: 'y',
     scales: {
       x: {
-        offset: true,
         min: 0,
-        max: total.value,
+        max: timespan.value,
         display: false,
       },
       y: {
@@ -46,24 +44,28 @@ export function useWaterfallChart(request: Ref<GraphQLRequest>, timelineStartAt:
     datasets: [
       {
         borderSkipped: false,
+        data: [[0, requestStartedAt.value]],
+        backgroundColor: 'transparent',
+        stack: 'timings',
+      },
+      {
+        barThickness: 6,
+        borderSkipped: false,
         data: [[0, blocked.value]],
         backgroundColor: '#fff',
         stack: 'timings',
       },
       {
+        barThickness: 12,
         borderSkipped: false,
-        data: [[blocked.value, blocked.value + sent.value + wait.value]],
+        data: [[0, sent.value + wait.value]],
         backgroundColor: '#38BF60',
         stack: 'timings',
       },
       {
+        barThickness: 10,
         borderSkipped: false,
-        data: [
-          [
-            blocked.value + sent.value + wait.value,
-            blocked.value + sent.value + wait.value + download.value,
-          ],
-        ],
+        data: [[0, download.value]],
         backgroundColor: '#4C8DF5',
         stack: 'timings',
       },
