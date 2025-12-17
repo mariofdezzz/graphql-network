@@ -20,8 +20,8 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
     return {
       id: faker.string.uuid(),
       name: pascalCase(faker.lorem.words({ min: 2, max: 5 })),
-      status: faker.helpers.arrayElement([200, 201, 400, 401, 403, 404, 500]),
-      errors: faker.number.int({ min: 0, max: 5 }),
+      status: faker.helpers.arrayElement([200, 201, 400, 403, 404, 500]),
+      errors: faker.number.int({ min: 0, max: 3 }),
       operation: faker.helpers.arrayElement(['query', 'mutation', 'subscription', 'unknown']),
       size: faker.number.int({ min: 500, max: 5000 }),
       timings: {

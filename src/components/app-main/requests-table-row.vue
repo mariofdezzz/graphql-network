@@ -12,9 +12,13 @@ const props = defineProps<{
   timelineStartAt: Date
 }>()
 
+const HTTP_STATUS_SUCCESS_THRESHOLD = 400
+
 const requestDetailStore = useRequestDetailStore()
 
-const rowHasErrors = computed(() => props.row.status >= 400)
+const rowHasErrors = computed(
+  () => props.row.status >= HTTP_STATUS_SUCCESS_THRESHOLD || props.row.errors > 0,
+)
 const totalTime = computed(() =>
   [props.row.timings.send, props.row.timings.wait, props.row.timings.receive]
     .filter((n): n is number => typeof n === 'number')
@@ -45,8 +49,10 @@ function onRowClick(column: Column) {
       <span v-if="column.key === 'time'"> {{ Math.round(totalTime) }}ms </span>
 
       <span v-else-if="column.key === 'status'">
-        <template v-if="row.errors > 0"> {{ row.errors }} errors </template>
-        <template v-else-if="row.status >= 400"> (http:{{ row.status }}) </template>
+        <template v-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
+          (http:{{ row.status }})
+        </template>
+        <template v-else-if="row.errors > 0"> {{ row.errors }} errors </template>
         <template v-else> ok </template>
       </span>
 
