@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useWaterfallChart } from '@/composables/timings/use-waterfall-chart'
+import { useWaterfallChart } from '@/composables/timings/use-waterfall-request-chart'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { toRefs } from 'vue'
 import { Bar } from 'vue-chartjs'
