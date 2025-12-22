@@ -9,7 +9,6 @@ export function useWaterfallChart(request: Ref<GraphQLRequest>) {
 
   const blocked = computed(() => queueing.value + stalled.value)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options = computed<ChartOptions<any>>(() => ({
     responsive: true,
     maintainAspectRatio: false,
@@ -38,7 +37,6 @@ export function useWaterfallChart(request: Ref<GraphQLRequest>) {
     },
   }))
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data = computed<ChartData<any>>(() => ({
     labels: [''],
     datasets: [

@@ -9,7 +9,6 @@ export function useColumns() {
     const children = slots.default?.() || []
 
     columns.value = children
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .filter((vnode) => (vnode.type as any)?.__name === 'shared-column')
       .map((vnode) => vnode.props as Column)
   }

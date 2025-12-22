@@ -43,7 +43,6 @@ export function useWaterfallChart() {
   )
   const timespan = computed(() => requestsTimings.value[0]?.timespan || 0)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options = computed<ChartOptions<any>>(() => ({
     responsive: true,
     maintainAspectRatio: false,
@@ -72,7 +71,6 @@ export function useWaterfallChart() {
     },
   }))
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data = computed<ChartData<any>>(() => ({
     labels: [''],
     datasets:

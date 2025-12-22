@@ -5,7 +5,6 @@ import type { ChartData, ChartOptions } from 'chart.js'
 type UseChartsOptions = Omit<ReturnType<typeof useRequestTimings>, 'formatTime'>
 
 export function useCharts({ queueing, stalled, sent, wait, download, total }: UseChartsOptions) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options = computed<ChartOptions<any>>(() => ({
     responsive: true,
     maintainAspectRatio: false,
@@ -34,7 +33,6 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
     },
   }))
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const queuingData = computed<ChartData<any>>(() => ({
     labels: [''],
     datasets: [
@@ -48,7 +46,6 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
     ],
   }))
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const stalledData = computed<ChartData<any>>(() => ({
     labels: [''],
     datasets: [
@@ -59,7 +56,6 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
     ],
   }))
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sentData = computed<ChartData<any>>(() => ({
     labels: [''],
     datasets: [
@@ -70,7 +66,6 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
     ],
   }))
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const waitData = computed<ChartData<any>>(() => ({
     labels: [''],
     datasets: [
@@ -86,7 +81,6 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
     ],
   }))
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const downloadData = computed<ChartData<any>>(() => ({
     labels: [''],
     datasets: [
