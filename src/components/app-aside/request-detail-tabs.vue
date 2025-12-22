@@ -12,7 +12,7 @@ const tabs = computed(() =>
   [
     'Headers',
     'Payload',
-    // 'Preview',
+    'Preview',
     'Response',
     props.request.initiator ? null : null, // disabled initiator
     // props.request.initiator ? 'Initiator' : null,

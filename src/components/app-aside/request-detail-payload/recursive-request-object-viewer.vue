@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { REQUEST_OBJECT_VIEWER_MAX_OPENED_DEPTH } from '@/constants/request-object-viewer-max-opened-depth'
 import { Icon } from '@iconify/vue'
 import { computed, ref } from 'vue'
 
@@ -8,10 +9,12 @@ const props = defineProps<{
 }>()
 
 const toggled = ref(
-  Object.entries(props.object)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .filter(([key, value]) => value !== null && typeof value === 'object')
-    .map(([key]) => key),
+  props.depth < REQUEST_OBJECT_VIEWER_MAX_OPENED_DEPTH
+    ? Object.entries(props.object)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .filter(([key, value]) => value !== null && typeof value === 'object')
+        .map(([key]) => key)
+    : [],
 )
 
 function textColor(value: any) {

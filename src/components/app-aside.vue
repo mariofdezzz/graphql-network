@@ -10,6 +10,7 @@ import RequestDetailPayload from './app-aside/request-detail-payload.vue'
 import RequestDetailResponse from './app-aside/request-detail-response.vue'
 import RequestDetailTiming from './app-aside/request-detail-timing.vue'
 import RequestDetailInitiator from './app-aside/request-detail-initiator.vue'
+import RequestDetailPreview from './app-aside/request-detail-preview.vue'
 
 defineProps<{
   timelineStartAt: Date
@@ -50,6 +51,8 @@ function closeDetail() {
       <RequestDetailHeaders v-if="selectedTab === 'Headers'" :request="requestDetail" />
 
       <RequestDetailPayload v-else-if="selectedTab === 'Payload'" :request="requestDetail" />
+
+      <RequestDetailPreview v-else-if="selectedTab === 'Preview'" :request="requestDetail" />
 
       <RequestDetailResponse v-else-if="selectedTab === 'Response'" :request="requestDetail" />
 

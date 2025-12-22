@@ -17,5 +17,9 @@ useTheme(options)
 </script>
 
 <template>
-  <CodeEditor :value="request.response" language="json" :options="options" />
+  <CodeEditor
+    :value="JSON.stringify(JSON.parse(request.response), null, 2)"
+    language="json"
+    :options="options"
+  />
 </template>
