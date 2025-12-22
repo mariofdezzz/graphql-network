@@ -4,13 +4,14 @@ import type { GraphQLRequest } from '@/types/graphql-request'
 import { CodeEditor, type MonacoEditorConfig } from 'monaco-editor-vue3'
 import { computed, ref } from 'vue'
 import HeadersSummary from './request-detail-headers/headers-summary.vue'
-import RequestDetailPayloadVariables from './request-detail-payload/request-detail-payload-variables.vue'
+import RequestObjectViewer from './request-detail-payload/request-object-viewer.vue'
 
 const props = defineProps<{
   request: GraphQLRequest
 }>()
 
 const showVariableSource = ref(false)
+const showExtensionsSource = ref(false)
 
 const options: MonacoEditorConfig = {
   readOnly: true,
@@ -52,7 +53,7 @@ useTheme(options)
         class="text-on-detail-header-active border border-button-border rounded-xl px-2.5 py-0.5 hover:bg-on-detail-header-hover active:bg-on-button-active"
         @click="showVariableSource = !showVariableSource"
       >
-        View Source
+        {{ showVariableSource ? 'View parsed' : 'View source' }}
       </button>
     </HeadersSummary>
 
@@ -65,21 +66,33 @@ useTheme(options)
     </div>
 
     <div v-else class="py-2">
-      <RequestDetailPayloadVariables :variables="payload.variables" />
+      <RequestObjectViewer :object="payload.variables" />
     </div>
   </details>
 
   <details v-if="payload.extensions" open name="extensions">
     <HeadersSummary :class="{ 'border-t-0': !payload.query && !payload.variables }">
       Extensions
+      <span class="px-5"></span>
+
+      <button
+        class="text-on-detail-header-active border border-button-border rounded-xl px-2.5 py-0.5 hover:bg-on-detail-header-hover active:bg-on-button-active"
+        @click="showExtensionsSource = !showExtensionsSource"
+      >
+        {{ showExtensionsSource ? 'View parsed' : 'View source' }}
+      </button>
     </HeadersSummary>
 
-    <div class="h-50">
+    <div v-if="showExtensionsSource" class="h-50">
       <CodeEditor
         :value="JSON.stringify(payload.extensions, null, 2)"
         language="json"
         :options="options"
       />
+    </div>
+
+    <div v-else class="py-2">
+      <RequestObjectViewer :object="payload.extensions" />
     </div>
   </details>
 </template>

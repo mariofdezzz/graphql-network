@@ -3,14 +3,14 @@ import { Icon } from '@iconify/vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps<{
-  variables: Record<string, any>
-  depth?: number
+  object: Record<string, any>
+  depth: number
 }>()
 
 const toggled = ref(
-  Object.entries(props.variables)
+  Object.entries(props.object)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .filter(([key, value]) => value && typeof value === 'object')
+    .filter(([key, value]) => value !== null && typeof value === 'object')
     .map(([key]) => key),
 )
 
@@ -32,7 +32,7 @@ function formatValue(value: any) {
   return `"${value}"`
 }
 
-const style = computed(() => 'padding-left: ' + (1 + (props.depth ?? 0) * 1) + 'rem;')
+const style = computed(() => 'padding-left: ' + (1 + props.depth * 1) + 'rem;')
 
 function toggle(key: string) {
   if (toggled.value.includes(key)) {
@@ -44,7 +44,7 @@ function toggle(key: string) {
 </script>
 
 <template>
-  <div v-for="([key, value], index) in Object.entries(variables)" :key="index">
+  <div v-for="([key, value], index) in Object.entries(object)" :key="index">
     <div class="hover:bg-on-base-hover cursor-default font-mono" :style>
       <div class="flex items-center">
         <Icon
@@ -59,14 +59,16 @@ function toggle(key: string) {
         />
 
         <div>
-          <span class="text-object-key"> {{ key }} </span>:
+          <span v-if="key">
+            <span class="text-object-key"> {{ key }} </span>:
+          </span>
           <span :class="[textColor(value)]">{{ formatValue(value) }}</span>
         </div>
       </div>
     </div>
 
     <div v-if="toggled.includes(key)">
-      <RequestDetailPayloadVariables :variables="value" :depth="(depth ?? 0) + 1" />
+      <RecursiveRequestObjectViewer :object="value" :depth="depth + 1" />
     </div>
   </div>
 </template>
