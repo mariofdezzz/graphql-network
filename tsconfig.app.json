@@ -18,5 +18,10 @@
     "types": [
       "chrome"
     ],
+    "lib": [
+      "ES2024",
+      "DOM",
+      "DOM.Iterable"
+    ]
   }
 }
