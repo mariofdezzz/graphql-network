@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTheme } from '@/composables/monaco/use-theme'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { CodeEditor, type MonacoEditorConfig } from 'monaco-editor-vue3'
 import { ref } from 'vue'
@@ -17,8 +18,10 @@ const response = ref('')
 props.request.response((text) => {
   response.value = text
 })
+
+useTheme(options)
 </script>
 
 <template>
-  <CodeEditor :value="response" language="json" theme="vs-dark" :options="options" />
+  <CodeEditor :value="response" language="json" :options="options" />
 </template>

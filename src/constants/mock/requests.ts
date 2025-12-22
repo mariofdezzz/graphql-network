@@ -67,9 +67,21 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
       },
       payload: JSON.stringify(
         {
-          query: faker.lorem.paragraphs(2),
+          query: `query Character {
+  characters {
+    results {
+      id
+      name
+    }
+  }
+}`,
           variables: {
             id: faker.number.int({ min: 1, max: 1000 }),
+            group: {
+              type: 'admin',
+              permissions: ['read', 'write', 'execute'],
+            },
+            null: null,
           },
         },
         null,
