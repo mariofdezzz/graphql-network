@@ -40,7 +40,7 @@ function clearRequestsEffect() {
         <AppFooter :requests />
       </div>
 
-      <AppAside class="flex-1" :timelineStartAt />
+      <AppAside class="flex-2" :timelineStartAt />
     </div>
   </div>
 </template>
