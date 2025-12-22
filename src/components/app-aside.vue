@@ -36,7 +36,7 @@ function closeDetail() {
   >
     <div class="flex gap-1 px-2 bg-header-base border-b border-on-base-disabled">
       <button
-        class="rounded-full hover:bg-on-base-hover active:bg-on-base-active p-1"
+        class="rounded-full hover:bg-on-detail-header-hover active:bg-on-base-active p-1"
         @click="closeDetail()"
         aria-label="Close request detail"
       >

@@ -27,8 +27,8 @@ const tabs = computed(() =>
     <button
       v-for="tab in tabs"
       :key="tab"
-      class="px-2 hover:bg-on-base-hover flex items-center border-b border-transparent"
-      :class="{ 'text-on-header-active border-on-header-active!': selected === tab }"
+      class="px-2 text-on-detail-header hover:bg-on-detail-header-hover flex items-center border-b border-transparent"
+      :class="{ 'text-on-detail-header-active border-on-detail-header-active!': selected === tab }"
       role="tab"
       :aria-selected="selected === tab"
       @click="selected = tab"

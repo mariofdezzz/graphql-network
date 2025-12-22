@@ -21,8 +21,9 @@ body,
   --color-table-alternate-row: light-dark(#fff, #1f1f1f);
   --color-table-selected-row: light-dark(#d3e4fd, #004a76);
   --color-table-error-row: light-dark(#b2271e, #f1b9b6);
-  --color-header-base: light-dark(#fff, #3c3c3c); /* TODO: light color */
-  --color-on-base-hover: light-dark(#f2f2f2, #4f4f4f); /* TODO */
-  --color-on-header-active: light-dark(#f2f2f2, #a7c6fa); /* TODO */
-  --color-request-timing-header: light-dark(#f0f4ff, #8e8e8e); /* TODO light color */
+  --color-header-base: light-dark(#edf2fa, #3c3c3c);
+  --color-on-detail-header: light-dark(#474747, #c7c7c7);
+  --color-on-detail-header-hover: light-dark(#e1e5ed, #4f4f4f);
+  --color-on-detail-header-active: light-dark(#0b57d0, #a7c6fa);
+  --color-request-timing-header: light-dark(#757575, #8e8e8e);
 }
