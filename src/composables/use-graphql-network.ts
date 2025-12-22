@@ -34,32 +34,34 @@ export function useGraphqlNetwork() {
 
     console.log('Request finished:', request)
 
-    requests.push({
-      id: crypto.randomUUID(),
-      name: name,
-      status: request.response.status,
-      errors: errors,
-      operation: operation,
-      size: request.response?._transferSize ?? 0,
-      timings: {
-        ...request.timings,
-        startedAt: request.startedDateTime,
-        total: request.time,
-      },
-      headers: {
-        general: {
-          url: request.request.url,
-          method: request.request.method,
-          status: request.response.status,
-          remoteAddress: request._ip_addr ?? undefined,
-          referer: '', // TODO
+    request.getContent((responseBody) => {
+      requests.push({
+        id: crypto.randomUUID(),
+        name: name,
+        status: request.response.status,
+        errors: errors,
+        operation: operation,
+        size: request.response?._transferSize ?? 0,
+        timings: {
+          ...request.timings,
+          startedAt: request.startedDateTime,
+          total: request.time,
         },
-        response: request.response.headers,
-        request: request.request.headers,
-      },
-      payload: request.request.postData?.text,
-      initiator: request._initiator as GraphQLRequest['initiator'],
-      response: request.getContent,
+        headers: {
+          general: {
+            url: request.request.url,
+            method: request.request.method,
+            status: request.response.status,
+            remoteAddress: request._ip_addr ?? undefined,
+            referer: '', // TODO
+          },
+          response: request.response.headers,
+          request: request.request.headers,
+        },
+        payload: request.request.postData?.text,
+        initiator: request._initiator as GraphQLRequest['initiator'],
+        response: responseBody,
+      })
     })
   }
 

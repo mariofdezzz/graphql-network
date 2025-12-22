@@ -28,7 +28,7 @@ export type GraphQLRequest = {
   }
   payload?: string
   initiator: Initiator
-  response: (callback: (text: string) => void) => void
+  response: string
 }
 
 export type Initiator = {

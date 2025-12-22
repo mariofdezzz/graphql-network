@@ -132,8 +132,8 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
           },
         },
       },
-      response: (callback: (text: string) => void) => {
-        const responseBody = {
+      response: JSON.stringify(
+        {
           data: {
             user: {
               id: faker.number.int({ min: 1, max: 1000 }),
@@ -149,14 +149,10 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
                 },
               ]
             : undefined,
-        }
-        setTimeout(
-          () => {
-            callback(JSON.stringify(responseBody, null, 2))
-          },
-          faker.number.int({ min: 100, max: 1000 }),
-        )
-      },
+        },
+        null,
+        2,
+      ),
     } satisfies GraphQLRequest
   },
   { count: 15 },
