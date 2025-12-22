@@ -14,8 +14,8 @@ const tabs = computed(() =>
     'Payload',
     // 'Preview',
     'Response',
-    props.request.initiator ? 'Initiator' : null,
-    // 'Initiator',
+    props.request.initiator ? null : null, // disabled initiator
+    // props.request.initiator ? 'Initiator' : null,
     'Timing',
     // 'Cookies' // TODO
   ].filter((tab): tab is string => tab !== null),
