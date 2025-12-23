@@ -43,7 +43,11 @@ useTheme(options)
     </div>
   </details>
 
-  <details v-if="payload.variables" open name="variables">
+  <details
+    v-if="payload.variables && Object.keys(payload.variables).length > 0"
+    open
+    name="variables"
+  >
     <HeadersSummary :class="{ 'border-t-0': !payload.query }">
       <span>Variables</span>
 
@@ -70,7 +74,11 @@ useTheme(options)
     </div>
   </details>
 
-  <details v-if="payload.extensions" open name="extensions">
+  <details
+    v-if="payload.extensions && Object.keys(payload.extensions).length > 0"
+    open
+    name="extensions"
+  >
     <HeadersSummary :class="{ 'border-t-0': !payload.query && !payload.variables }">
       Extensions
       <span class="px-5"></span>
