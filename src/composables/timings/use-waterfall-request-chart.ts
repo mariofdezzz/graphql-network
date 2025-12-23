@@ -4,10 +4,8 @@ import { computed, type Ref } from 'vue'
 import { useRequestTimings } from '../app-aside/request-detail-timing/use-request-timings'
 
 export function useWaterfallChart(request: Ref<GraphQLRequest>) {
-  const { queueing, stalled, sent, wait, download, timespan, requestStartedAt } =
+  const { queueing, stalled, dns, connect, ssl, sent, wait, download, timespan, requestStartedAt } =
     useRequestTimings(request)
-
-  const blocked = computed(() => queueing.value + stalled.value)
 
   const options = computed<ChartOptions<any>>(() => ({
     responsive: true,
@@ -47,21 +45,49 @@ export function useWaterfallChart(request: Ref<GraphQLRequest>) {
         stack: 'timings',
       },
       {
-        barThickness: 6,
+        barPercentage: 0.6,
         borderSkipped: false,
-        data: [[0, blocked.value]],
+        data: [[0, queueing.value]],
         backgroundColor: '#fff',
+        borderColor: '#D3D3D3',
+        borderWidth: 1,
         stack: 'timings',
       },
       {
-        barThickness: 12,
         borderSkipped: false,
-        data: [[0, sent.value + wait.value]],
+        data: [[0, stalled.value + dns.value]],
+        backgroundColor: 'transparent',
+        stack: 'timings',
+      },
+      {
+        barPercentage: 0.6,
+        borderSkipped: false,
+        data: [[0, connect.value - ssl.value]],
+        backgroundColor: '#E9B40A',
+        stack: 'timings',
+      },
+      {
+        barPercentage: 0.6,
+        borderSkipped: false,
+        data: [[0, ssl.value]],
+        backgroundColor: '#D090FF',
+        stack: 'timings',
+      },
+      {
+        borderSkipped: false,
+        data: [[0, sent.value]],
+        backgroundColor: 'transparent',
+        stack: 'timings',
+      },
+      {
+        barPercentage: 1,
+        borderSkipped: false,
+        data: [[0, wait.value]],
         backgroundColor: '#38BF60',
         stack: 'timings',
       },
       {
-        barThickness: 10,
+        barPercentage: 0.8,
         borderSkipped: false,
         data: [[0, download.value]],
         backgroundColor: '#4C8DF5',

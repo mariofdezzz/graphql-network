@@ -14,7 +14,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
     const blocked = faker.number.float({ min: 0, max: 100 })
     const _blocked_queueing = faker.number.float({ min: 0, max: 100 })
     const receive = faker.number.float({ min: 0, max: 1000 })
-    const ssl = faker.number.float({ min: 0, max: 100 })
+    const ssl = faker.number.float({ min: 0, max: connect })
     const total = blocked + dns + connect + send + wait + receive + ssl + _blocked_queueing
 
     return {

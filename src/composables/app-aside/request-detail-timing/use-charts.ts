@@ -1,10 +1,23 @@
 import { computed } from 'vue'
 import type { useRequestTimings } from './use-request-timings'
 import type { ChartData, ChartOptions } from 'chart.js'
+import { useDark } from '@vueuse/core'
 
 type UseChartsOptions = Omit<ReturnType<typeof useRequestTimings>, 'formatTime'>
 
-export function useCharts({ queueing, stalled, sent, wait, download, total }: UseChartsOptions) {
+export function useCharts({
+  queueing,
+  stalled,
+  dns,
+  connect,
+  ssl,
+  sent,
+  wait,
+  download,
+  total,
+}: UseChartsOptions) {
+  const isDark = useDark()
+
   const options = computed<ChartOptions<any>>(() => ({
     responsive: true,
     maintainAspectRatio: false,
@@ -40,7 +53,7 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
         borderSkipped: false,
         data: [[0, queueing.value]],
         backgroundColor: 'transparent',
-        borderColor: '#8E8E8E',
+        borderColor: isDark.value ? '#8E8E8E' : '#747474',
         borderWidth: 1,
       },
     ],
@@ -56,11 +69,56 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
     ],
   }))
 
+  const dnsData = computed<ChartData<any>>(() => ({
+    labels: [''],
+    datasets: [
+      {
+        data: [[queueing.value + stalled.value, queueing.value + stalled.value + dns.value]],
+        backgroundColor: '#5DD6FB',
+      },
+    ],
+  }))
+
+  const connectData = computed<ChartData<any>>(() => ({
+    labels: [''],
+    datasets: [
+      {
+        data: [
+          [
+            queueing.value + stalled.value + dns.value,
+            queueing.value + stalled.value + dns.value + connect.value,
+          ],
+        ],
+        backgroundColor: '#FE8D59',
+      },
+    ],
+  }))
+
+  const sslData = computed<ChartData<any>>(() => ({
+    labels: [''],
+    datasets: [
+      {
+        data: [
+          [
+            queueing.value + stalled.value + dns.value + connect.value - ssl.value,
+            queueing.value + stalled.value + dns.value + connect.value,
+          ],
+        ],
+        backgroundColor: '#D290FF',
+      },
+    ],
+  }))
+
   const sentData = computed<ChartData<any>>(() => ({
     labels: [''],
     datasets: [
       {
-        data: [[queueing.value + stalled.value, queueing.value + stalled.value + sent.value]],
+        data: [
+          [
+            queueing.value + stalled.value + dns.value + connect.value,
+            queueing.value + stalled.value + dns.value + connect.value + sent.value,
+          ],
+        ],
         backgroundColor: '#009DC1',
       },
     ],
@@ -72,8 +130,8 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
       {
         data: [
           [
-            queueing.value + stalled.value + sent.value,
-            queueing.value + stalled.value + sent.value + wait.value,
+            queueing.value + stalled.value + dns.value + connect.value + sent.value,
+            queueing.value + stalled.value + dns.value + connect.value + sent.value + wait.value,
           ],
         ],
         backgroundColor: '#38BF60',
@@ -87,8 +145,14 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
       {
         data: [
           [
-            queueing.value + stalled.value + sent.value + wait.value,
-            queueing.value + stalled.value + sent.value + wait.value + download.value,
+            queueing.value + stalled.value + dns.value + connect.value + sent.value + wait.value,
+            queueing.value +
+              stalled.value +
+              dns.value +
+              connect.value +
+              sent.value +
+              wait.value +
+              download.value,
           ],
         ],
         backgroundColor: '#4C8DF5',
@@ -100,6 +164,9 @@ export function useCharts({ queueing, stalled, sent, wait, download, total }: Us
     options,
     queuingData,
     stalledData,
+    dnsData,
+    connectData,
+    sslData,
     sentData,
     waitData,
     downloadData,
