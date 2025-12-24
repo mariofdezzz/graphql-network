@@ -1,11 +1,11 @@
-import { useRequestStore } from '@/stores/request'
+import { useNetworkStore } from '@/stores/network'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { storeToRefs } from 'pinia'
 import { computed, unref, type MaybeRef } from 'vue'
 
 export function useRequestTimings(request: MaybeRef<GraphQLRequest>) {
-  const requestStore = useRequestStore()
-  const { timelineStartAt, timelineEndAt } = storeToRefs(requestStore)
+  const networkStore = useNetworkStore()
+  const { timelineStartAt, timelineEndAt } = storeToRefs(networkStore)
 
   const queueing = computed(() => unref(request).timings._blocked_queueing ?? 0)
   const stalled = computed(() =>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useRequestStore } from '@/stores/request'
+import { useNetworkStore } from '@/stores/network'
 import { storeToRefs } from 'pinia'
 
-const requestStore = useRequestStore()
-const { preserveLog } = storeToRefs(requestStore)
+const networkStore = useNetworkStore()
+const { preserveLog } = storeToRefs(networkStore)
 </script>
 
 <template>

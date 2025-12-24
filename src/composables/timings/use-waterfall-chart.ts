@@ -1,13 +1,13 @@
-import { useRequestStore } from '@/stores/request'
+import { useNetworkStore } from '@/stores/network'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { computed, type UnwrapRef } from 'vue'
 import { useRequestTimings } from '../app-aside/request-detail-timing/use-request-timings'
 
 export function useWaterfallChart() {
-  const requestStore = useRequestStore()
+  const networkStore = useNetworkStore()
 
   const requestsTimings = computed(() =>
-    requestStore.requests
+    networkStore.requests
       .map((request) => useRequestTimings(request))
       .map((timings) => ({
         queueing: timings.queueing.value,

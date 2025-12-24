@@ -3,12 +3,12 @@ import AppAside from '@/components/app-aside.vue'
 import AppFooter from '@/components/app-footer.vue'
 import AppHeader from '@/components/app-header.vue'
 import AppMain from '@/components/app-main.vue'
-import { useRequestStore } from '@/stores/request'
+import { useNetworkStore } from '@/stores/network'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-const requestStore = useRequestStore()
-const { requests, selectedRequest, recording } = storeToRefs(requestStore)
+const networkStore = useNetworkStore()
+const { requests, selectedRequest, recording } = storeToRefs(networkStore)
 
 const timelineStartAt = computed(() => {
   return new Date(
@@ -22,7 +22,7 @@ const timelineStartAt = computed(() => {
 })
 
 function clearRequestsEffect() {
-  requestStore.clearRequests()
+  networkStore.clearRequests()
   selectedRequest.value = undefined
 }
 </script>

@@ -4,7 +4,7 @@ import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-export const useRequestStore = defineStore('request', () => {
+export const useNetworkStore = defineStore('network', () => {
   const { requests, recording, clearRequests } = useGraphqlNetwork()
 
   const selectedRequest = ref<GraphQLRequest>()
