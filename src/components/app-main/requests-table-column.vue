@@ -1,22 +1,36 @@
 <script setup lang="ts">
+import {
+  REQUEST_COLUMNS_TO_KEYS,
+  REQUEST_KEYS_TO_COLUMNS,
+} from '@/constants/request-columns-to-keys'
+import { useNetworkStore } from '@/stores/network'
 import type { Column } from '@/types/components/shared/table/column'
-import type { Sort } from '@/types/components/shared/table/sort'
 import { Icon } from '@iconify/vue'
-
-const sort = defineModel<Sort>('sort')
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
 defineProps<{
   columns: Column[]
 }>()
 
+const networkStore = useNetworkStore()
+const { order } = storeToRefs(networkStore)
+
+const sortedColumn = computed(
+  () => REQUEST_KEYS_TO_COLUMNS[order.value.column as keyof typeof REQUEST_KEYS_TO_COLUMNS] ?? null,
+)
+
 function updateSort(column: Column) {
-  if (sort.value?.column === column.key) {
-    sort.value = {
-      ...sort.value,
-      direction: sort.value.direction === 'asc' ? 'desc' : 'asc',
+  if (column.key === sortedColumn.value) {
+    order.value = {
+      ...order.value,
+      direction: order.value.direction === 'asc' ? 'desc' : 'asc',
     }
   } else {
-    sort.value = { column: column.key, direction: 'asc' }
+    order.value = {
+      column: REQUEST_COLUMNS_TO_KEYS[column.key as keyof typeof REQUEST_COLUMNS_TO_KEYS],
+      direction: 'asc',
+    }
   }
 }
 </script>
@@ -32,8 +46,8 @@ function updateSort(column: Column) {
       {{ column.title }}
     </span>
 
-    <template v-if="sort?.column === column.key">
-      <Icon v-if="sort.direction === 'asc'" icon="dashicons:arrow-up" class="h-4 w-4" />
+    <template v-if="sortedColumn === column.key">
+      <Icon v-if="order!.direction === 'asc'" icon="dashicons:arrow-up" class="h-4 w-4" />
       <Icon v-else icon="dashicons:arrow-down" class="h-4 w-4" />
     </template>
   </div>

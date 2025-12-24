@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import type { Sort } from '@/types/components/shared/table/sort'
 import { useColumns } from '@/composables/app-main/use-columns'
-import RequestsTableColumn from './requests-table-column.vue'
-import type { GraphQLRequest } from '@/types/graphql-request'
-import RequestsTableRow from './requests-table-row.vue'
-import { computed, ref } from 'vue'
 import { useRequestDetailStore } from '@/stores/request-detail'
+import type { GraphQLRequest } from '@/types/graphql-request'
+import { computed, ref } from 'vue'
+import RequestsTableColumn from './requests-table-column.vue'
+import RequestsTableRow from './requests-table-row.vue'
 
 defineProps<{
   rows: GraphQLRequest[]
-  sort?: Sort
   timelineStartAt: Date
 }>()
 
@@ -27,7 +25,7 @@ const columns = computed(() => {
   <div class="h-full flex flex-col">
     <!-- header -->
     <div class="flex gap-px bg-on-base-disabled *:bg-base *:flex-1">
-      <RequestsTableColumn :columns :sort />
+      <RequestsTableColumn :columns />
     </div>
 
     <!-- rows -->
