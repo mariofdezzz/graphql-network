@@ -1,5 +1,6 @@
 import { useGraphqlNetwork } from '@/composables/use-graphql-network'
 import type { GraphQLRequest } from '@/types/graphql-request'
+import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -7,6 +8,8 @@ export const useRequestStore = defineStore('request', () => {
   const { requests, recording, clearRequests } = useGraphqlNetwork()
 
   const selectedRequest = ref<GraphQLRequest>()
+  const preserveLog = useLocalStorage('preserveLog', false)
+  const currentUrl = ref('')
 
   const timelineStartAt = computed(() => {
     return new Date(
@@ -27,12 +30,29 @@ export const useRequestStore = defineStore('request', () => {
     )
   })
 
+  chrome.devtools.inspectedWindow.eval('window.location.href', (url: string, err) => {
+    if (!err) currentUrl.value = url
+  })
+
+  chrome.devtools.network.onNavigated.addListener((url) => {
+    console.log({
+      currentUrl: currentUrl.value,
+      newUrl: url,
+      preserveLog: preserveLog.value,
+    })
+    if (currentUrl.value === url && !preserveLog.value) {
+      clearRequests()
+    }
+    currentUrl.value = url
+  })
+
   return {
     requests,
     selectedRequest,
     recording,
     timelineStartAt,
     timelineEndAt,
+    preserveLog,
     clearRequests,
   }
 })

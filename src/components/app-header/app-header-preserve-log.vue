@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const preserveLog = defineModel('preserveLog', { type: Boolean })
+import { useRequestStore } from '@/stores/request'
+import { storeToRefs } from 'pinia'
+
+const requestStore = useRequestStore()
+const { preserveLog } = storeToRefs(requestStore)
 </script>
 
 <template>
