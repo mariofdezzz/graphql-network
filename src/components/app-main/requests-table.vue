@@ -24,7 +24,7 @@ const columns = computed(() => {
 <template>
   <div class="h-full flex flex-col">
     <!-- header -->
-    <div class="flex gap-px bg-on-base-disabled *:bg-base *:flex-1">
+    <div class="grid grid-cols-6 gap-px bg-on-base-disabled *:bg-table-base">
       <RequestsTableColumn :columns />
     </div>
 

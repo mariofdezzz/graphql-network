@@ -34,7 +34,7 @@ function onRowClick(column: Column) {
 
 <template>
   <div
-    class="flex gap-px bg-on-base-disabled hover:*:bg-on-base-hover"
+    class="grid grid-cols-6 gap-px bg-on-base-disabled hover:*:bg-on-base-hover"
     :class="[
       selected ? '*:bg-table-selected-row hover:*:bg-table-selected-row' : '',
       rowHasErrors ? 'text-table-error-row' : '',
@@ -43,7 +43,7 @@ function onRowClick(column: Column) {
     <div
       v-for="(column, index) in columns"
       :key="index"
-      class="flex-1 px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] overflow-hidden text-ellipsis min-w-0"
+      class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] overflow-hidden text-ellipsis min-w-0"
       @click="onRowClick(column)"
     >
       <span v-if="column.key === 'time'"> {{ Math.round(totalTime) }}ms </span>
