@@ -29,8 +29,8 @@ function textColor(value: any) {
 function formatValue(value: any) {
   if (value === null) return 'null'
   if (typeof value === 'number') return value
-  if (Array.isArray(value)) return '[…]'
-  if (typeof value === 'object') return '{…}'
+  if (Array.isArray(value)) return value.length > 0 ? '[…]' : '[]'
+  if (typeof value === 'object') return Object.keys(value).length > 0 ? '{…}' : '{}'
 
   return `"${value}"`
 }
