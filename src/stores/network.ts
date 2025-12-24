@@ -30,16 +30,11 @@ export const useNetworkStore = defineStore('network', () => {
     )
   })
 
-  chrome.devtools.inspectedWindow.eval('window.location.href', (url: string, err) => {
+  chrome.devtools?.inspectedWindow.eval('window.location.href', (url: string, err) => {
     if (!err) currentUrl.value = url
   })
 
-  chrome.devtools.network.onNavigated.addListener((url) => {
-    console.log({
-      currentUrl: currentUrl.value,
-      newUrl: url,
-      preserveLog: preserveLog.value,
-    })
+  chrome.devtools?.network.onNavigated.addListener((url) => {
     if (currentUrl.value === url && !preserveLog.value) {
       clearRequests()
     }
