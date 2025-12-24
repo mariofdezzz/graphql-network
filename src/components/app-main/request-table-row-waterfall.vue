@@ -15,6 +15,6 @@ const { options, data } = useWaterfallChart(request)
 
 <template>
   <div>
-    <Bar :id="'waterfall-' + request.id" :options :data class="h-4" />
+    <Bar :id="'waterfall-' + request.id" :options :data class="h-4!" />
   </div>
 </template>
