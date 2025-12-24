@@ -34,10 +34,11 @@ function onRowClick(column: Column) {
 
 <template>
   <div
-    class="grid grid-cols-6 gap-px bg-on-base-disabled hover:*:bg-on-base-hover"
+    class="grid gap-px bg-on-base-disabled hover:*:bg-on-base-hover"
     :class="[
-      selected ? '*:bg-table-selected-row hover:*:bg-table-selected-row' : '',
+      selected ? '*:bg-table-selected-row hover:*:bg-table-selected-row ' : '',
       rowHasErrors ? 'text-table-error-row' : '',
+      requestDetailStore.requestDetail ? 'grid-cols-1' : 'grid-cols-6',
     ]"
   >
     <div

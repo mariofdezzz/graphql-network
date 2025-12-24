@@ -24,7 +24,10 @@ const columns = computed(() => {
 <template>
   <div class="h-full flex flex-col">
     <!-- header -->
-    <div class="grid grid-cols-6 gap-px bg-on-base-disabled *:bg-table-base">
+    <div
+      class="grid gap-px bg-on-base-disabled *:bg-table-base"
+      :class="[requestDetailStore.requestDetail ? 'grid-cols-1' : 'grid-cols-6']"
+    >
       <RequestsTableColumn :columns />
     </div>
 
