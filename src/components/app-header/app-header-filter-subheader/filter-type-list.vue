@@ -6,7 +6,7 @@ import FilterTypeButton from './filter-type-list/filter-type-button.vue'
 
 const networkStore = useNetworkStore()
 
-const types = reactive<string[]>([])
+const types = reactive<string[]>(networkStore.typeFilters)
 
 const fetchSelected = computed(() =>
   ['query', 'mutation', 'subscription'].every((type) => types.includes(type)),
