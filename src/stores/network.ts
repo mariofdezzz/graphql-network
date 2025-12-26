@@ -11,15 +11,29 @@ export const useNetworkStore = defineStore('network', () => {
   const { requests, recording, clearRequests } = useGraphqlNetwork()
 
   const order = ref<Sort>(DEFAULT_NETWORK_ORDER)
+  const nameFilter = ref('')
+  const invertNameFilter = ref(false)
+  const typeFilters = ref<string[]>([])
 
   const selectedRequest = ref<GraphQLRequest>()
   const preserveLog = useLocalStorage('preserveLog', false)
   const currentUrl = ref('')
 
-  const sortedRequests = computed(() => {
-    if (!order.value) return requests.value
+  const filteredRequests = computed(() => {
+    return requests.value.filter((request) => {
+      const matchesName = request.name.toLowerCase().includes(nameFilter.value.toLowerCase())
+      const matchesType =
+        typeFilters.value.length === 0 || typeFilters.value.includes(request.operation)
 
-    return requests.value.toSorted((a, b) => {
+      const nameCondition = nameFilter.value && invertNameFilter.value ? !matchesName : matchesName
+      return nameCondition && matchesType
+    })
+  })
+
+  const sortedRequests = computed(() => {
+    if (!order.value) return filteredRequests.value
+
+    return filteredRequests.value.toSorted((a, b) => {
       const column = order.value!.column
 
       let aValue = getObjectProperty(a, column)
@@ -74,6 +88,9 @@ export const useNetworkStore = defineStore('network', () => {
 
   return {
     requests: sortedRequests,
+    nameFilter,
+    invertNameFilter,
+    typeFilters,
     order,
     selectedRequest,
     recording,

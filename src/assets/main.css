@@ -31,4 +31,7 @@ body,
   --color-object-value-text: light-dark(#dc362e, #5dd6fb);
   --color-button-border: light-dark(#a7c6fa, #077db7);
   --color-on-button-active: light-dark(#d5d5d5, #6b6b6b);
+  --color-filter-button-border: light-dark(#c7c7c7, #055a8c); /* TODO dark */
+  --color-filter-button-active: light-dark(#d3e3fd, #055a8c); /* TODO dark */
+  --color-primary: light-dark(#1b6ef3, #3d85f5); /* TODO dark */
 }
