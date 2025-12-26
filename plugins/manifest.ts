@@ -13,7 +13,7 @@ export function manifest(): Plugin {
             manifest_version: 3,
             name: 'GraphQL Network',
             version: pkg.version,
-            description: 'Extensión de DevTools para monitorear peticiones GraphQL',
+            description: 'Dedicated GraphQL network inspector following DevTools standards',
             devtools_page: 'chrome/devtools.html',
             icons: {
               '128': 'icons/icon-128.png',
