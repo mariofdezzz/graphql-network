@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import SharedHorizontalDivider from '@/components/shared/shared-horizontal-divider.vue'
-import AppHeaderRecord from './app-header/app-header-record.vue'
+import { useLocalStorage } from '@vueuse/core'
+import { ref } from 'vue'
 import AppHeaderClear from './app-header/app-header-clear.vue'
+import AppHeaderFilterSubheader from './app-header/app-header-filter-subheader.vue'
 import AppHeaderFilter from './app-header/app-header-filter.vue'
 import AppHeaderPreserveLog from './app-header/app-header-preserve-log.vue'
-import AppHeaderFilterSubheader from './app-header/app-header-filter-subheader.vue'
+import AppHeaderRecord from './app-header/app-header-record.vue'
 
 const recording = defineModel('recording', { type: Boolean })
 
@@ -13,7 +14,7 @@ defineEmits<{
   (e: 'clear', value: void): void
 }>()
 
-const filterActive = ref(false)
+const filterActive = useLocalStorage('filterActive', false)
 const preserveLog = ref(false)
 </script>
 
