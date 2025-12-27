@@ -1,4 +1,4 @@
-import { useGraphqlNetwork } from '@/composables/use-graphql-network'
+import { useGraphqlNetwork } from '@/composables/network/use-graphql-network'
 import { DEFAULT_NETWORK_ORDER } from '@/constants/default-network-order'
 import { onPageReload } from '@/logic/chrome/on-page-reload'
 import { getObjectProperty } from '@/logic/get-object-property'
