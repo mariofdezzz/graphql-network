@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useRequestDetailStore } from '@/stores/request-detail'
+import { Icon } from '@iconify/vue'
 import { useEventListener } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import { Icon } from '@iconify/vue'
-import RequestDetailTabs from './app-aside/request-detail-tabs.vue'
 import { ref } from 'vue'
 import RequestDetailHeaders from './app-aside/request-detail-headers.vue'
-import RequestDetailPayload from './app-aside/request-detail-payload.vue'
-import RequestDetailResponse from './app-aside/request-detail-response.vue'
-import RequestDetailTiming from './app-aside/request-detail-timing.vue'
 import RequestDetailInitiator from './app-aside/request-detail-initiator.vue'
+import RequestDetailPayload from './app-aside/request-detail-payload.vue'
 import RequestDetailPreview from './app-aside/request-detail-preview.vue'
+import RequestDetailResponse from './app-aside/request-detail-response.vue'
+import RequestDetailTabs from './app-aside/request-detail-tabs.vue'
+import RequestDetailTiming from './app-aside/request-detail-timing.vue'
 
 defineProps<{
   timelineStartAt: Date

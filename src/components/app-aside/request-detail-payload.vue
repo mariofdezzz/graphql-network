@@ -23,78 +23,82 @@ const payload = computed<{
   query?: string
   variables?: Record<string, any>
   extensions?: Record<string, any>
-}>(() => props.request.payload)
+}>(() => props.request.payload ?? {})
 
 useTheme(options)
 </script>
 
 <template>
-  <details v-if="payload.query" open name="query">
-    <HeadersSummary class="border-t-0"> Query </HeadersSummary>
+  <div v-if="!request.payload"></div>
 
-    <div class="h-50">
-      <CodeEditor :value="payload.query" language="graphql" :options="options" />
-    </div>
-  </details>
+  <template v-else>
+    <details v-if="payload.query" open name="query">
+      <HeadersSummary class="border-t-0"> Query </HeadersSummary>
 
-  <details
-    v-if="payload.variables && Object.keys(payload.variables).length > 0"
-    open
-    name="variables"
-  >
-    <HeadersSummary :class="{ 'border-t-0': !payload.query }">
-      <span>Variables</span>
+      <div class="h-50">
+        <CodeEditor :value="payload.query" language="graphql" :options="options" />
+      </div>
+    </details>
 
-      <span class="px-5"></span>
+    <details
+      v-if="payload.variables && Object.keys(payload.variables).length > 0"
+      open
+      name="variables"
+    >
+      <HeadersSummary :class="{ 'border-t-0': !payload.query }">
+        <span>Variables</span>
 
-      <button
-        class="text-on-detail-header-active border border-button-border rounded-xl px-2.5 py-0.5 hover:bg-on-detail-header-hover active:bg-on-button-active"
-        @click="showVariableSource = !showVariableSource"
-      >
-        {{ showVariableSource ? 'View parsed' : 'View source' }}
-      </button>
-    </HeadersSummary>
+        <span class="px-5"></span>
 
-    <div v-if="showVariableSource" class="h-50">
-      <CodeEditor
-        :value="JSON.stringify(payload.variables, null, 2)"
-        language="json"
-        :options="options"
-      />
-    </div>
+        <button
+          class="text-on-detail-header-active border border-button-border rounded-xl px-2.5 py-0.5 hover:bg-on-detail-header-hover active:bg-on-button-active"
+          @click="showVariableSource = !showVariableSource"
+        >
+          {{ showVariableSource ? 'View parsed' : 'View source' }}
+        </button>
+      </HeadersSummary>
 
-    <div v-else class="py-2">
-      <RequestObjectViewer :object="payload.variables" />
-    </div>
-  </details>
+      <div v-if="showVariableSource" class="h-50">
+        <CodeEditor
+          :value="JSON.stringify(payload.variables, null, 2)"
+          language="json"
+          :options="options"
+        />
+      </div>
 
-  <details
-    v-if="payload.extensions && Object.keys(payload.extensions).length > 0"
-    open
-    name="extensions"
-  >
-    <HeadersSummary :class="{ 'border-t-0': !payload.query && !payload.variables }">
-      Extensions
-      <span class="px-5"></span>
+      <div v-else class="py-2">
+        <RequestObjectViewer :object="payload.variables" />
+      </div>
+    </details>
 
-      <button
-        class="text-on-detail-header-active border border-button-border rounded-xl px-2.5 py-0.5 hover:bg-on-detail-header-hover active:bg-on-button-active"
-        @click="showExtensionsSource = !showExtensionsSource"
-      >
-        {{ showExtensionsSource ? 'View parsed' : 'View source' }}
-      </button>
-    </HeadersSummary>
+    <details
+      v-if="payload.extensions && Object.keys(payload.extensions).length > 0"
+      open
+      name="extensions"
+    >
+      <HeadersSummary :class="{ 'border-t-0': !payload.query && !payload.variables }">
+        Extensions
+        <span class="px-5"></span>
 
-    <div v-if="showExtensionsSource" class="h-50">
-      <CodeEditor
-        :value="JSON.stringify(payload.extensions, null, 2)"
-        language="json"
-        :options="options"
-      />
-    </div>
+        <button
+          class="text-on-detail-header-active border border-button-border rounded-xl px-2.5 py-0.5 hover:bg-on-detail-header-hover active:bg-on-button-active"
+          @click="showExtensionsSource = !showExtensionsSource"
+        >
+          {{ showExtensionsSource ? 'View parsed' : 'View source' }}
+        </button>
+      </HeadersSummary>
 
-    <div v-else class="py-2">
-      <RequestObjectViewer :object="payload.extensions" />
-    </div>
-  </details>
+      <div v-if="showExtensionsSource" class="h-50">
+        <CodeEditor
+          :value="JSON.stringify(payload.extensions, null, 2)"
+          language="json"
+          :options="options"
+        />
+      </div>
+
+      <div v-else class="py-2">
+        <RequestObjectViewer :object="payload.extensions" />
+      </div>
+    </details>
+  </template>
 </template>

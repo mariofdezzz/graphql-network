@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { GraphQLRequest } from '@/types/graphql-request'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 const selected = defineModel<string>()
 
@@ -11,7 +11,7 @@ const props = defineProps<{
 const tabs = computed(() =>
   [
     'Headers',
-    'Payload',
+    props.request.response ? 'Payload' : null,
     'Preview',
     'Response',
     props.request.initiator ? null : null, // disabled initiator
@@ -19,6 +19,15 @@ const tabs = computed(() =>
     'Timing',
     // 'Cookies' // TODO
   ].filter((tab): tab is string => tab !== null),
+)
+
+watch(
+  () => props.request,
+  () => {
+    if (tabs.value.indexOf(selected.value!) === -1) {
+      selected.value = tabs.value[0]
+    }
+  },
 )
 </script>
 

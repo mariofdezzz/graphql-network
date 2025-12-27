@@ -45,7 +45,7 @@ const columns = computed(() => {
 
     <!-- empty space -->
     <div
-      class="flex-1 grid gap-px bg-on-base-disabled *:bg-base"
+      class="flex-1 grid gap-px bg-on-base-disabled *:bg-base-color"
       :class="[requestDetailStore.requestDetail ? 'grid-cols-1' : 'grid-cols-6']"
     >
       <div v-for="(column, index) in columns" :key="index" class="first:pl-px last:pr-px"></div>

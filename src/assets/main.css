@@ -11,7 +11,7 @@ body,
 }
 
 @theme {
-  --color-base: light-dark(#fff, #282828);
+  --color-base-color: light-dark(#fff, #282828);
   --color-on-base: light-dark(#1f1f1f, #e2e2e2);
   --color-on-base-icon: light-dark(#474747, #c6c6c6);
   --color-on-base-disabled: light-dark(#d3e2fd, #5e5e5e);

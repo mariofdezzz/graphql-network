@@ -28,7 +28,7 @@ function clearRequestsEffect() {
 </script>
 
 <template>
-  <div class="h-full bg-base text-on-base flex flex-col text-xs">
+  <div class="h-full bg-base-color text-on-base flex flex-col text-xs">
     <AppHeader v-model:recording="recording" @clear="clearRequestsEffect" />
 
     <!-- <WaterfallTimeline :requests /> -->

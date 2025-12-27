@@ -9,7 +9,7 @@ export function extractName(request: ChromeNetworkRequest): string {
   const payload = isPreflight ? extractPayload(request._x_preflight_for!) : extractPayload(request)
   const query = extractQuery(payload)
 
-  const name = payload.operationName ?? /query\s*(?<name>\w+)/.exec(query)?.groups?.name ?? '-'
+  const name = payload?.operationName ?? /query\s*(?<name>\w+)/.exec(query)?.groups?.name ?? '-'
 
   return isPreflight ? `(${name})` : name
 }

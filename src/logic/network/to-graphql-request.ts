@@ -18,10 +18,10 @@ export async function toGraphQLRequest(
     const name = extractName(request)
 
     const responseText = await new Promise<string>((resolve) =>
-      request.getContent ? request.getContent(resolve) : resolve('{}'),
+      request.getContent ? request.getContent(resolve) : resolve('null'),
     )
-    const response = JSON.parse(responseText ?? '{}')
-    const errors = response.errors?.length ?? 0
+    const response = JSON.parse(responseText ?? 'null')
+    const errors = response?.errors?.length ?? 0
 
     const dnsTime = Math.max(request.timings.dns ?? 0, 0)
     const connectTime = Math.max(request.timings.connect ?? 0, 0)

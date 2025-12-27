@@ -27,7 +27,7 @@ export type GraphQLRequest = {
   }
   payload?: any
   initiator: Initiator
-  response: any
+  response?: any
 }
 
 export type Initiator = {

@@ -18,8 +18,13 @@ useTheme(options)
 
 <template>
   <CodeEditor
+    v-if="request.response"
     :value="JSON.stringify(request.response, null, 2)"
     language="json"
     :options="options"
   />
+
+  <div v-else class="h-full grid place-items-center font-medium text-sm">
+    <p>Failed to load response data</p>
+  </div>
 </template>
