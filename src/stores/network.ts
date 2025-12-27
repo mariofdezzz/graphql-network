@@ -1,5 +1,6 @@
 import { useGraphqlNetwork } from '@/composables/use-graphql-network'
 import { DEFAULT_NETWORK_ORDER } from '@/constants/default-network-order'
+import { onPageReload } from '@/logic/chrome/on-page-reload'
 import { getObjectProperty } from '@/logic/get-object-property'
 import type { Sort } from '@/types/components/shared/table/sort'
 import type { GraphQLRequest } from '@/types/graphql-request'
@@ -17,7 +18,6 @@ export const useNetworkStore = defineStore('network', () => {
 
   const selectedRequest = ref<GraphQLRequest>()
   const preserveLog = useLocalStorage('preserveLog', false)
-  const currentUrl = ref('')
 
   const filteredRequests = computed(() => {
     return requests.value.filter((request) => {
@@ -75,15 +75,10 @@ export const useNetworkStore = defineStore('network', () => {
     )
   })
 
-  chrome.devtools?.inspectedWindow.eval('window.location.href', (url: string, err) => {
-    if (!err) currentUrl.value = url
-  })
-
-  chrome.devtools?.network.onNavigated.addListener((url) => {
-    if (currentUrl.value === url && !preserveLog.value) {
+  onPageReload(() => {
+    if (!preserveLog.value) {
       clearRequests()
     }
-    currentUrl.value = url
   })
 
   return {
