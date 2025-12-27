@@ -19,11 +19,6 @@ const requestDetailStore = useRequestDetailStore()
 const rowHasErrors = computed(
   () => props.row.status >= HTTP_STATUS_SUCCESS_THRESHOLD || props.row.errors > 0,
 )
-const totalTime = computed(() =>
-  [props.row.timings.send, props.row.timings.wait, props.row.timings.receive]
-    .filter((n): n is number => typeof n === 'number')
-    .reduce((acc, curr) => acc + curr, 0),
-)
 
 function onRowClick(column: Column) {
   if (column.key === 'name') {
@@ -47,7 +42,7 @@ function onRowClick(column: Column) {
       class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] overflow-hidden text-ellipsis min-w-0"
       @click="onRowClick(column)"
     >
-      <span v-if="column.key === 'time'"> {{ Math.round(totalTime) }}ms </span>
+      <span v-if="column.key === 'time'"> {{ Math.round(row.timings.total) }}ms </span>
 
       <span v-else-if="column.key === 'status'">
         <template v-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
