@@ -1,8 +1,7 @@
+import { useFilteredRequests } from '@/composables/network/use-filtered-requests'
 import { useGraphqlNetwork } from '@/composables/network/use-graphql-network'
-import { DEFAULT_NETWORK_ORDER } from '@/constants/default-network-order'
+import { useSortedRequests } from '@/composables/network/use-sorted-requests'
 import { onPageReload } from '@/logic/chrome/on-page-reload'
-import { getObjectProperty } from '@/logic/get-object-property'
-import type { Sort } from '@/types/components/shared/table/sort'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
@@ -11,50 +10,17 @@ import { computed, ref } from 'vue'
 export const useNetworkStore = defineStore('network', () => {
   const { requests, recording, clearRequests } = useGraphqlNetwork()
 
-  const order = ref<Sort>(DEFAULT_NETWORK_ORDER)
-  const nameFilter = useLocalStorage('nameFilter', '')
-  const invertNameFilter = useLocalStorage('invertNameFilter', false)
-  const typeFilters = useLocalStorage<string[]>('typeFilters', [])
+  const {
+    requests: filteredRequests,
+    nameFilter,
+    invertNameFilter,
+    typeFilters,
+  } = useFilteredRequests(requests)
 
-  const selectedRequest = ref<GraphQLRequest>()
+  const { requests: sortedRequests, order } = useSortedRequests(filteredRequests)
+
   const preserveLog = useLocalStorage('preserveLog', false)
-
-  const filteredRequests = computed(() => {
-    return requests.value.filter((request) => {
-      const matchesName = request.name.toLowerCase().includes(nameFilter.value.toLowerCase())
-      const matchesType =
-        typeFilters.value.length === 0 || typeFilters.value.includes(request.operation)
-
-      const nameCondition = nameFilter.value && invertNameFilter.value ? !matchesName : matchesName
-      return nameCondition && matchesType
-    })
-  })
-
-  const sortedRequests = computed(() => {
-    if (!order.value) return filteredRequests.value
-
-    return filteredRequests.value.toSorted((a, b) => {
-      const column = order.value!.column
-
-      let aValue = getObjectProperty(a, column)
-      let bValue = getObjectProperty(b, column)
-
-      if (typeof aValue === 'string') {
-        aValue = aValue.toLowerCase()
-      }
-      if (typeof bValue === 'string') {
-        bValue = bValue.toLowerCase()
-      }
-
-      if (aValue < bValue) {
-        return order.value!.direction === 'asc' ? -1 : 1
-      }
-      if (aValue > bValue) {
-        return order.value!.direction === 'asc' ? 1 : -1
-      }
-      return 0
-    })
-  })
+  const selectedRequest = ref<GraphQLRequest>()
 
   const timelineStartAt = computed(() => {
     return new Date(
