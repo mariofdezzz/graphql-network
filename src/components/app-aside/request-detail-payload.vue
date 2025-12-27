@@ -23,13 +23,7 @@ const payload = computed<{
   query?: string
   variables?: Record<string, any>
   extensions?: Record<string, any>
-}>(() => {
-  try {
-    return JSON.parse(props.request.payload!)
-  } catch {
-    return {}
-  }
-})
+}>(() => props.request.payload)
 
 useTheme(options)
 </script>

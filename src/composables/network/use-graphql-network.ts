@@ -34,7 +34,7 @@ export function useGraphqlNetwork() {
   })
 
   async function pushRequest(request: ChromeNetworkRequest) {
-    // console.log('Finished GraphQL Request:', request)
+    console.log('Finished GraphQL Request:', request)
 
     const req = await toGraphQLRequest(request)
 

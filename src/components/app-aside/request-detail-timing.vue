@@ -38,24 +38,26 @@ const {
     <p class="mb-2">Started at {{ formatTime(requestStartedAt + queueing) }} ms</p>
 
     <div class="grid grid-cols-[auto_1fr_auto] gap-3 pb-4">
-      <span class="text-request-timing-header">Resource Scheduling</span>
+      <template v-if="queueing > 0">
+        <span class="text-request-timing-header">Resource Scheduling</span>
 
-      <div></div>
+        <div></div>
 
-      <span class="text-request-timing-header">DURATION</span>
+        <span class="text-request-timing-header">DURATION</span>
 
-      <span class="ps-4">Queueing</span>
+        <span class="ps-4">Queueing</span>
 
-      <div class="h-5">
-        <Bar
-          id="timing-queueing-chart"
-          :options="options"
-          :data="queuingData"
-          class="w-full!"
-        ></Bar>
-      </div>
+        <div class="h-5">
+          <Bar
+            id="timing-queueing-chart"
+            :options="options"
+            :data="queuingData"
+            class="w-full!"
+          ></Bar>
+        </div>
 
-      <span class="text-end">{{ formatTime(queueing) }} ms</span>
+        <span class="text-end">{{ formatTime(queueing) }} ms</span>
+      </template>
 
       <span class="text-request-timing-header">Connection Start</span>
 

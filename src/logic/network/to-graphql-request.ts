@@ -1,7 +1,10 @@
-import { GRAPHQL_PAYLOAD_OPERATIONS } from '@/constants/network/graphql-payload-operations'
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { isPreflightRequest } from './is-preflight-request'
+import { extractName } from './to-graphql-request/extract-name'
+import { extractOperation } from './to-graphql-request/extract-operation'
+import { extractPayload } from './to-graphql-request/extract-payload'
+import { extractQuery } from './to-graphql-request/extract-query'
 
 export async function toGraphQLRequest(
   request: ChromeNetworkRequest,
@@ -9,18 +12,19 @@ export async function toGraphQLRequest(
   try {
     const isPreflight = isPreflightRequest(request)
 
-    const payload = JSON.parse(request.request.postData?.text ?? '{}')
-    const query = payload.query?.trim() ?? ''
-    const operation = isPreflight
-      ? 'preflight'
-      : ((GRAPHQL_PAYLOAD_OPERATIONS.find((op) => query.startsWith(op)) ??
-          'unknown') as GraphQLRequest['operation'])
-    const name = payload.operationName ?? /query\s*(?<name>\w+)/.exec(query)?.groups?.name ?? '-'
+    const payload = extractPayload(request)
+    const query = extractQuery(payload)
+    const operation = isPreflight ? 'preflight' : extractOperation(query)
+    const name = extractName(request)
 
-    const response = JSON.parse(request.response.content.text ?? '{}')
+    const responseText = await new Promise<string>((resolve) =>
+      request.getContent ? request.getContent(resolve) : resolve('{}'),
+    )
+    const response = JSON.parse(responseText ?? '{}')
     const errors = response.errors?.length ?? 0
 
-    const responseBody = await new Promise<string>((resolve) => request.getContent(resolve))
+    const dnsTime = Math.max(request.timings.dns ?? 0, 0)
+    const connectTime = Math.max(request.timings.connect ?? 0, 0)
 
     return {
       id: crypto.randomUUID(),
@@ -32,7 +36,8 @@ export async function toGraphQLRequest(
       timings: {
         ...request.timings,
         startedAt: request.startedDateTime,
-        total: request.time,
+        total: request.time - dnsTime,
+        connect: connectTime - dnsTime,
       },
       headers: {
         general: {
@@ -46,9 +51,9 @@ export async function toGraphQLRequest(
         response: request.response.headers,
         request: request.request.headers,
       },
-      payload: request.request.postData?.text,
+      payload,
       initiator: request._initiator as GraphQLRequest['initiator'],
-      response: responseBody,
+      response,
     }
   } catch (error) {
     console.error('Failed to parse GraphQL request:', error)

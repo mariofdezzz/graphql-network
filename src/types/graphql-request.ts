@@ -25,9 +25,9 @@ export type GraphQLRequest = {
     response: ChromeNetworkRequest['response']['headers']
     request: ChromeNetworkRequest['request']['headers']
   }
-  payload?: string
+  payload?: any
   initiator: Initiator
-  response: string
+  response: any
 }
 
 export type Initiator = {

@@ -41,8 +41,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
           url: faker.internet.url(),
           method: faker.helpers.arrayElement(['GET', 'POST', 'PUT', 'DELETE']),
           status: faker.helpers.arrayElement([200, 201, 400, 401, 403, 404, 500]),
-          remoteAddress: faker.internet.ipv4(),
-          referer: faker.internet.url(),
+          remoteAddress: faker.internet.ipv4() + ':443',
         },
         response: [
           {
@@ -65,9 +64,8 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
           },
         ],
       },
-      payload: JSON.stringify(
-        {
-          query: `query Character {
+      payload: {
+        query: `query Character {
   characters {
     results {
       id
@@ -75,18 +73,15 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
     }
   }
 }`,
-          variables: {
-            id: faker.number.int({ min: 1, max: 1000 }),
-            group: {
-              type: 'admin',
-              permissions: ['read', 'write', 'execute'],
-            },
-            null: null,
+        variables: {
+          id: faker.number.int({ min: 1, max: 1000 }),
+          group: {
+            type: 'admin',
+            permissions: ['read', 'write', 'execute'],
           },
+          null: null,
         },
-        null,
-        2,
-      ),
+      },
       initiator: {
         type: 'script',
         stack: {
@@ -132,27 +127,23 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
           },
         },
       },
-      response: JSON.stringify(
-        {
-          data: {
-            user: {
-              id: faker.number.int({ min: 1, max: 1000 }),
-              name: faker.person.fullName(),
-              email: faker.internet.email(),
-            },
+      response: {
+        data: {
+          user: {
+            id: faker.number.int({ min: 1, max: 1000 }),
+            name: faker.person.fullName(),
+            email: faker.internet.email(),
           },
-          errors: faker.datatype.boolean()
-            ? [
-                {
-                  message: 'An error occurred',
-                  locations: [{ line: 2, column: 4 }],
-                },
-              ]
-            : undefined,
         },
-        null,
-        2,
-      ),
+        errors: faker.datatype.boolean()
+          ? [
+              {
+                message: 'An error occurred',
+                locations: [{ line: 2, column: 4 }],
+              },
+            ]
+          : undefined,
+      },
     } satisfies GraphQLRequest
   },
   { count: 15 },

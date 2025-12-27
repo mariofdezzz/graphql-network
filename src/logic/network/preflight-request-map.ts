@@ -10,7 +10,7 @@ export class PreflightRequestMap {
   get(request: ChromeNetworkRequest) {
     const requestStartedAt = new Date(request.startedDateTime).getTime()
 
-    return this.preflights
+    const preflight = this.preflights
       .filter(
         (preflight) =>
           preflight.request.url === request.request.url &&
@@ -22,10 +22,20 @@ export class PreflightRequestMap {
         const latestTime = new Date(latest.startedDateTime).getTime()
         const currentTime = new Date(current.startedDateTime).getTime()
 
-        const latestDelta = latestTime - requestStartedAt + latest.time - request.time
-        const currentDelta = currentTime - requestStartedAt + current.time - request.time
+        const latestDelta = Math.abs(
+          latestTime - requestStartedAt + latest.time - Number(request._blocked_queueing ?? 0),
+        )
+        const currentDelta = Math.abs(
+          currentTime - requestStartedAt + current.time - Number(request._blocked_queueing ?? 0),
+        )
 
         return currentDelta < latestDelta ? current : latest
       }, undefined)
+
+    if (preflight)
+      return {
+        ...preflight,
+        _x_preflight_for: request,
+      }
   }
 }

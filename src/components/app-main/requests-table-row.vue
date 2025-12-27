@@ -42,7 +42,9 @@ function onRowClick(column: Column) {
       class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] overflow-hidden text-ellipsis min-w-0"
       @click="onRowClick(column)"
     >
-      <span v-if="column.key === 'time'"> {{ Math.round(row.timings.total) }}ms </span>
+      <span v-if="column.key === 'time'">
+        {{ Math.round(row.timings.total - Math.max(row.timings._blocked_queueing ?? 0, 0)) }}ms
+      </span>
 
       <span v-else-if="column.key === 'status'">
         <template v-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
@@ -56,6 +58,10 @@ function onRowClick(column: Column) {
 
       <span v-else-if="column.key === 'waterfall'">
         <RequestTableRowWaterfall :request="row" />
+      </span>
+
+      <span v-else-if="row.name.startsWith('(') && column.key === 'name'" class="italic">
+        {{ row.name }}
       </span>
 
       <span v-else>
