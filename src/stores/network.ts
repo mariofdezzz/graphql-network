@@ -12,9 +12,9 @@ export const useNetworkStore = defineStore('network', () => {
   const { requests, recording, clearRequests } = useGraphqlNetwork()
 
   const order = ref<Sort>(DEFAULT_NETWORK_ORDER)
-  const nameFilter = ref('')
-  const invertNameFilter = ref(false)
-  const typeFilters = ref<string[]>([])
+  const nameFilter = useLocalStorage('nameFilter', '')
+  const invertNameFilter = useLocalStorage('invertNameFilter', false)
+  const typeFilters = useLocalStorage<string[]>('typeFilters', [])
 
   const selectedRequest = ref<GraphQLRequest>()
   const preserveLog = useLocalStorage('preserveLog', false)
