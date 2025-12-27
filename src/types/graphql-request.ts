@@ -6,7 +6,7 @@ export type GraphQLRequest = {
   name: string
   status: number
   errors: number
-  operation: 'query' | 'mutation' | 'subscription' | 'unknown'
+  operation: 'query' | 'mutation' | 'subscription' | 'preflight' | 'unknown'
   size: number
   timings: Prettify<
     {

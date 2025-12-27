@@ -1,68 +1,44 @@
-import { useDevtoolsNetwork } from '@/composables/use-devtools-network'
+import { mockRequests } from '@/constants/mock/requests'
+import { onNetworkRequestFinished } from '@/logic/chrome/on-network-request-finished'
+import { isGraphqlRequest } from '@/logic/network/is-graphql-request'
+import { isPreflightRequest } from '@/logic/network/is-preflight-request'
+import { PreflightRequestMap } from '@/logic/network/preflight-request-map'
+import { toGraphQLRequest } from '@/logic/network/to-graphql-request'
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed, reactive, ref } from 'vue'
-import { mockRequests } from '@/constants/mock/requests'
-
-const GraphQLPayloadKeys = ['query', 'variables', 'operationName', 'extensions']
-const GraphQLOperations = ['query', 'mutation', 'subscription']
 
 export function useGraphqlNetwork() {
-  useDevtoolsNetwork({ onRequestFinished })
-
-  const requests = reactive<GraphQLRequest[]>([])
+  const preflightRequests = new PreflightRequestMap()
   const recording = ref(true)
 
+  const requests = reactive<GraphQLRequest[]>([])
   const readonlyRequests = computed(() => (import.meta.env.DEV ? mockRequests : requests))
 
-  function onRequestFinished(request: ChromeNetworkRequest) {
+  onNetworkRequestFinished((request) => {
     if (!recording.value) return
-    if (request.request.method !== 'POST') return
 
-    const payload = JSON.parse(request.request.postData?.text ?? '{}')
+    console.log('Network Request:', request)
 
-    if (!Object.keys(payload).every((key) => GraphQLPayloadKeys.includes(key))) return
+    if (isPreflightRequest(request)) {
+      preflightRequests.add(request)
+    }
 
-    const query = payload.query?.trim() ?? ''
-    const operation = (GraphQLOperations.find((op) => query.startsWith(op)) ??
-      'unknown') as GraphQLRequest['operation']
-    const name = payload.operationName ?? /query\s*(?<name>\w+)/.exec(query)?.groups?.name ?? ''
+    if (!isGraphqlRequest(request)) return
 
-    const response = JSON.parse(request.response.content.text ?? '{}')
+    const preflight = preflightRequests.get(request)
 
-    const errors = response.errors?.length ?? 0
+    if (preflight) pushRequest(preflight)
 
-    console.log('Request finished:', request)
+    pushRequest(request)
+  })
 
-    request.getContent((responseBody) => {
-      requests.push({
-        id: crypto.randomUUID(),
-        name: name,
-        status: request.response.status,
-        errors: errors,
-        operation: operation,
-        size: request.response?._transferSize ?? 0,
-        timings: {
-          ...request.timings,
-          startedAt: request.startedDateTime,
-          total: request.time,
-        },
-        headers: {
-          general: {
-            url: request.request.url,
-            method: request.request.method,
-            status: request.response.status,
-            remoteAddress: request._ip_addr ?? undefined,
-            referer: '', // TODO
-          },
-          response: request.response.headers,
-          request: request.request.headers,
-        },
-        payload: request.request.postData?.text,
-        initiator: request._initiator as GraphQLRequest['initiator'],
-        response: responseBody,
-      })
-    })
+  async function pushRequest(request: ChromeNetworkRequest) {
+    // console.log('Finished GraphQL Request:', request)
+
+    const req = await toGraphQLRequest(request)
+
+    if (req) requests.push(req)
   }
 
   function clearRequests() {

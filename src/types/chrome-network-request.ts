@@ -1,1 +1,1 @@
-export type ChromeNetworkRequest = chrome.devtools.network.Request
+export type ChromeNetworkRequest = chrome.devtools.network.Request & { _connectionId?: string }
