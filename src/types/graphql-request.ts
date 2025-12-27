@@ -21,7 +21,6 @@ export type GraphQLRequest = {
       method: string
       status: number
       remoteAddress?: string
-      referer: string
     }
     response: ChromeNetworkRequest['response']['headers']
     request: ChromeNetworkRequest['request']['headers']

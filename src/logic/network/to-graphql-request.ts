@@ -39,8 +39,9 @@ export async function toGraphQLRequest(
           url: request.request.url,
           method: request.request.method,
           status: request.response.status,
-          remoteAddress: request._ip_addr ?? undefined,
-          referer: '', // TODO
+          remoteAddress: request.connection
+            ? request.serverIPAddress + ':' + request.connection
+            : request.serverIPAddress,
         },
         response: request.response.headers,
         request: request.request.headers,
