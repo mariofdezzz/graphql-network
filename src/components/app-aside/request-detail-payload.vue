@@ -1,14 +1,19 @@
 <script setup lang="ts">
+import { useLayout } from '@/composables/monaco/use-layout'
 import { useTheme } from '@/composables/monaco/use-theme'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { CodeEditor, type MonacoEditorConfig } from 'monaco-editor-vue3'
-import { computed, ref } from 'vue'
+import { computed, ref, toRefs } from 'vue'
 import HeadersSummary from './request-detail-headers/headers-summary.vue'
 import RequestObjectViewer from './request-detail-payload/request-object-viewer.vue'
 
 const props = defineProps<{
   request: GraphQLRequest
+  enabled: boolean
 }>()
+const { enabled } = toRefs(props)
+
+const { onEditorDidMount } = useLayout(enabled)
 
 const showVariableSource = ref(false)
 const showExtensionsSource = ref(false)
@@ -36,7 +41,12 @@ useTheme(options)
       <HeadersSummary class="border-t-0"> Query </HeadersSummary>
 
       <div class="h-50">
-        <CodeEditor :value="payload.query" language="graphql" :options="options" />
+        <CodeEditor
+          :value="payload.query"
+          language="graphql"
+          :options="options"
+          @editorDidMount="onEditorDidMount"
+        />
       </div>
     </details>
 

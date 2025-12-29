@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { GraphQLRequest } from '@/types/graphql-request'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 
 const props = defineProps<{
   request: GraphQLRequest
 }>()
 
 const stack = computed(() => {
-  return props.request.initiator.stack.callFrames
+  return props.request.initiator.stack
+})
+
+onMounted(() => {
+  console.log('Request call stack:', stack.value)
 })
 </script>
 
@@ -20,7 +24,7 @@ const stack = computed(() => {
 
       <div class="px-12">
         <div class="grid grid-cols-[auto_auto_auto] gap-x-2 gap-y-1 w-0">
-          <template v-for="(entry, index) in stack" :key="index">
+          <template v-for="(entry, index) in stack.callFrames" :key="index">
             <span>{{ entry.functionName ? entry.functionName : '(anonymous)' }}</span>
 
             <span>@</span>

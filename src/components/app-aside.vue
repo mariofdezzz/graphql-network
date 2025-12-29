@@ -47,19 +47,44 @@ function closeDetail() {
       <RequestDetailTabs v-model="selectedTab" :request="requestDetail" />
     </div>
 
-    <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-      <RequestDetailHeaders v-if="selectedTab === 'Headers'" :request="requestDetail" />
+    <div
+      v-show="selectedTab === 'Headers'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailHeaders :request="requestDetail" />
+    </div>
 
-      <RequestDetailPayload v-else-if="selectedTab === 'Payload'" :request="requestDetail" />
+    <div
+      v-show="selectedTab === 'Payload'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailPayload :request="requestDetail" :enabled="selectedTab === 'Payload'" />
+    </div>
 
-      <RequestDetailPreview v-else-if="selectedTab === 'Preview'" :request="requestDetail" />
+    <div
+      v-show="selectedTab === 'Preview'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailPreview :request="requestDetail" />
+    </div>
 
-      <RequestDetailResponse v-else-if="selectedTab === 'Response'" :request="requestDetail" />
+    <div
+      v-show="selectedTab === 'Response'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailResponse :request="requestDetail" :enabled="selectedTab === 'Response'" />
+    </div>
 
-      <RequestDetailInitiator v-else-if="selectedTab === 'Initiator'" :request="requestDetail" />
+    <div
+      v-show="selectedTab === 'Initiator'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailInitiator v-show="selectedTab === 'Initiator'" :request="requestDetail" />
+    </div>
 
+    <div v-show="selectedTab === 'Timing'" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
       <RequestDetailTiming
-        v-else-if="selectedTab === 'Timing'"
+        v-show="selectedTab === 'Timing'"
         :request="requestDetail"
         :timelineStartAt
       />
