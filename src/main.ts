@@ -12,6 +12,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
+import './plugins/monaco'
 
 const app = createApp(App)
 const pinia = createPinia()
