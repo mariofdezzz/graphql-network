@@ -18,7 +18,7 @@ export function manifest(): Plugin {
             icons: {
               '128': 'icons/icon-128.png',
             },
-            permissions: ['devtools', 'webRequest', '<all_urls>'],
+            permissions: [],
             host_permissions: ['https://api.iconify.design/*'],
             author: 'Mario Ferrero',
             minimum_chrome_version: '140',
