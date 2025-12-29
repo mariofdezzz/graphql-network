@@ -37,7 +37,8 @@ export type Initiator = {
 
 export type Stack = {
   callFrames: CallFrame[]
-  parent: StackParent
+  description?: string
+  parent?: Stack
 }
 
 export type CallFrame = {
@@ -46,15 +47,4 @@ export type CallFrame = {
   url: string
   lineNumber: number
   columnNumber: number
-}
-
-export type StackParent = {
-  description: string
-  callFrames: CallFrame[]
-  parent: ParentParent
-}
-
-export type ParentParent = {
-  description: string
-  callFrames: CallFrame[]
 }

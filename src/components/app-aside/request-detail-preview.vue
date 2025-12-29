@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { GraphQLRequest } from '@/types/graphql-request'
 import RequestObjectViewer from './request-detail-payload/request-object-viewer.vue'
+import RequestDetailFallbackTab from './request-detail-fallback-tab.vue'
 
 defineProps<{
   request: GraphQLRequest
@@ -12,7 +13,5 @@ defineProps<{
     <RequestObjectViewer :object="request.response" />
   </div>
 
-  <div v-else class="h-full grid place-items-center font-medium text-sm">
-    <p>Failed to load response data</p>
-  </div>
+  <RequestDetailFallbackTab v-else> Failed to load response data </RequestDetailFallbackTab>
 </template>

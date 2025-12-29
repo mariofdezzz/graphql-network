@@ -4,6 +4,7 @@ import { useTheme } from '@/composables/monaco/use-theme'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { CodeEditor, type MonacoEditorConfig } from 'monaco-editor-vue3'
 import { toRefs } from 'vue'
+import RequestDetailFallbackTab from './request-detail-fallback-tab.vue'
 
 const props = defineProps<{
   request: GraphQLRequest
@@ -31,7 +32,5 @@ useTheme(options)
     @editorDidMount="onEditorDidMount"
   />
 
-  <div v-else class="h-full grid place-items-center font-medium text-sm">
-    <p>Failed to load response data</p>
-  </div>
+  <RequestDetailFallbackTab v-else> Failed to load response data </RequestDetailFallbackTab>
 </template>
