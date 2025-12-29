@@ -38,6 +38,9 @@ export async function toGraphQLRequest(
         startedAt: request.startedDateTime,
         total: request.time - dnsTime,
         connect: connectTime - dnsTime,
+        waterfall:
+          new Date(request.startedDateTime).getTime() +
+          Math.max(0, (request.timings as any)._blocked_queueing ?? 0),
       },
       headers: {
         general: {

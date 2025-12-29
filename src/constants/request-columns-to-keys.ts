@@ -4,7 +4,7 @@ export const REQUEST_COLUMNS_TO_KEYS = {
   operation: 'operation',
   size: 'size',
   time: 'timings.total',
-  waterfall: 'timings.startedAt',
+  waterfall: 'timings.waterfall',
 } as const
 
 export const REQUEST_KEYS_TO_COLUMNS = Object.fromEntries(

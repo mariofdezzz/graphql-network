@@ -13,6 +13,7 @@ export type GraphQLRequest = {
       startedAt: string
       total: number
       _blocked_queueing?: number
+      waterfall: number
     } & ChromeNetworkRequest['timings']
   >
   headers: {
