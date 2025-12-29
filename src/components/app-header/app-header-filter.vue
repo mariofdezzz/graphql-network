@@ -20,7 +20,7 @@ const hasFilter = computed(() => {
   <button
     title="Filter"
     class="rounded-full hover:bg-on-base-hover active:bg-on-base-active p-1 relative"
-    :class="[hasFilter ? 'text-primary' : '']"
+    :class="[hasFilter || filterActive ? 'text-primary' : '']"
     @click="filterActive = !filterActive"
   >
     <Icon v-if="filterActive" icon="material-symbols:filter-alt" class="h-4 w-4" />
