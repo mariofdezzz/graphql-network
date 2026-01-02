@@ -1,7 +1,7 @@
 import { useFilteredRequests } from '@/composables/network/use-filtered-requests'
 import { useGraphqlNetwork } from '@/composables/network/use-graphql-network'
 import { useSortedRequests } from '@/composables/network/use-sorted-requests'
-import { onPageReload } from '@/logic/chrome/on-page-reload'
+import { onPageReload } from '@/logic/contexts/chrome/on-page-reload'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore, storeToRefs } from 'pinia'
 import { computed } from 'vue'

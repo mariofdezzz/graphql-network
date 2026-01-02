@@ -1,5 +1,5 @@
 import { DEFAULT_NETWORK_ORDER } from '@/constants/default-network-order'
-import { getObjectProperty } from '@/logic/get-object-property'
+import { getObjectProperty } from '@/logic/shared/get-object-property'
 import type { Sort } from '@/types/components/shared/table/sort'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed, ref, type Ref } from 'vue'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatHeader } from '@/logic/request-detail/format-header'
+import { formatHeader } from '@/logic/contexts/request-detail/format-header'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import HeadersSummary from './request-detail-headers/headers-summary.vue'
 import HeadersContent from './request-detail-headers/headers-content.vue'
