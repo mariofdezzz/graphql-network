@@ -5,7 +5,7 @@ import { useNetworkStore } from '@/stores/network'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import type { GraphQLRequest } from '@/types/graphql-request'
-import { timeline } from './timeline'
+import { timeline } from '../logic/components/app-waterfall/timeline'
 
 const networkStore = useNetworkStore()
 const { requests, timelineStartAt } = storeToRefs(networkStore)
