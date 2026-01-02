@@ -41,6 +41,11 @@ export const useNetworkStore = defineStore('network', () => {
     )
   })
 
+  function exposedClearRequests() {
+    clearRequests()
+    selectedRequest.value = undefined
+  }
+
   onPageReload(() => {
     if (!preserveLog.value) {
       clearRequests()
@@ -58,6 +63,6 @@ export const useNetworkStore = defineStore('network', () => {
     timelineStartAt,
     timelineEndAt,
     preserveLog,
-    clearRequests,
+    clearRequests: exposedClearRequests,
   }
 })

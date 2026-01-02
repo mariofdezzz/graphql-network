@@ -9,7 +9,7 @@ import { computed } from 'vue'
 import WaterfallTimeline from '@/components/app-main/waterfall-timeline.vue'
 
 const networkStore = useNetworkStore()
-const { requests, selectedRequest, recording } = storeToRefs(networkStore)
+const { requests, selectedRequest } = storeToRefs(networkStore)
 
 const timelineStartAt = computed(() => {
   return new Date(
@@ -21,16 +21,11 @@ const timelineStartAt = computed(() => {
       ),
   )
 })
-
-function clearRequestsEffect() {
-  networkStore.clearRequests()
-  selectedRequest.value = undefined
-}
 </script>
 
 <template>
   <div class="h-full bg-base-color text-on-base flex flex-col text-xs">
-    <AppHeader v-model:recording="recording" @clear="clearRequestsEffect" />
+    <AppHeader />
 
     <WaterfallTimeline />
 

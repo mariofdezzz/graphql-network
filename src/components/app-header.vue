@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import SharedHorizontalDivider from '@/components/shared/shared-horizontal-divider.vue'
+import { useNetworkStore } from '@/stores/network'
 import { useLocalStorage } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import AppHeaderClear from './app-header/app-header-clear.vue'
 import AppHeaderFilterSubheader from './app-header/app-header-filter-subheader.vue'
@@ -8,11 +10,8 @@ import AppHeaderFilter from './app-header/app-header-filter.vue'
 import AppHeaderPreserveLog from './app-header/app-header-preserve-log.vue'
 import AppHeaderRecord from './app-header/app-header-record.vue'
 
-const recording = defineModel('recording', { type: Boolean })
-
-defineEmits<{
-  (e: 'clear', value: void): void
-}>()
+const networkStore = useNetworkStore()
+const { recording } = storeToRefs(networkStore)
 
 const filterActive = useLocalStorage('filterActive', false)
 const preserveLog = ref(false)
@@ -24,7 +23,7 @@ const preserveLog = ref(false)
       <div class="flex gap-1 items-center">
         <AppHeaderRecord v-model:recording="recording" />
 
-        <AppHeaderClear @clear="$emit('clear')" />
+        <AppHeaderClear @clear="networkStore.clearRequests()" />
       </div>
 
       <SharedHorizontalDivider />
