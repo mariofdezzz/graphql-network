@@ -1,4 +1,4 @@
-import { useRequestTimings } from '@/composables/app-aside/request-detail-timing/use-request-timings'
+import { useRequestTimings } from '@/composables/components/app-aside/request-detail-timing/use-request-timings'
 import type { GraphQLRequest } from '@/types/graphql-request'
 
 export function timeline(request: GraphQLRequest, stack: string) {

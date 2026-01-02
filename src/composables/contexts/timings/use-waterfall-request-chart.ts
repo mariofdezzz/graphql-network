@@ -1,7 +1,7 @@
+import { useRequestTimings } from '@/composables/components/app-aside/request-detail-timing/use-request-timings'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { computed, type Ref } from 'vue'
-import { useRequestTimings } from '../app-aside/request-detail-timing/use-request-timings'
 
 export function useWaterfallChart(request: Ref<GraphQLRequest>) {
   const { queueing, stalled, dns, connect, ssl, sent, wait, download, timespan, requestStartedAt } =

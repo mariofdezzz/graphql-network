@@ -1,7 +1,7 @@
+import { useRequestTimings } from '@/composables/components/app-aside/request-detail-timing/use-request-timings'
 import { useNetworkStore } from '@/stores/network'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { computed, type UnwrapRef } from 'vue'
-import { useRequestTimings } from '../app-aside/request-detail-timing/use-request-timings'
 
 export function useWaterfallChart() {
   const networkStore = useNetworkStore()

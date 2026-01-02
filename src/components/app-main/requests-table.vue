@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useColumns } from '@/composables/app-main/use-columns'
+import { useColumns } from '@/composables/components/app-main/use-columns'
 import { useRequestDetailStore } from '@/stores/request-detail'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed, ref } from 'vue'

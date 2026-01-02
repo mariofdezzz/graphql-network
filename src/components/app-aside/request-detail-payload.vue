@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useLayout } from '@/composables/monaco/use-layout'
-import { useTheme } from '@/composables/monaco/use-theme'
+import { useLayout } from '@/composables/contexts/monaco/use-layout'
+import { useTheme } from '@/composables/contexts/monaco/use-theme'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { CodeEditor, type MonacoEditorConfig } from 'monaco-editor-vue3'
 import { computed, ref, toRefs } from 'vue'

@@ -1,7 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { useCharts } from '@/composables/app-aside/request-detail-timing/use-charts'
-import { useRequestTimings } from '@/composables/app-aside/request-detail-timing/use-request-timings'
+import { useCharts } from '@/composables/components/app-aside/request-detail-timing/use-charts'
+import { useRequestTimings } from '@/composables/components/app-aside/request-detail-timing/use-request-timings'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { toRefs } from 'vue'
 import { Bar } from 'vue-chartjs'
