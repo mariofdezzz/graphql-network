@@ -20,6 +20,9 @@ const requestDetailStore = useRequestDetailStore()
 const rowHasErrors = computed(
   () => props.row.status >= HTTP_STATUS_SUCCESS_THRESHOLD || props.row.errors > 0,
 )
+const time = computed(() => {
+  return props.row.timings.total - Math.max(props.row.timings._blocked_queueing ?? 0, 0)
+})
 
 function onRowClick(column: Column) {
   if (column.key === 'name') {
@@ -45,7 +48,7 @@ function onRowClick(column: Column) {
       @click="onRowClick(column)"
     >
       <span v-if="column.key === 'time'">
-        {{ formatTime(row.timings.total - Math.max(row.timings._blocked_queueing ?? 0, 0)) }}
+        {{ formatTime(time, time >= 1000 ? 2 : 0) }}
       </span>
 
       <span v-else-if="column.key === 'status'">
