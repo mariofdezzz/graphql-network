@@ -25,10 +25,6 @@ export function useRequestTimings(request: MaybeRef<GraphQLRequest>) {
 
   const timespan = computed(() => timelineEndAt.value.getTime() - timelineStartAt.value.getTime())
 
-  function formatTime(value: number) {
-    return Math.round(value * 100) / 100
-  }
-
   return {
     queueing,
     stalled,
@@ -41,6 +37,5 @@ export function useRequestTimings(request: MaybeRef<GraphQLRequest>) {
     total,
     requestStartedAt,
     timespan,
-    formatTime,
   }
 }

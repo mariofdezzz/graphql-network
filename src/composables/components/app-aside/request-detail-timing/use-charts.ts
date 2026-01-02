@@ -3,7 +3,7 @@ import type { useRequestTimings } from './use-request-timings'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { useDark } from '@vueuse/core'
 
-type UseChartsOptions = Omit<ReturnType<typeof useRequestTimings>, 'formatTime'>
+type UseChartsOptions = ReturnType<typeof useRequestTimings>
 
 export function useCharts({
   queueing,

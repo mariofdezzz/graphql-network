@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { useCharts } from '@/composables/components/app-aside/request-detail-timing/use-charts'
 import { useRequestTimings } from '@/composables/components/app-aside/request-detail-timing/use-request-timings'
+import { formatTime } from '@/logic/contexts/time/format-time'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { toRefs } from 'vue'
 import { Bar } from 'vue-chartjs'
@@ -12,7 +13,7 @@ const props = defineProps<{
 
 const { request } = toRefs(props)
 
-const { formatTime, ...timeData } = useRequestTimings(request)
+const timeData = useRequestTimings(request)
 const { queueing, stalled, dns, connect, ssl, sent, wait, download, total, requestStartedAt } =
   timeData
 
@@ -32,9 +33,9 @@ const {
 </script>
 <template>
   <div class="px-4 py-2 w-full">
-    <p class="mb-2">Queued at {{ requestStartedAt }} ms</p>
+    <p class="mb-2">Queued at {{ formatTime(requestStartedAt, 2) }}</p>
 
-    <p class="mb-2">Started at {{ formatTime(requestStartedAt + queueing) }} ms</p>
+    <p class="mb-2">Started at {{ formatTime(requestStartedAt + queueing, 2) }}</p>
 
     <div class="grid grid-cols-[auto_1fr_auto] gap-3 pb-4">
       <template v-if="queueing > 0">
@@ -55,7 +56,7 @@ const {
           ></Bar>
         </div>
 
-        <span class="text-end">{{ formatTime(queueing) }} ms</span>
+        <span class="text-end">{{ formatTime(queueing, 2) }} </span>
       </template>
 
       <span class="text-request-timing-header">Connection Start</span>
@@ -70,7 +71,7 @@ const {
         <Bar id="timing-stalled-chart" :options="options" :data="stalledData" class="w-full!"></Bar>
       </div>
 
-      <span class="text-end">{{ formatTime(stalled) }} ms</span>
+      <span class="text-end">{{ formatTime(stalled, 2) }} </span>
 
       <template v-if="dns">
         <span class="ps-4">DNS Lookup</span>
@@ -79,7 +80,7 @@ const {
           <Bar id="timing-stalled-chart" :options="options" :data="dnsData" class="w-full!"></Bar>
         </div>
 
-        <span class="text-end">{{ formatTime(dns) }} ms</span>
+        <span class="text-end">{{ formatTime(dns, 2) }} </span>
       </template>
 
       <template v-if="connect">
@@ -94,7 +95,7 @@ const {
           ></Bar>
         </div>
 
-        <span class="text-end">{{ formatTime(connect) }} ms</span>
+        <span class="text-end">{{ formatTime(connect, 2) }} </span>
       </template>
 
       <template v-if="ssl">
@@ -104,7 +105,7 @@ const {
           <Bar id="timing-stalled-chart" :options="options" :data="sslData" class="w-full!"></Bar>
         </div>
 
-        <span class="text-end">{{ formatTime(ssl) }} ms</span>
+        <span class="text-end">{{ formatTime(ssl, 2) }} </span>
       </template>
 
       <span class="text-request-timing-header">Request/Response</span>
@@ -124,7 +125,7 @@ const {
         ></Bar>
       </div>
 
-      <span class="text-end">{{ formatTime(sent) }} ms</span>
+      <span class="text-end">{{ formatTime(sent, 2) }} </span>
 
       <span class="ps-4">Waiting for server response</span>
 
@@ -132,7 +133,7 @@ const {
         <Bar id="timing-waiting-chart" :options="options" :data="waitData" class="w-full!"></Bar>
       </div>
 
-      <span class="text-end">{{ formatTime(wait) }} ms</span>
+      <span class="text-end">{{ formatTime(wait, 2) }} </span>
 
       <span class="ps-4">Content Download</span>
 
@@ -145,7 +146,7 @@ const {
         ></Bar>
       </div>
 
-      <span class="text-end">{{ formatTime(download) }} ms</span>
+      <span class="text-end">{{ formatTime(download, 2) }} </span>
     </div>
 
     <div class="flex items-center justify-between">
@@ -155,7 +156,7 @@ const {
         >Explanation</a
       >
 
-      <span class="font-bold">{{ formatTime(total) }} ms</span>
+      <span class="font-bold">{{ formatTime(total, 2) }} </span>
     </div>
   </div>
 </template>
