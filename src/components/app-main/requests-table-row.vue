@@ -4,6 +4,7 @@ import type { Column } from '@/types/components/shared/table/column'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed } from 'vue'
 import RequestTableRowWaterfall from './request-table-row-waterfall.vue'
+import { formatBytes } from '@/logic/contexts/bytes/format-bytes'
 
 const props = defineProps<{
   row: GraphQLRequest
@@ -53,7 +54,7 @@ function onRowClick(column: Column) {
         <template v-else> ok </template>
       </span>
 
-      <span v-else-if="column.key === 'size'"> {{ (row.size / 1024).toFixed(1) }} kb </span>
+      <span v-else-if="column.key === 'size'"> {{ formatBytes(row.size) }} </span>
 
       <span v-else-if="column.key === 'waterfall'">
         <RequestTableRowWaterfall :request="row" />
