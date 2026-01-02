@@ -4,7 +4,8 @@ import type { Column } from '@/types/components/shared/table/column'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed } from 'vue'
 import RequestTableRowWaterfall from './request-table-row-waterfall.vue'
-import { formatBytes } from '@/logic/contexts/bytes/format-bytes'
+import { formatBytes } from '@/logic/contexts/size/format-bytes'
+import { formatTime } from '@/logic/contexts/time/format-time'
 
 const props = defineProps<{
   row: GraphQLRequest
@@ -40,10 +41,11 @@ function onRowClick(column: Column) {
       v-for="(column, index) in columns"
       :key="index"
       class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] overflow-hidden text-ellipsis min-w-0"
+      :class="[['size', 'time'].includes(column.key) ? 'text-end' : '']"
       @click="onRowClick(column)"
     >
       <span v-if="column.key === 'time'">
-        {{ Math.round(row.timings.total - Math.max(row.timings._blocked_queueing ?? 0, 0)) }}ms
+        {{ formatTime(row.timings.total - Math.max(row.timings._blocked_queueing ?? 0, 0)) }}
       </span>
 
       <span v-else-if="column.key === 'status'">

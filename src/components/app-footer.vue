@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatBytes } from '@/logic/contexts/bytes/format-bytes'
+import { formatBytes } from '@/logic/contexts/size/format-bytes'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed } from 'vue'
 import SharedHorizontalDivider from '@/components/shared/shared-horizontal-divider.vue'
