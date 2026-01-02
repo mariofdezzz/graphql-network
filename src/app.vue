@@ -6,6 +6,7 @@ import AppMain from '@/components/app-main.vue'
 import { useNetworkStore } from '@/stores/network'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
+import WaterfallTimeline from '@/components/app-main/waterfall-timeline.vue'
 
 const networkStore = useNetworkStore()
 const { requests, selectedRequest, recording } = storeToRefs(networkStore)
@@ -31,7 +32,7 @@ function clearRequestsEffect() {
   <div class="h-full bg-base-color text-on-base flex flex-col text-xs">
     <AppHeader v-model:recording="recording" @clear="clearRequestsEffect" />
 
-    <!-- <WaterfallTimeline :requests /> -->
+    <WaterfallTimeline />
 
     <div class="flex-1 flex min-h-0">
       <div class="flex flex-col" :class="[selectedRequest ? 'flex-[0_0_300px]' : 'flex-1']">

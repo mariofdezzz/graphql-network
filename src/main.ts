@@ -1,4 +1,5 @@
 import './assets/main.css'
+import './pollyfills/array-zip'
 
 import { createApp } from 'vue'
 import App from './app.vue'
