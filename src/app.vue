@@ -6,9 +6,13 @@ import AppMain from '@/components/app-main.vue'
 import { useNetworkStore } from '@/stores/network'
 import { storeToRefs } from 'pinia'
 import AppWaterfall from './components/app-waterfall.vue'
+import { useRequestDetailStore } from './stores/request-detail'
 
 const networkStore = useNetworkStore()
-const { requests, selectedRequest } = storeToRefs(networkStore)
+const { requests } = storeToRefs(networkStore)
+
+const requestDetailStore = useRequestDetailStore()
+const { requestDetail: selectedRequest } = storeToRefs(requestDetailStore)
 </script>
 
 <template>
@@ -24,7 +28,7 @@ const { requests, selectedRequest } = storeToRefs(networkStore)
         <AppFooter :requests />
       </div>
 
-      <AppAside class="flex-2" />
+      <AppAside class="flex-1" />
     </div>
   </div>
 </template>

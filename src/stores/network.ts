@@ -2,10 +2,10 @@ import { useFilteredRequests } from '@/composables/network/use-filtered-requests
 import { useGraphqlNetwork } from '@/composables/network/use-graphql-network'
 import { useSortedRequests } from '@/composables/network/use-sorted-requests'
 import { onPageReload } from '@/logic/chrome/on-page-reload'
-import type { GraphQLRequest } from '@/types/graphql-request'
 import { useLocalStorage } from '@vueuse/core'
-import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { defineStore, storeToRefs } from 'pinia'
+import { computed } from 'vue'
+import { useRequestDetailStore } from './request-detail'
 
 export const useNetworkStore = defineStore('network', () => {
   const { requests, recording, clearRequests } = useGraphqlNetwork()
@@ -20,7 +20,9 @@ export const useNetworkStore = defineStore('network', () => {
   const { requests: sortedRequests, order } = useSortedRequests(filteredRequests)
 
   const preserveLog = useLocalStorage('preserveLog', false)
-  const selectedRequest = ref<GraphQLRequest>()
+
+  const requestDetailStore = useRequestDetailStore()
+  const { requestDetail: selectedRequest } = storeToRefs(requestDetailStore)
 
   const timelineStartAt = computed(() => {
     return new Date(
