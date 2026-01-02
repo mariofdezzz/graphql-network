@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import CloseIcon from '@/components/icons/close-icon.vue'
 import { useRequestDetailStore } from '@/stores/request-detail'
-import { Icon } from '@iconify/vue'
 import { useEventListener } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
@@ -37,7 +37,7 @@ function closeDetail() {
         @click="closeDetail()"
         aria-label="Close request detail"
       >
-        <Icon icon="material-symbols:close" class="h-4 w-4" />
+        <CloseIcon class="h-4 w-4" />
       </button>
 
       <RequestDetailTabs v-model="selectedTab" :request="requestDetail" />

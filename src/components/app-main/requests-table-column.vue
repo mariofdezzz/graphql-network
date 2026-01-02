@@ -5,9 +5,10 @@ import {
 } from '@/constants/request-columns-to-keys'
 import { useNetworkStore } from '@/stores/network'
 import type { Column } from '@/types/components/shared/table/column'
-import { Icon } from '@iconify/vue'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
+import ArrowDownIcon from '../icons/arrow-down-icon.vue'
+import ArrowUpIcon from '../icons/arrow-up-icon.vue'
 
 defineProps<{
   columns: Column[]
@@ -47,8 +48,8 @@ function updateSort(column: Column) {
     </span>
 
     <template v-if="sortedColumn === column.key">
-      <Icon v-if="order!.direction === 'asc'" icon="dashicons:arrow-up" class="h-4 w-4" />
-      <Icon v-else icon="dashicons:arrow-down" class="h-4 w-4" />
+      <ArrowUpIcon v-if="order!.direction === 'asc'" class="h-4 w-4" />
+      <ArrowDownIcon v-else class="h-4 w-4" />
     </template>
   </div>
 </template>

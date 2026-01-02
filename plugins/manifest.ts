@@ -19,7 +19,6 @@ export function manifest(): Plugin {
               '128': 'icons/icon-128.png',
             },
             permissions: [],
-            host_permissions: ['https://api.iconify.design/*'],
             author: 'Mario Ferrero',
             minimum_chrome_version: '140',
           },

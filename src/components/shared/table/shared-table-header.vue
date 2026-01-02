@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import ArrowDownIcon from '@/components/icons/arrow-down-icon.vue'
+import ArrowUpIcon from '@/components/icons/arrow-up-icon.vue'
 import type { Column } from '@/types/components/shared/table/column'
 import type { Sort } from '@/types/components/shared/table/sort'
-import { Icon } from '@iconify/vue'
 
 const sort = defineModel<Sort>('sort')
 
@@ -33,8 +34,8 @@ function updateSort(column: Column) {
     </span>
 
     <template v-if="sort?.column === column.key">
-      <Icon v-if="sort.direction === 'asc'" icon="dashicons:arrow-up" class="h-4 w-4" />
-      <Icon v-else icon="dashicons:arrow-down" class="h-4 w-4" />
+      <ArrowUpIcon v-if="sort.direction === 'asc'" class="h-4 w-4" />
+      <ArrowDownIcon v-else class="h-4 w-4" />
     </template>
   </div>
 </template>

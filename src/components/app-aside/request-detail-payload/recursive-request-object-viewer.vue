@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import ArrowDownIcon from '@/components/icons/arrow-down-icon.vue'
+import ArrowRightIcon from '@/components/icons/arrow-right-icon.vue'
 import { REQUEST_OBJECT_VIEWER_MAX_OPENED_DEPTH } from '@/constants/request-object-viewer-max-opened-depth'
-import { Icon } from '@iconify/vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps<{
@@ -50,12 +51,8 @@ function toggle(key: string) {
   <div v-for="([key, value], index) in Object.entries(object)" :key="index">
     <div class="hover:bg-on-base-hover cursor-default font-mono" :style>
       <div class="flex items-center">
-        <Icon
-          :icon="
-            toggled.includes(key)
-              ? 'material-symbols:arrow-drop-down'
-              : 'material-symbols:arrow-right'
-          "
+        <component
+          :is="toggled.includes(key) ? ArrowDownIcon : ArrowRightIcon"
           class="h-4 w-4"
           :class="{ invisible: !(value && typeof value === 'object') }"
           @click="toggle(key)"

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useNetworkStore } from '@/stores/network'
-import { Icon } from '@iconify/vue'
 import { computed } from 'vue'
+import FilterEmptyIcon from '@/components/icons/filter-empty-icon.vue'
+import FilterIcon from '@/components/icons/filter-icon.vue'
 
 const filterActive = defineModel('filterActive', { type: Boolean })
 
@@ -23,9 +24,9 @@ const hasFilter = computed(() => {
     :class="[hasFilter || filterActive ? 'text-primary' : '']"
     @click="filterActive = !filterActive"
   >
-    <Icon v-if="filterActive" icon="material-symbols:filter-alt" class="h-4 w-4" />
+    <FilterIcon v-if="filterActive" class="h-4 w-4" />
 
-    <Icon v-else icon="material-symbols:filter-alt-outline" class="h-4 w-4" />
+    <FilterEmptyIcon v-else class="h-4 w-4" />
 
     <span v-if="hasFilter" class="absolute bottom-1 right-0.5 h-1 w-1 rounded-full bg-primary" />
   </button>

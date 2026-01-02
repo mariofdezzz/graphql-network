@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
+import StopIcon from '@/components/icons/stop-icon.vue'
 
 defineEmits<{
   (e: 'clear', value: void): void
@@ -12,6 +12,6 @@ defineEmits<{
     class="rounded-full hover:bg-on-base-hover active:bg-on-base-active p-1"
     @click="$emit('clear')"
   >
-    <Icon icon="jam:stop-sign" class="h-4 w-4" />
+    <StopIcon class="h-4 w-4" />
   </button>
 </template>

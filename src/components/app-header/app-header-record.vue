@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
+import RecordStopIcon from '@/components/icons/record-stop-icon.vue'
+import RecordIcon from '@/components/icons/record-icon.vue'
 
 const recording = defineModel('recording', { type: Boolean })
 </script>
@@ -10,8 +11,8 @@ const recording = defineModel('recording', { type: Boolean })
     class="rounded-full hover:bg-on-base-hover active:bg-on-base-active p-1"
     @click="recording = !recording"
   >
-    <Icon v-if="recording" icon="fluent:record-stop-16-regular" class="h-4 w-4 text-red-400" />
+    <RecordStopIcon v-if="recording" class="h-4 w-4 text-red-400" />
 
-    <Icon v-else icon="fluent:record-16-regular" class="h-4 w-4" />
+    <RecordIcon v-else class="h-4 w-4" />
   </button>
 </template>
