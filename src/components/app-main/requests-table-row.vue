@@ -9,7 +9,6 @@ const props = defineProps<{
   row: GraphQLRequest
   columns: Column[]
   selected: boolean
-  timelineStartAt: Date
 }>()
 
 const HTTP_STATUS_SUCCESS_THRESHOLD = 400

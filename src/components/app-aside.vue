@@ -12,10 +12,6 @@ import RequestDetailResponse from './app-aside/request-detail-response.vue'
 import RequestDetailTabs from './app-aside/request-detail-tabs.vue'
 import RequestDetailTiming from './app-aside/request-detail-timing.vue'
 
-defineProps<{
-  timelineStartAt: Date
-}>()
-
 const requestDetailStore = useRequestDetailStore()
 const { requestDetail } = storeToRefs(requestDetailStore)
 
@@ -83,11 +79,7 @@ function closeDetail() {
     </div>
 
     <div v-show="selectedTab === 'Timing'" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-      <RequestDetailTiming
-        v-show="selectedTab === 'Timing'"
-        :request="requestDetail"
-        :timelineStartAt
-      />
+      <RequestDetailTiming v-show="selectedTab === 'Timing'" :request="requestDetail" />
     </div>
   </aside>
 </template>

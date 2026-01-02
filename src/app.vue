@@ -3,24 +3,12 @@ import AppAside from '@/components/app-aside.vue'
 import AppFooter from '@/components/app-footer.vue'
 import AppHeader from '@/components/app-header.vue'
 import AppMain from '@/components/app-main.vue'
+import WaterfallTimeline from '@/components/app-main/waterfall-timeline.vue'
 import { useNetworkStore } from '@/stores/network'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
-import WaterfallTimeline from '@/components/app-main/waterfall-timeline.vue'
 
 const networkStore = useNetworkStore()
 const { requests, selectedRequest } = storeToRefs(networkStore)
-
-const timelineStartAt = computed(() => {
-  return new Date(
-    requests.value
-      .map((req) => new Date(req.timings.startedAt).getTime() - req.timings.wait)
-      .reduce(
-        (current, startedAt) => (startedAt < current ? startedAt : current),
-        new Date().getTime(),
-      ),
-  )
-})
 </script>
 
 <template>
@@ -31,12 +19,12 @@ const timelineStartAt = computed(() => {
 
     <div class="flex-1 flex min-h-0">
       <div class="flex flex-col" :class="[selectedRequest ? 'flex-[0_0_300px]' : 'flex-1']">
-        <AppMain class="flex-1" :requests :timelineStartAt />
+        <AppMain class="flex-1" :requests />
 
         <AppFooter :requests />
       </div>
 
-      <AppAside class="flex-2" :timelineStartAt />
+      <AppAside class="flex-2" />
     </div>
   </div>
 </template>

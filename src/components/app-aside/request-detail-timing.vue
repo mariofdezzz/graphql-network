@@ -8,7 +8,6 @@ import { Bar } from 'vue-chartjs'
 
 const props = defineProps<{
   request: GraphQLRequest
-  timelineStartAt: Date
 }>()
 
 const { request } = toRefs(props)

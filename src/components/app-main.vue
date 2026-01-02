@@ -4,12 +4,11 @@ import RequestsTable from './app-main/requests-table.vue'
 
 defineProps<{
   requests: GraphQLRequest[]
-  timelineStartAt: Date
 }>()
 </script>
 
 <template>
   <main>
-    <RequestsTable :rows="requests" :timelineStartAt />
+    <RequestsTable :rows="requests" />
   </main>
 </template>
