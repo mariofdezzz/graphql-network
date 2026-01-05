@@ -1,13 +1,14 @@
 export function formatTime(milliseconds: number, decimals = 0) {
   if (milliseconds < 0) return '-'
-  if (milliseconds === 0) return '0 ms'
+  if (milliseconds < 0.001) return '0 µs'
 
+  const microseconds = milliseconds * 1000
   const k = 1000
-  const sizes = ['ms', 's', 'min']
+  const sizes = ['µs', 'ms', 's', 'min']
 
-  const i = Math.floor(Math.log(milliseconds) / Math.log(k))
+  const i = Math.floor(Math.log(microseconds) / Math.log(k))
 
-  const result = generateResult(milliseconds, i, decimals)
+  const result = generateResult(microseconds, i, decimals)
 
   return result + ' ' + sizes[i]
 }
