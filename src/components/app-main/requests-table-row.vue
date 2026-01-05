@@ -65,7 +65,7 @@ function onRowClick(column: Column) {
         <RequestTableRowWaterfall :request="row" />
       </span>
 
-      <span v-else-if="row.name.startsWith('(') && column.key === 'name'" class="italic">
+      <span v-else-if="row.operation === 'preflight' && column.key === 'name'" class="italic">
         {{ row.name }}
       </span>
 
