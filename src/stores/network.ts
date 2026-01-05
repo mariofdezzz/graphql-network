@@ -51,6 +51,7 @@ export const useNetworkStore = defineStore('network', () => {
   onPageReload(() => {
     if (!preserveLog.value) {
       clearRequests()
+      selectedRequest.value = undefined
     }
   })
 
