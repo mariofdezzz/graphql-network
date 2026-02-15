@@ -1,5 +1,6 @@
 import { useRequestTimings } from '@/composables/components/app-aside/request-detail-timing/use-request-timings'
 import { useNetworkStore } from '@/stores/network'
+import type { GraphQLNetworkRequest } from '@/types/graphql-request'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { computed, type UnwrapRef } from 'vue'
 
@@ -8,6 +9,7 @@ export function useWaterfallChart() {
 
   const requestsTimings = computed(() =>
     networkStore.requests
+      .filter((request): request is GraphQLNetworkRequest => request.operation !== 'subscription')
       .map((request) => useRequestTimings(request))
       .map((timings) => ({
         queueing: timings.queueing.value,

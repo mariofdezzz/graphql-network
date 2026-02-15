@@ -3,12 +3,12 @@
 import { useCharts } from '@/composables/components/app-aside/request-detail-timing/use-charts'
 import { useRequestTimings } from '@/composables/components/app-aside/request-detail-timing/use-request-timings'
 import { formatTime } from '@/logic/contexts/time/format-time'
-import type { GraphQLRequest } from '@/types/graphql-request'
+import type { GraphQLNetworkRequest } from '@/types/graphql-request'
 import { toRefs } from 'vue'
 import { Bar } from 'vue-chartjs'
 
 const props = defineProps<{
-  request: GraphQLRequest
+  request: GraphQLNetworkRequest
 }>()
 
 const { request } = toRefs(props)

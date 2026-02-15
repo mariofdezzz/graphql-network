@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CloseIcon from '@/components/icons/close-icon.vue'
 import { useRequestDetailStore } from '@/stores/request-detail'
+import type { GraphQLNetworkRequest } from '@/types/graphql-request'
 import { useEventListener } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
@@ -54,21 +55,27 @@ function closeDetail() {
       v-show="selectedTab === 'Payload'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
-      <RequestDetailPayload :request="requestDetail" :enabled="selectedTab === 'Payload'" />
+      <RequestDetailPayload
+        :request="requestDetail as GraphQLNetworkRequest"
+        :enabled="selectedTab === 'Payload'"
+      />
     </div>
 
     <div
       v-show="selectedTab === 'Preview'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
-      <RequestDetailPreview :request="requestDetail" />
+      <RequestDetailPreview :request="requestDetail as GraphQLNetworkRequest" />
     </div>
 
     <div
       v-show="selectedTab === 'Response'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
-      <RequestDetailResponse :request="requestDetail" :enabled="selectedTab === 'Response'" />
+      <RequestDetailResponse
+        :request="requestDetail as GraphQLNetworkRequest"
+        :enabled="selectedTab === 'Response'"
+      />
     </div>
 
     <div
@@ -79,7 +86,10 @@ function closeDetail() {
     </div>
 
     <div v-show="selectedTab === 'Timing'" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-      <RequestDetailTiming v-show="selectedTab === 'Timing'" :request="requestDetail" />
+      <RequestDetailTiming
+        v-show="selectedTab === 'Timing'"
+        :request="requestDetail as GraphQLNetworkRequest"
+      />
     </div>
   </aside>
 </template>

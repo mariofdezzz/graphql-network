@@ -1,6 +1,9 @@
+import type { Initiator } from './graphql-request'
+
 export type WebSocketNetworkEvent =
   | WebSocketNetworkCreatedEvent
-  | WebSocketNetworkHandshakeEvent
+  | WebSocketNetworkHandshakeRequestEvent
+  | WebSocketNetworkHandshakeResponseEvent
   | WebSocketNetworkFrameEvent
   | WebSocketNetworkClosedEvent
 
@@ -8,13 +11,25 @@ export type WebSocketNetworkCreatedEvent = {
   method: 'created'
   params: {
     requestId: string
-    initiator: Record<string, any>
+    initiator: Initiator
     url: string
   }
 }
 
-export type WebSocketNetworkHandshakeEvent = {
-  method: 'handshakeResponseReceived'
+export type WebSocketNetworkHandshakeRequestEvent = {
+  method: 'handshakeRequest'
+  params: {
+    requestId: string
+    timestamp: number
+    wallTime: number
+    request: {
+      headers: Record<string, string>
+    }
+  }
+}
+
+export type WebSocketNetworkHandshakeResponseEvent = {
+  method: 'handshakeResponse'
   params: {
     requestId: string
     timestamp: number
@@ -48,4 +63,10 @@ export type WebSocketNetworkClosedEvent = {
     requestId: string
     timestamp: number
   }
+}
+
+export type Message = {
+  data: string
+  length: number
+  timestamp: number
 }

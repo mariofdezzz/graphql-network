@@ -11,11 +11,13 @@ const props = defineProps<{
 const tabs = computed(() =>
   [
     'Headers',
-    props.request.response ? 'Payload' : null,
-    'Preview',
-    'Response',
+    'response' in props.request && props.request.response ? 'Payload' : null,
+    props.request.operation !== 'subscription' ? 'Preview' : null,
+    props.request.operation !== 'subscription' ? 'Response' : null,
     'Initiator',
-    'Timing',
+    props.request.operation !== 'subscription'
+      ? 'Timing' // FIXME: show timing on websocket requests
+      : null,
     // 'Cookies' // TODO
   ].filter((tab): tab is string => tab !== null),
 )

@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { formatBytes } from '@/logic/contexts/size/format-bytes'
+import { formatTime } from '@/logic/contexts/time/format-time'
 import { useRequestDetailStore } from '@/stores/request-detail'
 import type { Column } from '@/types/components/shared/table/column'
 import type { GraphQLRequest } from '@/types/graphql-request'
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import RequestTableRowWaterfall from './request-table-row-waterfall.vue'
-import { formatBytes } from '@/logic/contexts/size/format-bytes'
-import { formatTime } from '@/logic/contexts/time/format-time'
 
 const props = defineProps<{
   row: GraphQLRequest
@@ -17,11 +17,15 @@ const HTTP_STATUS_SUCCESS_THRESHOLD = 400
 
 const requestDetailStore = useRequestDetailStore()
 
-const rowHasErrors = computed(
-  () => props.row.status >= HTTP_STATUS_SUCCESS_THRESHOLD || props.row.errors > 0,
-)
+const rowHasErrors = computed(() => {
+  const errors = typeof props.row.errors === 'number' ? props.row.errors : props.row.errors.value
+
+  return props.row.status >= HTTP_STATUS_SUCCESS_THRESHOLD || errors > 0
+})
 const time = computed(() => {
-  return props.row.timings.total - Math.max(props.row.timings._blocked_queueing ?? 0, 0)
+  return '_blocked_queueing' in props.row.timings
+    ? props.row.timings.total - Math.max(props.row.timings._blocked_queueing ?? 0, 0)
+    : props.row.timings.total
 })
 
 function onRowClick(column: Column) {
@@ -47,15 +51,15 @@ function onRowClick(column: Column) {
       :class="[['size', 'time'].includes(column.key) ? 'text-end' : '']"
       @click="onRowClick(column)"
     >
-      <span v-if="column.key === 'time'">
-        {{ formatTime(time, time >= 1000 ? 2 : 0) }}
+      <span v-if="column.key === 'time'" :class="{ 'text-request-timing-header': !time }">
+        {{ time ? formatTime(time, time >= 1000 ? 2 : 0) : 'Pending' }}
       </span>
 
       <span v-else-if="column.key === 'status'">
         <template v-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
           (http:{{ row.status }})
         </template>
-        <template v-else-if="row.errors > 0"> {{ row.errors }} errors </template>
+        <template v-else-if="unref(row.errors) > 0"> {{ row.errors }} errors </template>
         <template v-else> ok </template>
       </span>
 

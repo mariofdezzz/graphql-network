@@ -1,5 +1,5 @@
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
-import type { GraphQLRequest } from '@/types/graphql-request'
+import type { GraphQLNetworkRequest, GraphQLRequest } from '@/types/graphql-request'
 import { isPreflightRequest } from './is-preflight-request'
 import { extractName } from './to-graphql-request/extract-name'
 import { extractOperation } from './to-graphql-request/extract-operation'
@@ -8,13 +8,15 @@ import { extractQuery } from './to-graphql-request/extract-query'
 
 export async function toGraphQLRequest(
   request: ChromeNetworkRequest,
-): Promise<GraphQLRequest | null> {
+): Promise<GraphQLNetworkRequest | null> {
   try {
     const isPreflight = isPreflightRequest(request)
 
     const payload = extractPayload(request)
     const query = extractQuery(payload)
-    const operation = isPreflight ? 'preflight' : extractOperation(query)
+    const operation = isPreflight
+      ? 'preflight'
+      : extractOperation<GraphQLNetworkRequest['operation']>(query)
     const name = extractName(request)
 
     const responseText = await new Promise<string>((resolve) =>
@@ -28,10 +30,10 @@ export async function toGraphQLRequest(
 
     return {
       id: crypto.randomUUID(),
-      name: name,
+      name,
       status: request.response.status,
-      errors: errors,
-      operation: operation,
+      errors,
+      operation,
       size: request.response?._transferSize ?? 0,
       timings: {
         ...request.timings,

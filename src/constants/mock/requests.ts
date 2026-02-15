@@ -1,4 +1,4 @@
-import type { GraphQLRequest } from '@/types/graphql-request'
+import type { GraphQLNetworkRequest, GraphQLRequest } from '@/types/graphql-request'
 import { faker } from '@faker-js/faker'
 import { pascalCase } from 'case-anything'
 
@@ -22,7 +22,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
       name: pascalCase(faker.lorem.words({ min: 2, max: 5 })),
       status: faker.helpers.arrayElement([200, 201, 400, 403, 404, 500]),
       errors: faker.number.int({ min: 0, max: 3 }),
-      operation: faker.helpers.arrayElement(['query', 'mutation', 'subscription', 'unknown']),
+      operation: faker.helpers.arrayElement(['query', 'mutation', 'unknown']),
       size: faker.number.int({ min: 500, max: 5000 }),
       timings: {
         startedAt: new Date(referenceDate).toISOString(),
@@ -145,7 +145,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
             ]
           : undefined,
       },
-    } satisfies GraphQLRequest
+    } satisfies GraphQLNetworkRequest
   },
   { count: 15 },
 )

@@ -2,7 +2,8 @@ import type { WebSocketNetworkEvent } from '@/types/websocket-network-event'
 
 const ChromeEvents = {
   'Network.webSocketCreated': 'created',
-  'Network.webSocketHandshakeResponseReceived': 'handshakeResponseReceived',
+  'Network.webSocketWillSendHandshakeRequest': 'handshakeRequest',
+  'Network.webSocketHandshakeResponseReceived': 'handshakeResponse',
   'Network.webSocketFrameReceived': 'frameReceived',
   'Network.webSocketFrameSent': 'frameSent',
   'Network.webSocketClosed': 'closed',
@@ -10,6 +11,7 @@ const ChromeEvents = {
 
 export function onWebsocketNetworkEvent(onEvent: (event: WebSocketNetworkEvent) => void) {
   chrome.debugger.onEvent.addListener((source, method, params) => {
+    console.log('Event:', source, method, params)
     if (method in ChromeEvents && params) {
       onEvent({
         method: ChromeEvents[method as keyof typeof ChromeEvents],

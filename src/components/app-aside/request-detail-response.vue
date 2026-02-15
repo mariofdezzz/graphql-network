@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useLayout } from '@/composables/contexts/monaco/use-layout'
 import { useTheme } from '@/composables/contexts/monaco/use-theme'
-import type { GraphQLRequest } from '@/types/graphql-request'
+import type { GraphQLNetworkRequest } from '@/types/graphql-request'
 import { CodeEditor, type MonacoEditorConfig } from 'monaco-editor-vue3'
 import { toRefs } from 'vue'
 import RequestDetailFallbackTab from './request-detail-fallback-tab.vue'
 
 const props = defineProps<{
-  request: GraphQLRequest
+  request: GraphQLNetworkRequest
   enabled: boolean
 }>()
 const { enabled } = toRefs(props)

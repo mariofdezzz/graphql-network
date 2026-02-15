@@ -15,7 +15,7 @@ export const useNetworkStore = defineStore('network', () => {
     nameFilter,
     invertNameFilter,
     typeFilters,
-  } = useFilteredRequests(requests)
+  } = useFilteredRequests(requests as any) // FIXME
 
   const { requests: sortedRequests, order } = useSortedRequests(filteredRequests)
 
@@ -38,7 +38,7 @@ export const useNetworkStore = defineStore('network', () => {
   const timelineEndAt = computed(() => {
     return new Date(
       requests.value
-        .map(({ timings }) => new Date(timings.startedAt).getTime() + timings.total)
+        .map(({ timings }) => new Date(timings.startedAt).getTime() + (timings.total ?? 0))
         .reduce((current, endedAt) => (endedAt > current ? endedAt : current), 0),
     )
   })

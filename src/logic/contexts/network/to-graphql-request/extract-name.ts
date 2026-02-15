@@ -10,7 +10,9 @@ export function extractName(request: ChromeNetworkRequest): string {
   const query = extractQuery(payload)
 
   const name =
-    payload?.operationName ?? /query\s*(?<name>\w+)/.exec(query)?.groups?.name ?? '(anonymous)'
+    payload?.operationName ??
+    /(query|mutation)\s*(?<name>\w+)/.exec(query)?.groups?.name ??
+    '(anonymous)'
 
   return isPreflight ? `(${name})` : name
 }

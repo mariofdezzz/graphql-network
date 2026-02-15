@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { GraphQLRequest } from '@/types/graphql-request'
-import RequestObjectViewer from './request-detail-payload/request-object-viewer.vue'
+import type { GraphQLNetworkRequest } from '@/types/graphql-request'
 import RequestDetailFallbackTab from './request-detail-fallback-tab.vue'
+import RequestObjectViewer from './request-detail-payload/request-object-viewer.vue'
 
 defineProps<{
-  request: GraphQLRequest
+  request: GraphQLNetworkRequest
 }>()
 </script>
 

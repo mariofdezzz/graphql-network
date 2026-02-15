@@ -1,12 +1,16 @@
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { Prettify } from '@/types/prettify'
+import type { ComputedRef } from 'vue'
+import type { Message } from './websocket-network-event'
 
-export type GraphQLRequest = {
+export type GraphQLRequest = GraphQLNetworkRequest | GraphQLSubscriptionRequest
+
+export type GraphQLNetworkRequest = {
   id: string
   name: string
   status: number
   errors: number
-  operation: 'query' | 'mutation' | 'subscription' | 'preflight' | 'unknown'
+  operation: 'query' | 'mutation' | 'preflight' | 'unknown'
   size: number
   timings: Prettify<
     {
@@ -23,12 +27,40 @@ export type GraphQLRequest = {
       status: number
       remoteAddress?: string
     }
-    response: ChromeNetworkRequest['response']['headers']
-    request: ChromeNetworkRequest['request']['headers']
+    request: ChromeNetworkHeaders
+    response: ChromeNetworkHeaders
   }
   payload?: any
   initiator: Initiator
   response?: any
+}
+
+export type GraphQLSubscriptionRequest = {
+  id: string
+  name: string
+  status: number
+  errors: ComputedRef<number>
+  operation: 'subscription'
+  size: number
+  timings: Prettify<{
+    startedAt: string
+    total?: number
+    // _blocked_queueing?: number
+    // waterfall: number
+  }>
+  //  & ChromeNetworkRequest['timings']
+  headers: {
+    general: {
+      url: string
+      method: string
+      status: number
+      remoteAddress?: string
+    }
+    request: ChromeNetworkHeaders
+    response: ChromeNetworkHeaders
+  }
+  initiator: Initiator
+  messages: Message[]
 }
 
 export type Initiator = {
@@ -49,3 +81,5 @@ export type CallFrame = {
   lineNumber: number
   columnNumber: number
 }
+
+export type ChromeNetworkHeaders = ChromeNetworkRequest['request']['headers']
