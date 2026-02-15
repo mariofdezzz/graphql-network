@@ -35,6 +35,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
         wait,
         receive,
         ssl,
+        waterfall: 0,
       },
       headers: {
         general: {

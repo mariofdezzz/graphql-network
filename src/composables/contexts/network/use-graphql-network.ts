@@ -18,7 +18,7 @@ export function useGraphqlNetwork() {
   onNetworkRequestFinished((request) => {
     if (!recording.value) return
 
-    console.log('Network Request:', request)
+    // console.log('Network Request:', request)
 
     if (isPreflightRequest(request)) {
       preflightRequests.add(request)
@@ -34,7 +34,7 @@ export function useGraphqlNetwork() {
   })
 
   async function pushRequest(request: ChromeNetworkRequest) {
-    console.log('Finished GraphQL Request:', request)
+    // console.log('Finished GraphQL Request:', request)
 
     const req = await toGraphQLRequest(request)
 

@@ -18,7 +18,8 @@ export function manifest(): Plugin {
             icons: {
               '128': 'icons/icon-128.png',
             },
-            permissions: [],
+            permissions: ['debugger'],
+            host_permissions: ['<all_urls>'],
             author: 'Mario Ferrero',
             minimum_chrome_version: '140',
           },

@@ -7,9 +7,7 @@ export function isGraphqlRequest(request: ChromeNetworkRequest): boolean {
   try {
     const payload = JSON.parse(request.request.postData?.text ?? '{}')
 
-    if (!Object.keys(payload).every((key) => GRAPHQL_PAYLOAD_KEYS.includes(key))) return false
-
-    return true
+    return Object.keys(payload).every((key) => GRAPHQL_PAYLOAD_KEYS.includes(key))
   } catch {
     return false
   }
