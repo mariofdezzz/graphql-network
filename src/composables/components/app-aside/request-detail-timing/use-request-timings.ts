@@ -4,7 +4,11 @@ import { storeToRefs } from 'pinia'
 import { computed, unref, type MaybeRef } from 'vue'
 
 export function useRequestTimings(request: MaybeRef<GraphQLRequest>) {
-  if (unref(request).operation === 'subscription')
+  const networkStore = useNetworkStore()
+  const { timelineStartAt, timelineEndAt } = storeToRefs(networkStore)
+  const networkRequest = request as GraphQLNetworkRequest
+
+  if (unref(request).operation === 'subscription') {
     return {
       queueing: computed(() => 0),
       stalled: computed(() => 0),
@@ -21,10 +25,7 @@ export function useRequestTimings(request: MaybeRef<GraphQLRequest>) {
           new Date(unref(request).timings.startedAt).getTime() - timelineStartAt.value.getTime(),
       ),
     }
-
-  const networkStore = useNetworkStore()
-  const { timelineStartAt, timelineEndAt } = storeToRefs(networkStore)
-  const networkRequest = request as GraphQLNetworkRequest
+  }
 
   const queueing = computed(() => unref(networkRequest).timings._blocked_queueing ?? 0)
   const stalled = computed(() =>

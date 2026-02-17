@@ -69,4 +69,5 @@ export type Message = {
   data: string
   length: number
   timestamp: number
+  method: 'frameReceived' | 'frameSent'
 }

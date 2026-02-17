@@ -85,6 +85,7 @@ function toMessages(events: WebSocketNetworkEvent[]): Message[] {
           data: event.params.response.payloadData,
           length: event.params.response.payloadData.length,
           timestamp: event.params.timestamp,
+          method: event.method,
         }) satisfies Message,
     )
 }

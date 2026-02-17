@@ -10,6 +10,13 @@ const ChromeEvents = {
 } as const
 
 export function onWebsocketNetworkEvent(onEvent: (event: WebSocketNetworkEvent) => void) {
+  if (!chrome.debugger) {
+    console.warn(
+      'chrome.debugger API is not available. WebSocket network events will not be captured.',
+    )
+    return
+  }
+
   chrome.debugger.onEvent.addListener((source, method, params) => {
     console.log('Event:', source, method, params)
     if (method in ChromeEvents && params) {

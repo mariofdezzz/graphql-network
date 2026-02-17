@@ -1,8 +1,86 @@
 import type { GraphQLNetworkRequest, GraphQLRequest } from '@/types/graphql-request'
 import { faker } from '@faker-js/faker'
 import { pascalCase } from 'case-anything'
+import { computed, reactive } from 'vue'
 
 let referenceDate = faker.date.recent().getTime()
+
+export const wsMockRequests = reactive<GraphQLRequest[]>([
+  {
+    id: crypto.randomUUID(),
+    name: 'NewMessage',
+    status: 101,
+    errors: computed(() => 0),
+    operation: 'subscription',
+    size: 0,
+    timings: {
+      startedAt: new Date().toISOString(),
+    },
+    headers: {
+      general: {
+        url: 'wss://example.com/graphql',
+        method: 'GET',
+        status: 101,
+        remoteAddress: '127.0.0.1:443',
+      },
+      request: [],
+      response: [],
+    },
+    initiator: {
+      type: 'script',
+      stack: {
+        callFrames: [
+          {
+            functionName: 'startSubscription',
+            scriptId: '1',
+            url: 'https://example.com/app.js',
+            lineNumber: 10,
+            columnNumber: 15,
+          },
+        ],
+      },
+    },
+    messages: [
+      {
+        data: JSON.stringify({ type: 'connection_init' }),
+        length: 25,
+        timestamp: Date.now(),
+        method: 'frameSent',
+      },
+      {
+        data: JSON.stringify({ type: 'connection_ack' }),
+        length: 25,
+        timestamp: Date.now() + 200,
+        method: 'frameReceived',
+      },
+      {
+        data: JSON.stringify({
+          id: 'f0492f6e-78f2-4036-a8e2-875504dcebae',
+          type: 'subscribe',
+          payload: {
+            variables: {},
+            extensions: {},
+            operationName: 'Reloj',
+            query: 'subscription Reloj {\n  clock\n}',
+          },
+        }),
+        length: 25,
+        timestamp: Date.now() + 400,
+        method: 'frameSent',
+      },
+      {
+        data: JSON.stringify({
+          id: 'f0492f6e-78f2-4036-a8e2-875504dcebae',
+          type: 'next',
+          payload: { data: { clock: '2026-02-17T19:10:32.332Z' } },
+        }),
+        length: 25,
+        timestamp: Date.now() + 600,
+        method: 'frameReceived',
+      },
+    ],
+  },
+])
 
 export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
   () => {

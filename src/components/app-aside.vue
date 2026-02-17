@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import CloseIcon from '@/components/icons/close-icon.vue'
 import { useRequestDetailStore } from '@/stores/request-detail'
-import type { GraphQLNetworkRequest } from '@/types/graphql-request'
+import type { GraphQLNetworkRequest, GraphQLSubscriptionRequest } from '@/types/graphql-request'
 import { useEventListener } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import RequestDetailHeaders from './app-aside/request-detail-headers.vue'
 import RequestDetailInitiator from './app-aside/request-detail-initiator.vue'
+import RequestDetailMessages from './app-aside/request-detail-messages.vue'
 import RequestDetailPayload from './app-aside/request-detail-payload.vue'
 import RequestDetailPreview from './app-aside/request-detail-preview.vue'
 import RequestDetailResponse from './app-aside/request-detail-response.vue'
@@ -76,6 +77,13 @@ function closeDetail() {
         :request="requestDetail as GraphQLNetworkRequest"
         :enabled="selectedTab === 'Response'"
       />
+    </div>
+
+    <div
+      v-show="selectedTab === 'Messages'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailMessages :request="requestDetail as GraphQLSubscriptionRequest" />
     </div>
 
     <div

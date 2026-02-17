@@ -35,4 +35,7 @@ body,
   --color-filter-button-active: light-dark(#d3e3fd, #004a77);
   --color-on-filter-button-active: light-dark(#041e49, #c2e7ff);
   --color-primary: light-dark(#1b6ef3, #7cacf8);
+  --color-ws-message-sent-arrow: light-dark(#d1e7dd, #6dd58c); /* TODO: light */
+  --color-ws-message-received-arrow: light-dark(#f8d7da, #f2b8b5); /* TODO: light */
+  --color-ws-message-sent: light-dark(#d1e7dd, #1c3d26); /* TODO: light */
 }
