@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import type { GraphQLSubscriptionRequest } from '@/types/graphql-request'
+import type { Message } from '@/types/websocket-network-event'
+import { ref } from 'vue'
 import RequestDetailMessagesTable from './request-detail-messages/request-detail-messages-table.vue'
+import RequestDetailMessagesViewer from './request-detail-messages/request-detail-messages-viewer.vue'
 
 defineProps<{
   request: GraphQLSubscriptionRequest
 }>()
+
+const selected = ref<Message>()
 </script>
 
 <template>
-  <div class="h-full">
-    <RequestDetailMessagesTable :messages="request.messages" />
+  <div class="h-full grid grid-rows-[1fr_200px]">
+    <RequestDetailMessagesTable :messages="request.messages" v-model="selected" />
+
+    <RequestDetailMessagesViewer :selected />
   </div>
 </template>

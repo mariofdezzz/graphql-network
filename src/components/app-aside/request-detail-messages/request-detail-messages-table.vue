@@ -1,15 +1,27 @@
 <script setup lang="ts">
 import type { Column } from '@/types/components/shared/table/column'
 import type { Message } from '@/types/websocket-network-event'
-import { ref } from 'vue'
+import { computed } from 'vue'
 import RequestDetailMessagesTableColumn from './request-detail-messages-table-column.vue'
 import RequestDetailMessagesTableRow from './request-detail-messages-table-row.vue'
 
-defineProps<{
+const selected = defineModel<Message>()
+
+const props = defineProps<{
   messages: Message[]
 }>()
 
-const selectedRow = ref<number>()
+const selectedRow = computed({
+  // eslint-disable-next-line vue/return-in-computed-property
+  get() {
+    const index = props.messages.indexOf(selected.value!)
+
+    if (index > -1) return index
+  },
+  set(value: number) {
+    selected.value = props.messages[value]
+  },
+})
 
 const columns: Column[] = [
   {

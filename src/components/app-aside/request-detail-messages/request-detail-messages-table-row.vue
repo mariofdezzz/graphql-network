@@ -20,10 +20,10 @@ const formatter = new Intl.DateTimeFormat('en', {
 
 <template>
   <div
-    class="grid grid-cols-[1fr_100px_200px] gap-px bg-on-base-disabled hover:*:bg-on-base-hover border-b border-on-base-disabled"
+    class="grid grid-cols-[1fr_100px_200px] gap-px bg-on-base-disabled hover:*:bg-on-base-hover! border-b border-on-base-disabled"
     :class="[
-      selected ? '*:bg-table-selected-row hover:*:bg-table-selected-row ' : '',
-      row.method === 'frameSent' ? '*:bg-ws-message-sent!' : '',
+      selected ? '*:bg-table-selected-row! hover:*:bg-table-selected-row!' : '',
+      row.method === 'frameSent' ? '*:bg-ws-message-sent' : '*:bg-base-color!',
     ]"
   >
     <div
