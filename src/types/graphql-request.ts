@@ -45,6 +45,8 @@ export type GraphQLSubscriptionRequest = {
   timings: Prettify<{
     startedAt: string
     total?: number
+    wallTime: number
+    baseTimestamp: number
     // _blocked_queueing?: number
     // waterfall: number
   }>

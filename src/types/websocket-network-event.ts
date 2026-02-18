@@ -68,6 +68,6 @@ export type WebSocketNetworkClosedEvent = {
 export type Message = {
   data: string
   length: number
-  timestamp: number
+  time: Date
   method: 'frameReceived' | 'frameSent'
 }

@@ -34,7 +34,7 @@ const columns: Column[] = [
   },
   {
     title: 'Time',
-    key: 'timestamp',
+    key: 'time',
   },
 ]
 </script>

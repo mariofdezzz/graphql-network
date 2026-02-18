@@ -29,8 +29,13 @@ export function toGraphQLSubscriptionRequest(
   const responseHeaders = toHeaders(handshakeEvent.params.response.headers)
 
   const status = handshakeEvent.params.response.status
+  const timings = {
+    startedAt: new Date(handshakeRequestEvent.params.wallTime * 1000).toISOString(),
+    wallTime: handshakeRequestEvent.params.wallTime,
+    baseTimestamp: handshakeRequestEvent.params.timestamp,
+  }
 
-  const messages = reactive(toMessages(events))
+  const messages = reactive(toMessages(events, timings))
 
   const errors = computed(() =>
     messages.reduce((errors, { data }) => {
@@ -49,9 +54,7 @@ export function toGraphQLSubscriptionRequest(
     errors,
     operation,
     size: 0,
-    timings: {
-      startedAt: new Date(handshakeRequestEvent.params.wallTime * 1000).toISOString(),
-    },
+    timings,
     headers: {
       general: {
         url: createdEvent.params.url,
@@ -73,19 +76,30 @@ function toHeaders(headers: Record<string, string>): ChromeNetworkHeaders {
   }))
 }
 
-function toMessages(events: WebSocketNetworkEvent[]): Message[] {
+function toMessages(
+  events: WebSocketNetworkEvent[],
+  timings: GraphQLSubscriptionRequest['timings'],
+): Message[] {
   return events
     .filter(
       (event): event is WebSocketNetworkFrameEvent =>
         event.method === 'frameSent' || event.method === 'frameReceived',
     )
-    .map(
-      (event) =>
-        ({
-          data: event.params.response.payloadData,
-          length: event.params.response.payloadData.length,
-          timestamp: event.params.timestamp,
-          method: event.method,
-        }) satisfies Message,
-    )
+    .map((event) => toMessage(event, timings))
+}
+
+export function toMessage(
+  event: WebSocketNetworkFrameEvent,
+  timings: GraphQLSubscriptionRequest['timings'],
+): Message {
+  const time = new Date(
+    (timings.wallTime + (event.params.timestamp - timings.baseTimestamp)) * 1000,
+  )
+
+  return {
+    data: event.params.response.payloadData,
+    length: event.params.response.payloadData.length,
+    time,
+    method: event.method,
+  }
 }

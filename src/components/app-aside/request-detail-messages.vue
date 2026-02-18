@@ -14,7 +14,7 @@ const selected = ref<Message>()
 
 <template>
   <div class="h-full grid grid-rows-[1fr_200px]">
-    <RequestDetailMessagesTable :messages="request.messages" v-model="selected" />
+    <RequestDetailMessagesTable v-model="selected" :messages="request.messages" />
 
     <RequestDetailMessagesViewer :selected />
   </div>

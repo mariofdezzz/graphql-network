@@ -6,14 +6,14 @@ import { PreflightRequestMap } from '@/logic/contexts/network/preflight-request-
 import { toGraphQLRequest } from '@/logic/contexts/network/to-graphql-request'
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { GraphQLRequest } from '@/types/graphql-request'
-import { computed, reactive, ref } from 'vue'
+import { computed, ref, shallowReactive } from 'vue'
 import { useGraphqlNetworkSubscriptions } from './use-graphql-network-subscriptions'
 
 export function useGraphqlNetwork() {
   const preflightRequests = new PreflightRequestMap()
   const recording = ref(true)
 
-  const requests = reactive<GraphQLRequest[]>([])
+  const requests = shallowReactive<GraphQLRequest[]>([])
   const readonlyRequests = computed(() => (import.meta.env.DEV ? wsMockRequests : requests))
 
   onNetworkRequestFinished((request) => {

@@ -1,11 +1,11 @@
 import type { GraphQLNetworkRequest, GraphQLRequest } from '@/types/graphql-request'
 import { faker } from '@faker-js/faker'
 import { pascalCase } from 'case-anything'
-import { computed, reactive } from 'vue'
+import { computed, reactive, shallowReactive } from 'vue'
 
 let referenceDate = faker.date.recent().getTime()
 
-export const wsMockRequests = reactive<GraphQLRequest[]>([
+export const wsMockRequests = shallowReactive<GraphQLRequest[]>([
   {
     id: crypto.randomUUID(),
     name: 'NewMessage',
@@ -15,6 +15,8 @@ export const wsMockRequests = reactive<GraphQLRequest[]>([
     size: 0,
     timings: {
       startedAt: new Date().toISOString(),
+      wallTime: 1231231,
+      baseTimestamp: 1231231232,
     },
     headers: {
       general: {
@@ -40,17 +42,17 @@ export const wsMockRequests = reactive<GraphQLRequest[]>([
         ],
       },
     },
-    messages: [
+    messages: reactive([
       {
         data: JSON.stringify({ type: 'connection_init' }),
         length: 25,
-        timestamp: Date.now(),
+        time: new Date(),
         method: 'frameSent',
       },
       {
         data: JSON.stringify({ type: 'connection_ack' }),
         length: 25,
-        timestamp: Date.now() + 200,
+        time: new Date(),
         method: 'frameReceived',
       },
       {
@@ -65,7 +67,7 @@ export const wsMockRequests = reactive<GraphQLRequest[]>([
           },
         }),
         length: 25,
-        timestamp: Date.now() + 400,
+        time: new Date(),
         method: 'frameSent',
       },
       {
@@ -75,10 +77,10 @@ export const wsMockRequests = reactive<GraphQLRequest[]>([
           payload: { data: { clock: '2026-02-17T19:10:32.332Z' } },
         }),
         length: 25,
-        timestamp: Date.now() + 600,
+        time: new Date(),
         method: 'frameReceived',
       },
-    ],
+    ]),
   },
 ])
 

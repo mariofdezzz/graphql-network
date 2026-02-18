@@ -66,8 +66,8 @@ const formatter = new Intl.DateTimeFormat('en', {
         </span>
       </div>
 
-      <div v-else-if="column.key === 'timestamp'" class="line-clamp-1">
-        {{ formatter.format(new Date(row.timestamp)) }}
+      <div v-else-if="column.key === 'time'" class="line-clamp-1">
+        {{ formatter.format(row.time) }}
       </div>
 
       <span v-else class="line-clamp-1">

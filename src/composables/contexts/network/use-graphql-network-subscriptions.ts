@@ -1,12 +1,15 @@
 import { onWebsocketNetworkEvent } from '@/logic/contexts/chrome/on-websocket-network-event'
 import { isGraphqlSubscribeRequest } from '@/logic/contexts/network/is-graphql-subscribe-request'
-import { toGraphQLSubscriptionRequest } from '@/logic/contexts/network/to-graphql-subscription-request'
+import {
+  toGraphQLSubscriptionRequest,
+  toMessage,
+} from '@/logic/contexts/network/to-graphql-subscription-request'
 import type { GraphQLSubscriptionRequest } from '@/types/graphql-request'
 import type { WebSocketNetworkEvent } from '@/types/websocket-network-event'
 
 type ActiveSubscription = {
   events: WebSocketNetworkEvent[]
-  subscription: any
+  subscription: GraphQLSubscriptionRequest
 }
 
 export function useGraphqlNetworkSubscriptions(
@@ -68,7 +71,12 @@ export function useGraphqlNetworkSubscriptions(
 
     if (activeSubscription) {
       activeSubscription.events.push(event)
-      activeSubscription.subscription.messages.push(event)
+
+      if (event.method === 'frameReceived' || event.method === 'frameSent') {
+        activeSubscription.subscription.messages.push(
+          toMessage(event, activeSubscription.subscription.timings),
+        )
+      }
     }
   }
 }
