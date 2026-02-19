@@ -26,8 +26,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Create zip from dist
+        run: |
+          cd dist
+          zip -r ../build.zip .
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/**
+          files: build.zip
