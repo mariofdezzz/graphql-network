@@ -19,7 +19,7 @@ export function manifest(): Plugin {
               '128': 'icons/icon-128.png',
             },
             permissions: ['debugger'],
-            host_permissions: ['<all_urls>'],
+            host_permissions: ['activeTab'],
             author: 'Mario Ferrero',
             minimum_chrome_version: '140',
           },
