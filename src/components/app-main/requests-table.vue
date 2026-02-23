@@ -37,33 +37,34 @@ function getTime(row: GraphQLRequest) {
 <template>
   <SharedTable :rows :sort="initialSort" :rightBorder="!hideColumns">
     <SharedColumn field="name" header="Name" @click="requestDetailStore.requestDetail = $event" />
+
     <SharedColumn v-if="!hideColumns" field="status" header="Status">
       <template #default="{ row }">
-        <template v-if="row?.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
-          (http:{{ row?.status }})
+        <template v-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
+          (http:{{ row.status }})
         </template>
-        <template v-else-if="unref(row?.errors) > 0"> {{ row?.errors }} errors </template>
+        <template v-else-if="unref(row.errors) > 0"> {{ row.errors }} errors </template>
         <template v-else> ok </template>
       </template>
     </SharedColumn>
+
     <SharedColumn v-if="!hideColumns" field="operation" header="Type" />
+
     <SharedColumn v-if="!hideColumns" field="size" header="Size">
       <template #default="{ row }">
-        {{ row ? formatBytes(row.size) : '' }}
+        {{ formatBytes(row.size) }}
       </template>
     </SharedColumn>
+
     <SharedColumn v-if="!hideColumns" field="time" header="Time">
       <template #default="{ row }">
-        {{
-          row && times[row.id]
-            ? formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0)
-            : 'Pending'
-        }}
+        {{ times[row.id] ? formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0) : 'Pending' }}
       </template>
     </SharedColumn>
+
     <SharedColumn v-if="!hideColumns" field="waterfall" header="Waterfall">
       <template #default="{ row }">
-        <RequestTableRowWaterfall v-if="row" :request="row" />
+        <RequestTableRowWaterfall :request="row" />
       </template>
     </SharedColumn>
   </SharedTable>
