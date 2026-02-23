@@ -32,10 +32,22 @@ function getTime(row: GraphQLRequest) {
     ? row.timings.total - Math.max(row.timings._blocked_queueing ?? 0, 0)
     : row.timings.total
 }
+
+function focusChange(row: GraphQLRequest) {
+  if (requestDetailStore.requestDetail) {
+    requestDetailStore.requestDetail = row
+  }
+}
 </script>
 
 <template>
-  <SharedTable :rows :sort="initialSort" :rightBorder="!hideColumns">
+  <SharedTable
+    :rows
+    :sort="initialSort"
+    :rightBorder="!hideColumns"
+    @enter="requestDetailStore.requestDetail = $event"
+    @focusChange="focusChange($event)"
+  >
     <SharedColumn field="name" header="Name" @click="requestDetailStore.requestDetail = $event" />
 
     <SharedColumn v-if="!hideColumns" field="status" header="Status">

@@ -8,7 +8,7 @@ defineSlots<{
 }>()
 
 defineEmits<{
-  click: (event: any) => void // TODO generic
+  (e: 'click', event: any): void // TODO generic
 }>()
 </script>
 

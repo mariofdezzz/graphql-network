@@ -16,6 +16,10 @@ const props = withDefaults(
     rightBorder: true,
   },
 )
+const emit = defineEmits<{
+  (e: 'enter', row: T): void
+  (e: 'focusChange', row: T): void
+}>()
 
 const { columns } = useColumns()
 const sortModel = ref(props.sort)
@@ -41,6 +45,34 @@ const sortedRows = computed(() =>
 function select(row: T) {
   selectedRow.value = row
 }
+function onEnter(row: T) {
+  select(row)
+  emit('enter', row)
+}
+function focusPrevious(event: KeyboardEvent, row: T, index: number) {
+  event.preventDefault()
+  const target = event.target as HTMLDivElement
+  const previous = target.previousElementSibling as HTMLDivElement | null
+
+  if (previous) {
+    const newRow = sortedRows.value[index - 1]!
+    previous.focus()
+    select(newRow)
+    emit('focusChange', newRow)
+  }
+}
+function focusNext(event: KeyboardEvent, row: T, index: number) {
+  event.preventDefault()
+  const target = event.target as HTMLDivElement
+  const next = target.nextElementSibling as HTMLDivElement | null
+
+  if (next) {
+    const newRow = sortedRows.value[index + 1]!
+    next.focus()
+    select(newRow)
+    emit('focusChange', newRow)
+  }
+}
 </script>
 
 <template>
@@ -65,7 +97,7 @@ function select(row: T) {
 
       <div class="col-span-full grid grid-cols-subgrid overflow-auto">
         <div
-          v-for="row in sortedRows"
+          v-for="(row, index) in sortedRows"
           :key="row.id"
           class="col-span-full grid grid-cols-subgrid *:bg-table-base hover:*:bg-on-base-hover"
           :class="[
@@ -74,6 +106,10 @@ function select(row: T) {
               : '',
           ]"
           @click="select(row)"
+          @keypress.enter="onEnter(row)"
+          @keyup.up="focusPrevious($event, row, index)"
+          @keyup.down="focusNext($event, row, index)"
+          tabindex="0"
         >
           <div
             v-for="{ field, slot, onClick } in columns"
