@@ -13,5 +13,5 @@ defineEmits<{
 </script>
 
 <template>
-  <slot v-if="false" />
+  <slot v-if="false" :row="undefined" />
 </template>
