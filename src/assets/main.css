@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@source inline("grid-cols-{1..15}");
 
 html,
 body,

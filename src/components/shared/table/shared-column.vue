@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { onMounted, unref } from 'vue'
 import type { Column } from '@/types/components/shared/table/column'
 
-const props = defineProps<Column>()
+defineProps<Column>()
 
-const emit = defineEmits<{
-  (e: 'register', column: Column): void
+defineSlots<{
+  default: (props: { row: any }) => any
 }>()
 
-onMounted(() => {
-  emit('register', unref(props))
-})
+defineEmits<{
+  click: (event: any) => void // TODO generic
+}>()
 </script>
 
 <template>
-  <slot />
+  <slot v-if="false" />
 </template>
