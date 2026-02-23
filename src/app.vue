@@ -22,7 +22,7 @@ const { requestDetail: selectedRequest } = storeToRefs(requestDetailStore)
     <!-- <AppWaterfall /> -->
 
     <div class="flex-1 flex min-h-0">
-      <div class="flex flex-col" :class="[selectedRequest ? 'flex-[0_0_300px]' : 'flex-1']">
+      <div class="flex flex-col min-h-0" :class="[selectedRequest ? 'flex-[0_0_300px]' : 'flex-1']">
         <AppMain class="flex-1" :requests />
 
         <AppFooter :requests />

@@ -44,8 +44,11 @@ function select(row: T) {
 </script>
 
 <template>
-  <div class="h-full grid grid-rows-[auto_1fr] gap-x-px bg-on-base-disabled" :class="[tableCols]">
-    <div class="col-span-full grid grid-cols-subgrid gap-px">
+  <div
+    class="h-full min-h-0 grid grid-rows-[auto_1fr] gap-x-px bg-on-base-disabled"
+    :class="[tableCols]"
+  >
+    <div class="col-span-full grid grid-cols-subgrid gap-px min-h-0">
       <div class="col-span-full grid grid-cols-subgrid *:bg-table-base">
         <SharedTableHeader
           v-for="column in columns"
@@ -60,7 +63,7 @@ function select(row: T) {
         />
       </div>
 
-      <div class="col-span-full grid grid-cols-subgrid">
+      <div class="col-span-full grid grid-cols-subgrid overflow-auto">
         <div
           v-for="row in sortedRows"
           :key="row.id"

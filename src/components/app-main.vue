@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <main>
+  <main class="min-h-0">
     <RequestsTable :rows="requests" />
   </main>
 </template>
