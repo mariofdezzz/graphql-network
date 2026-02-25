@@ -1,26 +1,32 @@
 import type { Column } from '@/types/components/shared/table/column'
-import { onMounted, ref, useSlots, watchEffect, type Slot } from 'vue'
+import { onMounted, reactive, useSlots, watchEffect, type Slot } from 'vue'
 
 export type ColumnContext = Column & {
   slot?: Slot
   onClick?: (row: any) => void
+  relativeWidth: number
 }
 
 export function useColumns() {
   const slots = useSlots()
-  const columns = ref<ColumnContext[]>([])
+  const columns = reactive<ColumnContext[]>([])
 
   function registerColumns() {
     const children = slots.default?.() || []
 
-    columns.value = children
-      .filter((vnode) => (vnode.type as any)?.__name === 'shared-column')
-      .map((vnode) => ({
-        field: vnode.props?.field,
-        header: vnode.props?.header,
-        slot: (vnode.children as any)?.default,
-        onClick: vnode.props?.onClick,
-      }))
+    columns.splice(
+      0,
+      columns.length,
+      ...children
+        .filter((vnode) => (vnode.type as any)?.__name === 'shared-column')
+        .map((vnode, index, arr) => ({
+          field: vnode.props?.field,
+          header: vnode.props?.header,
+          slot: (vnode.children as any)?.default,
+          onClick: vnode.props?.onClick,
+          relativeWidth: 100 / arr.length,
+        })),
+    )
   }
 
   onMounted(() => {

@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T extends Record<string, any> & { id: string }">
-import { useColumns } from '@/composables/shared/table/use-columns'
+import { useColumns, type ColumnContext } from '@/composables/shared/table/use-columns'
+import { MIN_COL_WIDTH } from '@/constants/shared/table/min-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
 import { computed, ref } from 'vue'
 import SharedTableHeader from './shared-table-header.vue'
@@ -25,7 +26,24 @@ const { columns } = useColumns()
 const sortModel = ref(props.sort)
 const selectedRow = ref<T>()
 
-const tableCols = computed(() => 'grid-cols-' + columns.value.length)
+const gridTemplateCols = computed(
+  () =>
+    'grid-template-columns: ' +
+    columns
+      .map(({ relativeWidth }, index) =>
+        index < columns.length - 1
+          ? `minmax(${MIN_COL_WIDTH}px, ${relativeWidth}%)`
+          : `minmax(${MIN_COL_WIDTH}px, 1fr)`,
+      )
+      .join(' '),
+)
+const lastColumnWidth = computed(() => {
+  const totalRelativeWidth = columns
+    .slice(0, -1)
+    .reduce((sum, { relativeWidth }) => sum + relativeWidth, 0)
+  const absoluteLastColWidth = window.innerWidth * (1 - totalRelativeWidth / 100)
+  return absoluteLastColWidth
+})
 
 const sortedRows = computed(() =>
   props.rows.toSorted((a, b) => {
@@ -73,25 +91,35 @@ function focusNext(event: KeyboardEvent, row: T, index: number) {
     emit('focusChange', newRow)
   }
 }
+
+function resizeColumn(column: ColumnContext, newRelativeSize: number) {
+  columns.at(-1)!.relativeWidth += column.relativeWidth - newRelativeSize
+
+  column.relativeWidth = newRelativeSize
+}
 </script>
 
 <template>
   <div
     class="h-full min-h-0 grid grid-rows-[auto_1fr] gap-x-px bg-on-base-disabled"
-    :class="[tableCols]"
+    :style="gridTemplateCols"
   >
     <div class="col-span-full grid grid-cols-subgrid gap-px min-h-0">
       <div class="col-span-full grid grid-cols-subgrid *:bg-table-base">
         <SharedTableHeader
-          v-for="column in columns"
+          v-for="(column, index) in columns"
           :key="column.field"
           v-model:sort="sortModel"
           :column
+          :relativeWidth="column.relativeWidth"
+          :lastColumnWidth
+          :showResizeHandle="index !== columns.length - 1"
           class="border-on-base-disabled"
           :class="{
             'first:border-l': props.leftBorder,
             'last:border-r': props.rightBorder,
           }"
+          @resize="resizeColumn(column, $event)"
         />
       </div>
 
@@ -114,7 +142,7 @@ function focusNext(event: KeyboardEvent, row: T, index: number) {
           <div
             v-for="{ field, slot, onClick } in columns"
             :key="field"
-            class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] line-clamp-1"
+            class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] line-clamp-1 text-ellipsis"
             @click="onClick?.(row)"
           >
             <component v-if="slot" :is="() => slot({ row })" />
