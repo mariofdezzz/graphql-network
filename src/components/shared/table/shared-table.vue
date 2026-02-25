@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, any> & { id: string }">
-import { useColumns, type ColumnContext } from '@/composables/shared/table/use-columns'
+import { useColumns, type ColumnContext } from '@/composables/components/shared/table/use-columns'
 import { MIN_COL_WIDTH } from '@/constants/shared/table/min-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
 import { computed, ref } from 'vue'
