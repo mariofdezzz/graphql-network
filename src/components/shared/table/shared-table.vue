@@ -5,18 +5,11 @@ import type { Sort } from '@/types/components/shared/table/sort'
 import { computed, ref } from 'vue'
 import SharedTableHeader from './shared-table-header.vue'
 
-const props = withDefaults(
-  defineProps<{
-    rows: Array<T>
-    sort?: Sort
-    leftBorder?: boolean
-    rightBorder?: boolean
-  }>(),
-  {
-    leftBorder: true,
-    rightBorder: true,
-  },
-)
+const props = defineProps<{
+  rows: Array<T>
+  sort?: Sort
+}>()
+
 const emit = defineEmits<{
   (e: 'enter', row: T): void
   (e: 'focusChange', row: T): void
@@ -115,10 +108,6 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
           :lastColumnWidth
           :showResizeHandle="index !== columns.length - 1"
           class="border-on-base-disabled"
-          :class="{
-            'first:border-l': props.leftBorder,
-            'last:border-r': props.rightBorder,
-          }"
           @resize="resizeColumn(column, $event)"
         />
       </div>
