@@ -31,13 +31,13 @@ export function useGraphqlNetwork() {
 
     if (preflight) pushRequest(preflight)
 
-    pushRequest(request)
+    pushRequest(request, preflight)
   })
 
-  async function pushRequest(request: ChromeNetworkRequest) {
+  async function pushRequest(request: ChromeNetworkRequest, preflight?: ChromeNetworkRequest) {
     console.log('Finished GraphQL Request:', request)
 
-    const req = await toGraphQLRequest(request)
+    const req = await toGraphQLRequest(request, preflight)
 
     if (req) requests.push(req)
   }

@@ -10,6 +10,7 @@ export type GraphQLNetworkRequest = {
   name: string
   status: number
   errors: number
+  corsError: boolean
   operation: 'query' | 'mutation' | 'preflight' | 'unknown'
   size: number
   timings: Prettify<

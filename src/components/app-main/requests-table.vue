@@ -14,14 +14,24 @@ const props = defineProps<{
 }>()
 
 const HTTP_STATUS_SUCCESS_THRESHOLD = 400
-
-const requestDetailStore = useRequestDetailStore()
-
-const hideColumns = computed(() => Boolean(requestDetailStore.requestDetail))
 const initialSort: Sort = {
   column: 'waterfall',
   direction: 'asc',
 }
+
+const requestDetailStore = useRequestDetailStore()
+
+const processedRows = computed(() =>
+  props.rows.map((row) => ({
+    ...row,
+    hasErrors:
+      row.status >= HTTP_STATUS_SUCCESS_THRESHOLD ||
+      (typeof row.errors === 'number' ? row.errors : row.errors.value) > 0 ||
+      (row as any).corsError,
+  })),
+)
+
+const hideColumns = computed(() => Boolean(requestDetailStore.requestDetail))
 
 const times = computed(() => {
   return Object.fromEntries(props.rows.map((row) => [row.id, getTime(row)]))
@@ -42,7 +52,7 @@ function focusChange(row: GraphQLRequest) {
 
 <template>
   <SharedTable
-    :rows
+    :rows="processedRows"
     :sort="initialSort"
     @enter="requestDetailStore.requestDetail = $event"
     @focusChange="focusChange($event)"
@@ -54,6 +64,7 @@ function focusChange(row: GraphQLRequest) {
         <template v-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
           (http:{{ row.status }})
         </template>
+        <template v-if="row.corsError"> (CORS error) </template>
         <template v-else-if="unref(row.errors) > 0"> {{ row.errors }} errors </template>
         <template v-else> ok </template>
       </template>

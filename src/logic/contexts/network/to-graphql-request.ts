@@ -1,5 +1,6 @@
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { GraphQLNetworkRequest, GraphQLRequest } from '@/types/graphql-request'
+import { hasCorsErrors } from './has-cors-errors'
 import { isPreflightRequest } from './is-preflight-request'
 import { extractName } from './to-graphql-request/extract-name'
 import { extractOperation } from './to-graphql-request/extract-operation'
@@ -8,6 +9,7 @@ import { extractQuery } from './to-graphql-request/extract-query'
 
 export async function toGraphQLRequest(
   request: ChromeNetworkRequest,
+  preflight?: ChromeNetworkRequest,
 ): Promise<GraphQLNetworkRequest | null> {
   try {
     const isPreflight = isPreflightRequest(request)
@@ -24,6 +26,7 @@ export async function toGraphQLRequest(
     )
     const response = JSON.parse(responseText ?? 'null')
     const errors = response?.errors?.length ?? 0
+    const corsError = Boolean(preflight && hasCorsErrors(preflight))
 
     const dnsTime = Math.max(request.timings.dns ?? 0, 0)
     const connectTime = Math.max(request.timings.connect ?? 0, 0)
@@ -33,6 +36,7 @@ export async function toGraphQLRequest(
       name,
       status: request.response.status,
       errors,
+      corsError,
       operation,
       size: request.response?._transferSize ?? 0,
       timings: {

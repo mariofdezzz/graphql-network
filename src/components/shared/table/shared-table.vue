@@ -1,4 +1,8 @@
-<script setup lang="ts" generic="T extends Record<string, any> & { id: string }">
+<script
+  setup
+  lang="ts"
+  generic="T extends Record<string, any> & { id: string; hasErrors?: boolean }"
+>
 import { useColumns, type ColumnContext } from '@/composables/components/shared/table/use-columns'
 import { MIN_COL_WIDTH } from '@/constants/shared/table/min-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
@@ -122,6 +126,7 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
             selectedRow?.id === row.id
               ? '*:bg-table-selected-row hover:*:bg-table-selected-row'
               : '',
+            row.hasErrors ? 'text-table-error-row' : '',
           ]"
           @click="select(row)"
           @keypress.enter="onEnter(row)"
