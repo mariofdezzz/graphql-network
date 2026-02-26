@@ -4,6 +4,7 @@ import { MIN_COL_WIDTH } from '@/constants/shared/table/min-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
 import { computed, ref } from 'vue'
 import SharedTableHeader from './shared-table-header.vue'
+import SharedTableRowCell from './shared-table-row-cell.vue'
 
 const props = defineProps<{
   rows: Array<T>
@@ -128,18 +129,7 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
           @keyup.down="focusNext($event, row, index)"
           tabindex="0"
         >
-          <div
-            v-for="{ field, slot, onClick } in columns"
-            :key="field"
-            class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] line-clamp-1 text-ellipsis"
-            @click="onClick?.(row)"
-          >
-            <component v-if="slot" :is="() => slot({ row })" />
-
-            <template v-else>
-              {{ row[field] }}
-            </template>
-          </div>
+          <SharedTableRowCell :row :columns />
         </div>
       </div>
     </div>
