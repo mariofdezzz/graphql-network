@@ -44,7 +44,6 @@ function focusChange(row: GraphQLRequest) {
   <SharedTable
     :rows
     :sort="initialSort"
-    :rightBorder="!hideColumns"
     @enter="requestDetailStore.requestDetail = $event"
     @focusChange="focusChange($event)"
   >
