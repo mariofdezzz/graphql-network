@@ -30,30 +30,46 @@ const payload = computed<{
   extensions?: Record<string, any>
 }>(() => props.request.payload ?? {})
 
+const sectionsCount = computed(() => {
+  let count = 0
+  if (payload.value.query) count++
+  if (payload.value.variables && Object.keys(payload.value.variables).length > 0) count++
+  if (payload.value.extensions && Object.keys(payload.value.extensions).length > 0) count++
+  return count
+})
+
+const gridTemplateRows = computed(() => {
+  return `grid-template-rows: repeat(${sectionsCount.value}, 1fr)`
+})
+
 useTheme(options)
 </script>
 
 <template>
   <div v-if="!request.payload"></div>
 
-  <template v-else>
-    <details v-if="payload.query" open name="query">
+  <div class="h-full grid" :style="[gridTemplateRows]" v-else>
+    <details
+      v-if="payload.query"
+      open
+      name="query"
+      class="flex flex-col open:details-content:flex-1"
+    >
       <HeadersSummary class="border-t-0"> Query </HeadersSummary>
 
-      <div class="h-50">
-        <CodeEditor
-          :value="payload.query"
-          language="graphql"
-          :options="options"
-          @editorDidMount="onEditorDidMount"
-        />
-      </div>
+      <CodeEditor
+        :value="payload.query"
+        language="graphql"
+        :options="options"
+        @editorDidMount="onEditorDidMount"
+      />
     </details>
 
     <details
       v-if="payload.variables && Object.keys(payload.variables).length > 0"
       open
       name="variables"
+      class="flex flex-col open:details-content:flex-1"
     >
       <HeadersSummary :class="{ 'border-t-0': !payload.query }">
         <span>Variables</span>
@@ -68,13 +84,13 @@ useTheme(options)
         </button>
       </HeadersSummary>
 
-      <div v-if="showVariableSource" class="h-50">
+      <template v-if="showVariableSource">
         <CodeEditor
           :value="JSON.stringify(payload.variables, null, 2)"
           language="json"
           :options="options"
         />
-      </div>
+      </template>
 
       <div v-else class="py-2">
         <RequestObjectViewer :object="payload.variables" />
@@ -85,6 +101,7 @@ useTheme(options)
       v-if="payload.extensions && Object.keys(payload.extensions).length > 0"
       open
       name="extensions"
+      class="flex flex-col open:details-content:flex-1"
     >
       <HeadersSummary :class="{ 'border-t-0': !payload.query && !payload.variables }">
         Extensions
@@ -98,17 +115,17 @@ useTheme(options)
         </button>
       </HeadersSummary>
 
-      <div v-if="showExtensionsSource" class="h-50">
+      <template v-if="showExtensionsSource">
         <CodeEditor
           :value="JSON.stringify(payload.extensions, null, 2)"
           language="json"
           :options="options"
         />
-      </div>
+      </template>
 
       <div v-else class="py-2">
         <RequestObjectViewer :object="payload.extensions" />
       </div>
     </details>
-  </template>
+  </div>
 </template>
