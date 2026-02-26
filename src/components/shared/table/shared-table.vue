@@ -129,7 +129,7 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
           @keyup.down="focusNext($event, row, index)"
           tabindex="0"
         >
-          <SharedTableRowCell :row :columns />
+          <SharedTableRowCell v-for="column in columns" :key="column.field" :row :column />
         </div>
       </div>
     </div>
