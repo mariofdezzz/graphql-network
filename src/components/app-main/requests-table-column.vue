@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import {
   REQUEST_COLUMNS_TO_KEYS,
   REQUEST_KEYS_TO_COLUMNS,
@@ -52,4 +52,4 @@ function updateSort(column: Column) {
       <ArrowDownIcon v-else class="h-4 w-4" />
     </template>
   </div>
-</template>
+</template> -->

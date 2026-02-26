@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { formatBytes } from '@/logic/contexts/size/format-bytes'
 import { formatTime } from '@/logic/contexts/time/format-time'
 import { useRequestDetailStore } from '@/stores/request-detail'
@@ -78,4 +78,4 @@ function onRowClick(column: Column) {
       </span>
     </div>
   </div>
-</template>
+</template> -->

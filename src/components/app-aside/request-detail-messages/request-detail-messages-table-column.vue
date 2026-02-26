@@ -22,14 +22,14 @@ const sortedColumn = computed(
 )
 
 function updateSort(column: Column) {
-  if (column.key === sortedColumn.value) {
+  if (column.field === sortedColumn.value) {
     order.value = {
       ...order.value,
       direction: order.value.direction === 'asc' ? 'desc' : 'asc',
     }
   } else {
     order.value = {
-      column: REQUEST_COLUMNS_TO_KEYS[column.key as keyof typeof REQUEST_COLUMNS_TO_KEYS],
+      column: REQUEST_COLUMNS_TO_KEYS[column.field as keyof typeof REQUEST_COLUMNS_TO_KEYS],
       direction: 'asc',
     }
   }
@@ -44,10 +44,10 @@ function updateSort(column: Column) {
     @click="updateSort(column)"
   >
     <span>
-      {{ column.title }}
+      {{ column.header }}
     </span>
 
-    <template v-if="sortedColumn === column.key">
+    <template v-if="sortedColumn === column.field">
       <ArrowUpIcon v-if="order!.direction === 'asc'" class="h-4 w-4" />
       <ArrowDownIcon v-else class="h-4 w-4" />
     </template>

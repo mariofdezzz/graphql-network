@@ -25,16 +25,16 @@ const selectedRow = computed({
 
 const columns: Column[] = [
   {
-    title: 'Data',
-    key: 'data',
+    field: 'data',
+    header: 'Data',
   },
   {
-    title: 'Length',
-    key: 'length',
+    field: 'length',
+    header: 'Length',
   },
   {
-    title: 'Time',
-    key: 'time',
+    field: 'time',
+    header: 'Time',
   },
 ]
 </script>

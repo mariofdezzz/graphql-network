@@ -30,7 +30,7 @@ const formatter = new Intl.DateTimeFormat('en', {
       v-for="(column, index) in columns"
       :key="index"
       class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] overflow-hidden text-ellipsis min-w-0"
-      :class="[['length'].includes(column.key) ? 'text-end' : '']"
+      :class="[['length'].includes(column.field) ? 'text-end' : '']"
     >
       <!-- <span v-if="column.key === 'time'" :class="{ 'text-request-timing-header': !time }">
         {{ time ? formatTime(time, time >= 1000 ? 2 : 0) : 'Pending' }}
@@ -50,7 +50,7 @@ const formatter = new Intl.DateTimeFormat('en', {
         <RequestTableRowWaterfall :request="row" />
       </span>-->
 
-      <div v-if="column.key === 'data'" class="flex line-clamp-1 items-center gap-1">
+      <div v-if="column.field === 'data'" class="flex line-clamp-1 items-center gap-1">
         <Icon
           :icon="row.method === 'frameSent' ? 'entypo:arrow-up' : 'entypo:arrow-down'"
           class="shrink-0"
@@ -66,13 +66,13 @@ const formatter = new Intl.DateTimeFormat('en', {
         </span>
       </div>
 
-      <div v-else-if="column.key === 'time'" class="line-clamp-1">
+      <div v-else-if="column.field === 'time'" class="line-clamp-1">
         {{ formatter.format(row.time) }}
       </div>
 
       <span v-else class="line-clamp-1">
         <!-- <span v-else> -->
-        {{ row[column.key as keyof Message] }}
+        {{ row[column.field as keyof Message] }}
       </span>
     </div>
   </div>
