@@ -1,7 +1,7 @@
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 
 export function hasCorsErrors(preflight: ChromeNetworkRequest): boolean {
-  if (preflight.response.status !== 200) return true
+  if (!/2\d\d/.test(String(preflight.response.status))) return true
 
   const responseHeaders = preflight.response.headers
   const requestHeaders = preflight.request.headers
