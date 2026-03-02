@@ -8,6 +8,7 @@ import { useSorted } from '@/composables/components/shared/table/use-sorted'
 import { MIN_COL_WIDTH } from '@/constants/shared/table/min-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
 import { computed, ref, toRefs } from 'vue'
+import SharedTableColumnResizer from './shared-table-column-resizer.vue'
 import SharedTableHeader from './shared-table-header.vue'
 import SharedTableRowCell from './shared-table-row-cell.vue'
 
@@ -88,7 +89,7 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
 
 <template>
   <div
-    class="h-full min-h-0 grid grid-rows-[auto_1fr] gap-x-px bg-on-base-disabled"
+    class="h-full min-h-0 grid grid-rows-[auto_1fr] gap-x-px bg-on-base-disabled relative"
     :style="gridTemplateCols"
   >
     <div class="col-span-full grid grid-cols-subgrid gap-px min-h-0">
@@ -132,6 +133,17 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
 
     <div class="col-span-full grid grid-cols-subgrid *:bg-table-base">
       <div v-for="i in columns.length" :key="i"></div>
+    </div>
+
+    <div class="absolute h-full w-full grid gap-x-px pointer-events-none" :style="gridTemplateCols">
+      <SharedTableColumnResizer
+        v-for="(column, index) in columns"
+        :key="column.field"
+        :relativeWidth="column.relativeWidth"
+        :lastColumnWidth="lastColumnWidth"
+        :showResizeHandle="index !== columns.length - 1"
+        @resize="resizeColumn(column, $event)"
+      />
     </div>
   </div>
 
