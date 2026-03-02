@@ -18,7 +18,8 @@ export function onWebsocketNetworkEvent(onEvent: (event: WebSocketNetworkEvent) 
   }
 
   chrome.debugger.onEvent.addListener((source, method, params) => {
-    console.log('Event:', source, method, params)
+    // console.log('Event:', source, method, params)
+
     if (method in ChromeEvents && params) {
       onEvent({
         method: ChromeEvents[method as keyof typeof ChromeEvents],

@@ -4,9 +4,10 @@
   generic="T extends Record<string, any> & { id: string; hasErrors?: boolean }"
 >
 import { useColumns, type ColumnContext } from '@/composables/components/shared/table/use-columns'
+import { useSorted } from '@/composables/components/shared/table/use-sorted'
 import { MIN_COL_WIDTH } from '@/constants/shared/table/min-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
-import { computed, ref } from 'vue'
+import { computed, ref, toRefs } from 'vue'
 import SharedTableHeader from './shared-table-header.vue'
 import SharedTableRowCell from './shared-table-row-cell.vue'
 
@@ -20,9 +21,12 @@ const emit = defineEmits<{
   (e: 'focusChange', row: T): void
 }>()
 
+const { rows } = toRefs(props)
 const { columns } = useColumns()
 const sortModel = ref(props.sort)
 const selectedRow = ref<T>()
+
+const { result: sortedRows } = useSorted(rows, sortModel)
 
 const gridTemplateCols = computed(
   () =>
@@ -42,21 +46,6 @@ const lastColumnWidth = computed(() => {
   const absoluteLastColWidth = window.innerWidth * (1 - totalRelativeWidth / 100)
   return absoluteLastColWidth
 })
-
-const sortedRows = computed(() =>
-  props.rows.toSorted((a, b) => {
-    if (props.sort === undefined) return 0
-
-    const column = props.sort.column
-
-    if (typeof a[column] === 'string') {
-      return props.sort.direction === 'asc'
-        ? String(a[column]).localeCompare(b[column])
-        : String(b[column]).localeCompare(a[column])
-    }
-    return props.sort.direction === 'asc' ? a[column] - b[column] : b[column] - a[column]
-  }),
-)
 
 function select(row: T) {
   selectedRow.value = row
@@ -112,6 +101,7 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
           :relativeWidth="column.relativeWidth"
           :lastColumnWidth
           :showResizeHandle="index !== columns.length - 1"
+          :sortable="column.sortable"
           class="border-on-base-disabled"
           @resize="resizeColumn(column, $event)"
         />

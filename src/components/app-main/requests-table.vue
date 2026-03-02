@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { DEFAULT_NETWORK_ORDER } from '@/constants/default-network-order'
+import { REQUEST_COLUMNS_TO_KEYS } from '@/constants/request-columns-to-keys'
 import { formatBytes } from '@/logic/contexts/size/format-bytes'
 import { formatTime } from '@/logic/contexts/time/format-time'
 import { useRequestDetailStore } from '@/stores/request-detail'
-import type { Sort } from '@/types/components/shared/table/sort'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed, unref } from 'vue'
 import SharedColumn from '../shared/table/shared-column.vue'
@@ -14,10 +15,6 @@ const props = defineProps<{
 }>()
 
 const HTTP_STATUS_SUCCESS_THRESHOLD = 400
-const initialSort: Sort = {
-  column: 'waterfall',
-  direction: 'asc',
-}
 
 const requestDetailStore = useRequestDetailStore()
 
@@ -53,11 +50,16 @@ function focusChange(row: GraphQLRequest) {
 <template>
   <SharedTable
     :rows="processedRows"
-    :sort="initialSort"
+    :sort="DEFAULT_NETWORK_ORDER"
     @enter="requestDetailStore.requestDetail = $event"
     @focusChange="focusChange($event)"
   >
-    <SharedColumn field="name" header="Name" @click="requestDetailStore.requestDetail = $event">
+    <SharedColumn
+      :field="REQUEST_COLUMNS_TO_KEYS.name"
+      header="Name"
+      sortable
+      @click="requestDetailStore.requestDetail = $event"
+    >
       <template #default="{ row }">
         <span :class="{ italic: row.operation === 'preflight' }">
           {{ row.name }}
@@ -65,7 +67,12 @@ function focusChange(row: GraphQLRequest) {
       </template>
     </SharedColumn>
 
-    <SharedColumn v-if="!hideColumns" field="status" header="Status">
+    <SharedColumn
+      v-if="!hideColumns"
+      :field="REQUEST_COLUMNS_TO_KEYS.status"
+      header="Status"
+      sortable
+    >
       <template #default="{ row }">
         <template v-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
           (http:{{ row.status }})
@@ -76,21 +83,31 @@ function focusChange(row: GraphQLRequest) {
       </template>
     </SharedColumn>
 
-    <SharedColumn v-if="!hideColumns" field="operation" header="Type" />
+    <SharedColumn
+      v-if="!hideColumns"
+      :field="REQUEST_COLUMNS_TO_KEYS.operation"
+      header="Type"
+      sortable
+    />
 
-    <SharedColumn v-if="!hideColumns" field="size" header="Size">
+    <SharedColumn v-if="!hideColumns" :field="REQUEST_COLUMNS_TO_KEYS.size" header="Size" sortable>
       <template #default="{ row }">
         {{ formatBytes(row.size) }}
       </template>
     </SharedColumn>
 
-    <SharedColumn v-if="!hideColumns" field="time" header="Time">
+    <SharedColumn v-if="!hideColumns" :field="REQUEST_COLUMNS_TO_KEYS.time" header="Time" sortable>
       <template #default="{ row }">
         {{ times[row.id] ? formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0) : 'Pending' }}
       </template>
     </SharedColumn>
 
-    <SharedColumn v-if="!hideColumns" field="waterfall" header="Waterfall">
+    <SharedColumn
+      v-if="!hideColumns"
+      :field="REQUEST_COLUMNS_TO_KEYS.waterfall"
+      header="Waterfall"
+      sortable
+    >
       <template #default="{ row }">
         <RequestTableRowWaterfall :request="row" />
       </template>

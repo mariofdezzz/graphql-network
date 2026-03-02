@@ -22,6 +22,7 @@ export function useColumns() {
         .map((vnode, index, arr) => ({
           field: vnode.props?.field,
           header: vnode.props?.header,
+          sortable: vnode.props?.sortable,
           slot: (vnode.children as any)?.default,
           onClick: vnode.props?.onClick,
           relativeWidth: 100 / arr.length,

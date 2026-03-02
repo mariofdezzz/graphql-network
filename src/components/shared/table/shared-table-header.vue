@@ -13,6 +13,7 @@ const props = defineProps<{
   relativeWidth: number
   lastColumnWidth: number
   showResizeHandle?: boolean
+  sortable?: boolean
 }>()
 const { relativeWidth, lastColumnWidth } = toRefs(props)
 
@@ -21,13 +22,15 @@ const emit = defineEmits<{
 }>()
 
 function updateSort() {
-  if (sort.value?.column === props.column.field) {
-    sort.value = {
-      ...sort.value,
-      direction: sort.value.direction === 'asc' ? 'desc' : 'asc',
+  if (props.sortable) {
+    if (sort.value?.column === props.column.field) {
+      sort.value = {
+        ...sort.value,
+        direction: sort.value.direction === 'asc' ? 'desc' : 'asc',
+      }
+    } else {
+      sort.value = { column: props.column.field, direction: 'asc' }
     }
-  } else {
-    sort.value = { column: props.column.field, direction: 'asc' }
   }
 }
 
@@ -46,7 +49,8 @@ const { onMouseDown } = useResizer(
 <template>
   <div ref="header" class="select-none relative">
     <div
-      class="w-full px-2 py-1 flex items-center justify-between hover:bg-on-base-hover overflow-hidden"
+      class="w-full px-2 py-1 flex items-center justify-between overflow-hidden"
+      :class="{ 'hover:bg-on-base-hover': sortable }"
       @click="updateSort()"
     >
       <span class="flex-1 min-w-0 overflow-hidden text-ellipsis">

@@ -96,6 +96,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
     const receive = faker.number.float({ min: 0, max: 1000 })
     const ssl = faker.number.float({ min: 0, max: connect })
     const total = blocked + dns + connect + send + wait + receive + ssl + _blocked_queueing
+    const startedAt = new Date(referenceDate).toISOString()
 
     return {
       id: faker.string.uuid(),
@@ -106,7 +107,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
       operation: faker.helpers.arrayElement(['query', 'mutation', 'unknown']),
       size: faker.number.int({ min: 500, max: 5000 }),
       timings: {
-        startedAt: new Date(referenceDate).toISOString(),
+        startedAt: startedAt,
         total,
         _blocked_queueing,
         blocked,
@@ -116,7 +117,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
         wait,
         receive,
         ssl,
-        waterfall: 0,
+        waterfall: new Date(startedAt).getTime() + _blocked_queueing,
       },
       headers: {
         general: {

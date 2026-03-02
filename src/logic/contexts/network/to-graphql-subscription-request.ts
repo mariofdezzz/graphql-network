@@ -29,10 +29,12 @@ export function toGraphQLSubscriptionRequest(
   const responseHeaders = toHeaders(handshakeEvent.params.response.headers)
 
   const status = handshakeEvent.params.response.status
+  const startedAtDate = new Date(handshakeRequestEvent.params.wallTime * 1000)
   const timings = {
-    startedAt: new Date(handshakeRequestEvent.params.wallTime * 1000).toISOString(),
+    startedAt: startedAtDate.toISOString(),
     wallTime: handshakeRequestEvent.params.wallTime,
     baseTimestamp: handshakeRequestEvent.params.timestamp,
+    waterfall: startedAtDate.getTime(),
   }
 
   const messages = reactive(toMessages(events, timings))

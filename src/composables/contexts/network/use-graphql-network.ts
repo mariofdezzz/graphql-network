@@ -1,4 +1,4 @@
-import { wsMockRequests } from '@/constants/mock/requests'
+import { mockRequests } from '@/constants/mock/requests'
 import { onNetworkRequestFinished } from '@/logic/contexts/chrome/on-network-request-finished'
 import { isGraphqlRequest } from '@/logic/contexts/network/is-graphql-request'
 import { isPreflightRequest } from '@/logic/contexts/network/is-preflight-request'
@@ -14,7 +14,7 @@ export function useGraphqlNetwork() {
   const recording = ref(true)
 
   const requests = shallowReactive<GraphQLRequest[]>([])
-  const readonlyRequests = computed(() => (import.meta.env.DEV ? wsMockRequests : requests))
+  const readonlyRequests = computed(() => (import.meta.env.DEV ? mockRequests : requests))
 
   onNetworkRequestFinished((request) => {
     if (!recording.value) return
@@ -35,7 +35,7 @@ export function useGraphqlNetwork() {
   })
 
   async function pushRequest(request: ChromeNetworkRequest, preflight?: ChromeNetworkRequest) {
-    console.log('Finished GraphQL Request:', request)
+    // console.log('Finished GraphQL Request:', request)
 
     const req = await toGraphQLRequest(request, preflight)
 
@@ -45,7 +45,7 @@ export function useGraphqlNetwork() {
   useGraphqlNetworkSubscriptions((request) => {
     if (!recording.value) return
 
-    console.log('Finished subscription:', request)
+    // console.log('Finished subscription:', request)
 
     requests.push(request as any) // FIXME
   })

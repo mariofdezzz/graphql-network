@@ -40,7 +40,7 @@ export function useGraphqlNetworkSubscriptions(
           events.push(event)
 
           const subscription = toGraphQLSubscriptionRequest(events)
-          console.log('Subscription:', subscription)
+          // console.log('Subscription:', subscription)
 
           activeSubscriptions.set(requestId, {
             events,
@@ -58,7 +58,7 @@ export function useGraphqlNetworkSubscriptions(
         pendingRequests.get(requestId)?.push(event)
         updateActiveSubscription(requestId, event)
 
-        console.log('Subscription ended:', activeSubscriptions.get(requestId))
+        // console.log('Subscription ended:', activeSubscriptions.get(requestId))
 
         pendingRequests.delete(requestId)
         activeSubscriptions.delete(requestId)
