@@ -17,7 +17,7 @@ export const useNetworkStore = defineStore('network', () => {
     typeFilters,
   } = useFilteredRequests(requests as any) // FIXME
 
-  const { requests: sortedRequests, order } = useSortedRequests(filteredRequests)
+  const { requests: sortedRequests, order } = useSortedRequests(filteredRequests) // FIXME: deprecated
 
   const preserveLog = useLocalStorage('preserveLog', false)
 
