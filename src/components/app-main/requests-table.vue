@@ -57,7 +57,13 @@ function focusChange(row: GraphQLRequest) {
     @enter="requestDetailStore.requestDetail = $event"
     @focusChange="focusChange($event)"
   >
-    <SharedColumn field="name" header="Name" @click="requestDetailStore.requestDetail = $event" />
+    <SharedColumn field="name" header="Name" @click="requestDetailStore.requestDetail = $event">
+      <template #default="{ row }">
+        <span :class="{ italic: row.operation === 'preflight' }">
+          {{ row.name }}
+        </span>
+      </template>
+    </SharedColumn>
 
     <SharedColumn v-if="!hideColumns" field="status" header="Status">
       <template #default="{ row }">
