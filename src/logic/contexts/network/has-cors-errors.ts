@@ -28,7 +28,7 @@ export function hasCorsErrors(preflight: ChromeNetworkRequest): boolean {
   if (
     !accessControlAllowMethods ||
     !requestMethod ||
-    !accessControlAllowMethods.includes(requestMethod)
+    (accessControlAllowMethods !== '*' && !accessControlAllowMethods.includes(requestMethod))
   )
     return true
 
@@ -42,7 +42,8 @@ export function hasCorsErrors(preflight: ChromeNetworkRequest): boolean {
 
   if (
     !accessControlAllowHeaders ||
-    !requestHeadersList.every((h) => accessControlAllowHeaders.toLowerCase().includes(h))
+    (accessControlAllowHeaders !== '*' &&
+      !requestHeadersList.every((h) => accessControlAllowHeaders.toLowerCase().includes(h)))
   )
     return true
 
