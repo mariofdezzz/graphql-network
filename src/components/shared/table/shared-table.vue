@@ -103,7 +103,7 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
     :style="gridTemplateCols"
   >
     <div class="col-span-full grid grid-cols-subgrid gap-px min-h-0">
-      <div class="col-span-full grid grid-cols-subgrid *:bg-table-base">
+      <div class="col-span-full grid grid-cols-subgrid *:bg-table-alternate-row">
         <SharedTableHeader
           v-for="(column, index) in columns"
           :key="column.field"
@@ -121,12 +121,13 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
         <div
           v-for="(row, index) in sortedRows"
           :key="row.id"
-          class="col-span-full grid grid-cols-subgrid *:bg-table-base hover:*:bg-on-base-hover"
+          class="col-span-full grid grid-cols-subgrid hover:*:bg-on-base-hover"
           :class="[
             selectedRow?.id === row.id
               ? '*:bg-table-selected-row hover:*:bg-table-selected-row'
               : '',
             row.hasErrors ? 'text-table-error-row' : '',
+            index % 2 === 0 ? '*:bg-table-alternate-row' : '*:bg-table-base',
           ]"
           @click="select(row)"
           @keypress.enter="onEnter(row)"

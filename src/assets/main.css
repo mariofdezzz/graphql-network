@@ -18,8 +18,8 @@ body,
   --color-on-base-disabled: light-dark(#d3e2fd, #5e5e5e);
   --color-on-base-hover: light-dark(#f2f2f2, #3d3d3d);
   --color-on-base-active: light-dark(#e1e1e1, #5c5c5c);
-  --color-table-base: light-dark(#f8fafd, #28292a);
-  --color-table-alternate-row: light-dark(#fff, #1f1f1f);
+  --color-table-base: light-dark(#fff, #1f1f1f);
+  --color-table-alternate-row: light-dark(#f8fafd, #28292a);
   --color-table-selected-row: light-dark(#d3e4fd, #004a76);
   --color-table-error-row: light-dark(#b2271e, #f1b9b6);
   --color-header-base: light-dark(#edf2fa, #3c3c3c);
