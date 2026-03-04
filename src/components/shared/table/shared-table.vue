@@ -5,7 +5,7 @@
 >
 import { useColumns, type ColumnContext } from '@/composables/components/shared/table/use-columns'
 import { useSorted } from '@/composables/components/shared/table/use-sorted'
-import { MIN_COL_WIDTH } from '@/constants/shared/table/min-col-width'
+import { MIN_TABLE_COL_WIDTH } from '@/constants/shared/table/min-table-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
 import { computed, ref, toRefs } from 'vue'
 import SharedTableColumnResizer from './shared-table-column-resizer.vue'
@@ -35,8 +35,8 @@ const gridTemplateCols = computed(
     columns
       .map(({ relativeWidth }, index) =>
         index < columns.length - 1
-          ? `minmax(${MIN_COL_WIDTH}px, ${relativeWidth}%)`
-          : `minmax(${MIN_COL_WIDTH}px, 1fr)`,
+          ? `max(${MIN_TABLE_COL_WIDTH}px, ${relativeWidth}%)`
+          : `max(${MIN_TABLE_COL_WIDTH}px, 1fr)`,
       )
       .join(' '),
 )
