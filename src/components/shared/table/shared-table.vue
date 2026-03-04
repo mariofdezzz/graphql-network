@@ -35,8 +35,8 @@ const gridTemplateCols = computed(
     columns
       .map(({ relativeWidth }, index) =>
         index < columns.length - 1
-          ? `max(${MIN_TABLE_COL_WIDTH}px, ${relativeWidth}%)`
-          : `max(${MIN_TABLE_COL_WIDTH}px, 1fr)`,
+          ? `minmax(${MIN_TABLE_COL_WIDTH}px, ${relativeWidth}%)`
+          : `minmax(${MIN_TABLE_COL_WIDTH}px, 1fr)`,
       )
       .join(' '),
 )
