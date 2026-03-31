@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import SharedHorizontalDivider from '@/components/shared/shared-horizontal-divider.vue'
 import { formatBytes } from '@/logic/contexts/size/format-bytes'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed } from 'vue'
-import SharedHorizontalDivider from '@/components/shared/shared-horizontal-divider.vue'
 
 const props = defineProps<{
   requests: GraphQLRequest[]
@@ -18,7 +18,9 @@ const transferred = computed(() => {
 </script>
 
 <template>
-  <footer class="px-2 py-1 border-t border-on-base-disabled">
+  <footer
+    class="w-full min-w-0 box-border px-2 py-1 border-t border-on-base-disabled overflow-hidden whitespace-nowrap"
+  >
     <div v-if="requests.length > 0" class="flex gap-2">
       <span>{{ requests.length }} requests</span>
 
