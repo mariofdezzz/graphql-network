@@ -17,19 +17,20 @@ const props = withDefaults(
 
 const containerElement = useTemplateRef('container')
 const { panels } = usePanels()
-const { sizes, setSize } = usePanelSizes({
+const { sizes, units, setSize } = usePanelSizes({
   panels,
   container: containerElement,
   direction: props.direction,
   storageKey: props.storageKey,
 })
-const { style } = useSplitterGridStyle({ sizes, direction: props.direction })
+const { style } = useSplitterGridStyle({ sizes, units, direction: props.direction })
 
 const renderedPanels = computed(() =>
   panels.map(({ vnode, props }, index) =>
     cloneVNode(vnode, {
       ...(props ?? {}),
-      relativeSize: sizes.value[index],
+      size: sizes.value[index],
+      unit: units.value[index],
     }),
   ),
 )
@@ -46,7 +47,8 @@ const renderedPanels = computed(() =>
       :key="index"
       :is="index < renderedPanels.length - 1 ? SharedResizer : 'div'"
       class="grid bg-base-color"
-      :relativeSize="sizes[index]"
+      :size="sizes[index]"
+      :unit="units[index]"
       :direction="direction"
       @resize="setSize(index, $event)"
     >

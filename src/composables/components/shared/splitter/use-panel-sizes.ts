@@ -18,9 +18,12 @@ export function usePanelSizes({
     .slice(0, -1)
     .map(() => undefined as number | undefined)
 
+  const units = computed(() => unref(panels).map(({ props }) => props?.unit ?? '%'))
+
   const settedSizes = storageKey
     ? useLocalStorage('panel-size-' + storageKey, initialValue)
     : ref(initialValue)
+
   const { width, height } = useElementBounding(container)
 
   const containerSize = computed(() => (direction === 'horizontal' ? width.value : height.value))
@@ -38,13 +41,21 @@ export function usePanelSizes({
   )
 
   function setSize(index: number, delta: number) {
+    const unit = units.value[index]!
+
     const newSize = Math.max(sizes.value[index]! + delta, 0.1)
-    const newAbsoluteSize = unref(containerSize) * (newSize / 100)
+    const newAbsoluteSize = unit === '%' ? unref(containerSize) * (newSize / 100) : newSize
 
-    const totalSize =
-      sizes.value.reduce((sum, size) => sum + size, 0) - sizes.value[index]! + newSize
+    const totalSize = sizes.value.reduce((sum, size, panelIndex) => {
+      const sizeUnit = units.value[panelIndex]!
+      const absoluteSize = sizeUnit === '%' ? unref(containerSize) * (size / 100) : size
 
-    const totalAbsoluteSize = unref(containerSize) * (totalSize / 100) + MIN_SPLITTER_PANEL_SIZE
+      return sum + absoluteSize
+    }, 0)
+    const totalAbsoluteSize =
+      totalSize -
+      (unit === '%' ? unref(containerSize) * (sizes.value[index]! / 100) : sizes.value[index]!) +
+      newAbsoluteSize
 
     // console.log(
     //   'setSize',
@@ -52,7 +63,7 @@ export function usePanelSizes({
     //   delta,
     //   settedSizes.value[index],
     //   sizes.value[index],
-    //   totalSize,
+    //   totalAbsoluteSize,
     //   unref(containerSize),
     // )
 
@@ -63,6 +74,7 @@ export function usePanelSizes({
 
   return {
     sizes,
+    units,
     setSize,
   }
 }

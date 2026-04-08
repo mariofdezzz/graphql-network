@@ -4,11 +4,13 @@ import { computed, useTemplateRef, watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
-    relativeSize: number
+    size: number
+    unit?: '%' | 'px'
     direction?: 'horizontal' | 'vertical'
   }>(),
   {
     direction: 'horizontal',
+    unit: '%',
   },
 )
 
@@ -30,8 +32,13 @@ function onMouseDown(event: MouseEvent) {
   event.preventDefault()
 
   const resizeWatcher = watch(position, (position) => {
-    const newSize = (position * props.relativeSize) / size.value
-    const delta = newSize - props.relativeSize
+    if (props.unit === 'px') {
+      const delta = position - size.value
+
+      return emit('resize', delta)
+    }
+    const newSize = (position * props.size) / size.value
+    const delta = newSize - props.size
 
     emit('resize', delta)
   })

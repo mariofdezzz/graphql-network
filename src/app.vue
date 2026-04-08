@@ -24,7 +24,7 @@ const { requestDetail: selectedRequest } = storeToRefs(requestDetailStore)
     <!-- <AppWaterfall /> -->
 
     <SharedSplitter class="flex-1 min-h-0" storageKey="aside">
-      <SharedSplitterPanel class="flex flex-col min-h-0">
+      <SharedSplitterPanel class="flex flex-col min-h-0" unit="px">
         <AppMain class="flex-1" :requests />
 
         <AppFooter :requests />
