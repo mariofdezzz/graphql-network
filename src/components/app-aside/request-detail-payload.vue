@@ -11,9 +11,9 @@ const props = defineProps<{
   request: GraphQLNetworkRequest
   enabled: boolean
 }>()
-const { enabled } = toRefs(props)
+const { enabled, request } = toRefs(props)
 
-const { onEditorDidMount } = useLayout(enabled)
+const { onEditorDidMount } = useLayout(enabled, request)
 
 const showVariableSource = ref(false)
 const showExtensionsSource = ref(false)
@@ -53,7 +53,7 @@ useTheme(options)
       v-if="payload.query"
       open
       name="query"
-      class="flex flex-col open:details-content:flex-1"
+      class="flex flex-col open:details-content:flex-1 min-h-0 overflow-y-auto"
     >
       <HeadersSummary class="border-t-0"> Query </HeadersSummary>
 
@@ -69,7 +69,7 @@ useTheme(options)
       v-if="payload.variables && Object.keys(payload.variables).length > 0"
       open
       name="variables"
-      class="flex flex-col open:details-content:flex-1"
+      class="flex flex-col open:details-content:flex-1 min-h-0 overflow-y-auto"
     >
       <HeadersSummary :class="{ 'border-t-0': !payload.query }">
         <span>Variables</span>
@@ -101,7 +101,7 @@ useTheme(options)
       v-if="payload.extensions && Object.keys(payload.extensions).length > 0"
       open
       name="extensions"
-      class="flex flex-col open:details-content:flex-1"
+      class="flex flex-col open:details-content:flex-1 min-h-0 overflow-y-auto"
     >
       <HeadersSummary :class="{ 'border-t-0': !payload.query && !payload.variables }">
         Extensions

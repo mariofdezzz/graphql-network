@@ -46,13 +46,13 @@ const renderedPanels = computed(() =>
       v-for="(panel, index) in renderedPanels"
       :key="index"
       :is="index < renderedPanels.length - 1 ? SharedResizer : 'div'"
-      class="grid bg-base-color"
+      class="grid bg-base-color min-h-0"
       :size="sizes[index]"
       :unit="units[index]"
       :direction="direction"
       @resize="setSize(index, $event)"
     >
-      <component :is="panel" class="min-w-0" />
+      <component :is="panel" class="min-w-0 min-h-0" />
     </component>
 
     <!-- <div class="absolute h-full w-full grid gap-x-px pointer-events-none" :style="style">

@@ -10,9 +10,9 @@ const props = defineProps<{
   request: GraphQLNetworkRequest
   enabled: boolean
 }>()
-const { enabled } = toRefs(props)
+const { enabled, request } = toRefs(props)
 
-const { onEditorDidMount } = useLayout(enabled)
+const { onEditorDidMount } = useLayout(enabled, request)
 
 const options: MonacoEditorConfig = {
   readOnly: true,
