@@ -29,7 +29,10 @@ function closeDetail() {
 </script>
 
 <template>
-  <aside v-if="requestDetail" class="flex flex-col h-full overflow-x-hidden">
+  <aside
+    v-if="requestDetail"
+    class="border-l border-on-base-disabled flex flex-col h-full overflow-x-hidden"
+  >
     <div class="flex gap-1 px-2 bg-header-base border-b border-on-base-disabled">
       <button
         class="rounded-full hover:bg-on-detail-header-hover active:bg-on-base-active p-1"

@@ -6,8 +6,6 @@ import AppMain from '@/components/app-main.vue'
 import { useNetworkStore } from '@/stores/network'
 import { storeToRefs } from 'pinia'
 // import AppWaterfall from './components/app-waterfall.vue'
-import SharedSplitterPanel from './components/shared/splitter/shared-splitter-panel.vue'
-import SharedSplitter from './components/shared/splitter/shared-splitter.vue'
 import { useRequestDetailStore } from './stores/request-detail'
 
 const networkStore = useNetworkStore()
@@ -23,16 +21,14 @@ const { requestDetail: selectedRequest } = storeToRefs(requestDetailStore)
 
     <!-- <AppWaterfall /> -->
 
-    <SharedSplitter class="flex-1 min-h-0" storageKey="aside">
-      <SharedSplitterPanel class="flex flex-col min-h-0" unit="px">
+    <div class="flex-1 flex min-h-0">
+      <div class="flex flex-col min-h-0" :class="[selectedRequest ? 'flex-[0_0_300px]' : 'flex-1']">
         <AppMain class="flex-1" :requests />
 
         <AppFooter :requests />
-      </SharedSplitterPanel>
+      </div>
 
-      <SharedSplitterPanel v-if="selectedRequest">
-        <AppAside />
-      </SharedSplitterPanel>
-    </SharedSplitter>
+      <AppAside class="flex-1" />
+    </div>
   </div>
 </template>
