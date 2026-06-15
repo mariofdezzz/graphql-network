@@ -8,6 +8,10 @@ export function formatTime(milliseconds: number, decimals = 0) {
 
   const i = Math.floor(Math.log(microseconds) / Math.log(k))
 
+  if (i === 0 && microseconds >= 100) {
+    return (microseconds / 1000).toFixed(decimals) + ' ms'
+  }
+
   const result = generateResult(microseconds, i, decimals)
 
   return result + ' ' + sizes[i]
@@ -16,12 +20,15 @@ export function formatTime(milliseconds: number, decimals = 0) {
 function generateResult(ms: number, i: number, decimals: number) {
   switch (i) {
     case 0:
-      return parseFloat(ms.toFixed(decimals))
+      return Math.round(ms).toString()
 
     case 1:
-      return parseFloat((ms / Math.pow(1000, i)).toFixed(decimals))
+      return (ms / 1000).toFixed(decimals)
+
+    case 2:
+      return (ms / 1000000).toFixed(decimals)
 
     default:
-      return parseFloat((ms / Math.pow(1000, i - 1) / 60).toFixed(decimals))
+      return (ms / 1000000 / 60).toFixed(decimals)
   }
 }
