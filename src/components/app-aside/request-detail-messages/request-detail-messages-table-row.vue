@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Column } from '@/types/components/shared/table/column'
-import type { Message } from '@/types/websocket-network-event'
+import type { Message } from '@/types/graphql-request'
 import { Icon } from '@iconify/vue'
 
 defineProps<{

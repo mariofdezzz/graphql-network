@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { GraphQLSubscriptionRequest } from '@/types/graphql-request'
-import type { Message } from '@/types/websocket-network-event'
+import type { GraphQLSubscriptionRequest, Message } from '@/types/graphql-request'
 import { ref } from 'vue'
 import RequestDetailMessagesTable from './request-detail-messages/request-detail-messages-table.vue'
 import RequestDetailMessagesViewer from './request-detail-messages/request-detail-messages-viewer.vue'

@@ -7,6 +7,7 @@ import { toGraphQLRequest } from '@/logic/contexts/network/to-graphql-request'
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed, ref, shallowReactive } from 'vue'
+import { useGraphqlNetworkSSE } from './use-graphql-network-sse'
 import { useGraphqlNetworkSubscriptions } from './use-graphql-network-subscriptions'
 
 export function useGraphqlNetwork() {
@@ -45,7 +46,15 @@ export function useGraphqlNetwork() {
   useGraphqlNetworkSubscriptions((request) => {
     if (!recording.value) return
 
-    // console.log('Finished subscription:', request)
+    console.log('[Network] Finished WebSocket subscription:', request.name)
+
+    requests.push(request as any) // FIXME
+  })
+
+  useGraphqlNetworkSSE((request) => {
+    if (!recording.value) return
+
+    console.log('[Network] Finished SSE subscription:', request.name)
 
     requests.push(request as any) // FIXME
   })

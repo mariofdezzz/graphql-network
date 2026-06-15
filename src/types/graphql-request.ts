@@ -1,7 +1,10 @@
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { Prettify } from '@/types/prettify'
 import type { ComputedRef } from 'vue'
-import type { Message } from './websocket-network-event'
+import type { SSEMessage } from './sse-network-event'
+import type { Message as WebSocketMessage } from './websocket-network-event'
+
+export type Message = WebSocketMessage | SSEMessage
 
 export type GraphQLRequest = GraphQLNetworkRequest | GraphQLSubscriptionRequest
 

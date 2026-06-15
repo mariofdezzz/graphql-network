@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Message } from '@/types/websocket-network-event'
+import type { Message } from '@/types/graphql-request'
 import { computed } from 'vue'
 import RequestObjectViewer from '../request-detail-payload/request-object-viewer.vue'
 
