@@ -1,0 +1,17 @@
+{
+  "name": "back",
+  "version": "0.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx --watch src/index.ts"
+  },
+  "dependencies": {
+    "graphql": "16.14.2",
+    "graphql-yoga": "5.21.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.18.11",
+    "tsx": "4.22.4"
+  }
+}
