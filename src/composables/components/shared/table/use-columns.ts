@@ -19,14 +19,17 @@ export function useColumns() {
       columns.length,
       ...children
         .filter((vnode) => (vnode.type as any)?.__name === 'shared-column')
-        .map((vnode, index, arr) => ({
-          field: vnode.props?.field,
-          header: vnode.props?.header,
-          sortable: vnode.props?.sortable,
-          slot: (vnode.children as any)?.default,
-          onClick: vnode.props?.onClick,
-          relativeWidth: 100 / arr.length,
-        })),
+        .map((vnode, index, arr) => {
+          const defaultWidth = 100 / arr.length
+          return {
+            field: vnode.props?.field,
+            header: vnode.props?.header,
+            sortable: vnode.props?.sortable,
+            slot: (vnode.children as any)?.default,
+            onClick: vnode.props?.onClick,
+            relativeWidth: vnode.props?.width != null ? Number(vnode.props.width) : defaultWidth,
+          }
+        }),
     )
   }
 
