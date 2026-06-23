@@ -55,14 +55,14 @@ export function useGraphqlNetworkSSE(onSubscribe: (request: GraphQLSubscriptionR
         const response = (event as any).params.response
         const headers = response?.headers || {}
         const mimeType = response?.mimeType
+        const resourceType = (event as any).params.type
 
         console.log(`[SSE Composable] responseReceived: ${requestId}, mimeType: ${mimeType}`)
 
         // Check if this is a GraphQL request we're tracking
         const pending = pendingRequests.get(requestId)
-        const isGraphQLRequest = pending?.postData ? isGraphqlPostData(pending.postData) : false
 
-        if (!isSSEResponse(mimeType, headers, isGraphQLRequest)) {
+        if (!isSSEResponse({ mimeType, headers, postData: pending?.postData, resourceType })) {
           console.log(`[SSE Composable] Not an SSE response (mimeType: ${mimeType}), ignoring`)
           pendingRequests.delete(requestId)
           break

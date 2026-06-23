@@ -1,3 +1,5 @@
+import { extractOperation } from '@/logic/contexts/network/to-graphql-request/extract-operation'
+
 /**
  * Check if a request postData contains a GraphQL operation (for SSE detection)
  */
@@ -59,23 +61,21 @@ export function extractGraphqlFromPostData(postData: string | undefined): {
 }
 
 /**
- * Check if a response is an SSE (Server-Sent Events) response
+ * Check if a response is an SSE (Server-Sent Events) response.
  * Checks both mimeType and response headers for text/event-stream.
- * Also accepts application/json responses if they come from a GraphQL request,
- * since some GraphQL servers use this for SSE subscriptions.
+ * For application/json responses, requires the operation to be a subscription
+ * and the CDP resource type to be EventSource.
  */
-export function isSSEResponse(
-  mimeType?: string,
-  headers?: Record<string, string>,
-  isGraphQLRequest?: boolean,
-): boolean {
-  console.log(
-    `[isSSEResponse] Checking - mimeType: ${mimeType}, has headers: ${!!headers}, isGraphQL: ${isGraphQLRequest}`,
-  )
+export function isSSEResponse(options: {
+  mimeType?: string
+  headers?: Record<string, string>
+  postData?: string
+  resourceType?: string
+}): boolean {
+  const { mimeType, headers, postData, resourceType } = options
 
   // Check mimeType field
   if (mimeType === 'text/event-stream') {
-    console.log(`[isSSEResponse] Matched text/event-stream in mimeType`)
     return true
   }
 
@@ -83,21 +83,20 @@ export function isSSEResponse(
   if (headers) {
     const contentType = headers['content-type'] || headers['Content-Type']
     if (contentType && contentType.includes('text/event-stream')) {
-      console.log(`[isSSEResponse] Matched text/event-stream in headers`)
       return true
     }
   }
 
-  // Some GraphQL servers return application/json for SSE subscriptions
-  // If we know this is a GraphQL request and there are indicators of streaming,
-  // treat it as SSE even with application/json MIME type
-  if (isGraphQLRequest && mimeType === 'application/json') {
-    console.log(
-      `[isSSEResponse] GraphQL request with application/json - treating as potential SSE subscription`,
-    )
-    return true
+  // Some GraphQL servers (e.g. graphql-sse) return application/json for SSE subscriptions.
+  // Only treat as SSE if: the operation is a subscription AND the CDP resource type is EventSource.
+  if (mimeType === 'application/json' && postData) {
+    const { query } = extractGraphqlFromPostData(postData)
+    const operation = extractOperation(query)
+
+    if (operation === 'subscription' && resourceType === 'EventSource') {
+      return true
+    }
   }
 
-  console.log(`[isSSEResponse] Not an SSE response`)
   return false
 }
