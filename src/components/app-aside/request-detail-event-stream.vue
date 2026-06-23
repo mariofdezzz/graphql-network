@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import StopIcon from '@/components/icons/stop-icon.vue'
 import type { GraphQLSubscriptionRequest } from '@/types/graphql-request'
 import type { SSEMessage } from '@/types/sse-network-event'
 import { computed, ref } from 'vue'
@@ -32,10 +33,25 @@ const rows = computed<SSERow[]>(() =>
 function onSelect(row: SSERow) {
   selected.value = row
 }
+
+function clearMessages() {
+  props.request.messages.splice(0)
+  selected.value = undefined
+}
 </script>
 
 <template>
-  <div class="h-full grid grid-rows-[1fr_200px]">
+  <div class="h-full grid grid-rows-[auto_1fr_200px]">
+    <div class="flex items-center border-b border-on-base-disabled border-base px-1">
+      <button
+        title="Clear all"
+        class="rounded-full hover:bg-on-base-hover active:bg-on-base-active p-1"
+        @click="clearMessages"
+      >
+        <StopIcon class="h-4 w-4" />
+      </button>
+    </div>
+
     <SharedTable
       :rows
       :sort="{ column: 'time', direction: 'asc' }"
