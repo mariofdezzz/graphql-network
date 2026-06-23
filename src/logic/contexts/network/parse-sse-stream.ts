@@ -30,15 +30,24 @@ export function parseSSEStream(
 } {
   const messages: SSEMessage[] = []
 
-  // Only process new content
+  // Only process new content since last parse
   const newContent = streamBody.slice(lastParsedOffset)
 
   if (!newContent) {
     return { messages, newOffset: lastParsedOffset }
   }
 
-  // Split by double newlines (message boundaries)
-  const lines = (lastParsedOffset === 0 ? streamBody : streamBody).split('\n')
+  // Find the last complete message boundary (double newline)
+  const lastBoundary = newContent.lastIndexOf('\n\n')
+
+  if (lastBoundary === -1) {
+    // No complete message yet, wait for more data
+    return { messages, newOffset: lastParsedOffset }
+  }
+
+  // Only parse up to the last complete message
+  const completePart = newContent.slice(0, lastBoundary + 2)
+  const lines = completePart.split('\n')
 
   let currentEvent = ''
   let currentData = ''
@@ -80,18 +89,9 @@ export function parseSSEStream(
     }
   }
 
-  // Handle last message if stream doesn't end with newline
-  if (currentData.trim()) {
-    messages.push({
-      eventName: currentEvent || 'message',
-      eventId: currentId,
-      data: currentData.trim(),
-    })
-  }
-
   return {
     messages,
-    newOffset: streamBody.length,
+    newOffset: lastParsedOffset + lastBoundary + 2,
   }
 }
 

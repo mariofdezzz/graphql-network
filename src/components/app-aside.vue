@@ -5,6 +5,7 @@ import type { GraphQLNetworkRequest, GraphQLSubscriptionRequest } from '@/types/
 import { useEventListener } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import RequestDetailEventStream from './app-aside/request-detail-event-stream.vue'
 import RequestDetailHeaders from './app-aside/request-detail-headers.vue'
 import RequestDetailInitiator from './app-aside/request-detail-initiator.vue'
 import RequestDetailMessages from './app-aside/request-detail-messages.vue'
@@ -84,6 +85,10 @@ function closeDetail() {
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
       <RequestDetailMessages :request="requestDetail as GraphQLSubscriptionRequest" />
+    </div>
+
+    <div v-show="selectedTab === 'EventStream'" class="flex-1 min-h-0 overflow-hidden">
+      <RequestDetailEventStream :request="requestDetail as GraphQLSubscriptionRequest" />
     </div>
 
     <div

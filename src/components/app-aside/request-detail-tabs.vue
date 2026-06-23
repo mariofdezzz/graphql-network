@@ -13,7 +13,12 @@ const tabs = computed(() =>
     'Headers',
     'response' in props.request && props.request.response ? 'Payload' : null,
     props.request.operation !== 'subscription' ? 'Preview' : null,
-    props.request.operation === 'subscription' ? 'Messages' : null,
+    props.request.operation === 'subscription' && props.request.transport === 'websocket'
+      ? 'Messages'
+      : null,
+    props.request.operation === 'subscription' && props.request.transport === 'sse'
+      ? 'EventStream'
+      : null,
     props.request.operation !== 'subscription' ? 'Response' : null,
     'Initiator',
     props.request.operation !== 'subscription'

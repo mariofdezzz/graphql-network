@@ -4,7 +4,6 @@ const ChromeEvents = {
   'Network.requestWillBeSent': 'requestSent',
   'Network.responseReceived': 'responseReceived',
   'Network.dataReceived': 'dataReceived',
-  'Network.responseBodyReceived': 'responseBodyReceived',
   'Network.eventSourceMessageReceived': 'eventSourceMessageReceived',
   'Network.loadingFinished': 'loadingFinished',
   'Network.loadingFailed': 'loadingFailed',
@@ -16,20 +15,26 @@ export function onSSENetworkEvent(onEvent: (event: SSENetworkEvent) => void) {
     return
   }
 
-  console.log('[SSE] onSSENetworkEvent listener registered')
-
   chrome.debugger.onEvent.addListener((source, method, params) => {
-    // Map Chrome DevTools Protocol events to SSE network events
-    // and forward them for processing by the composable
     if (method in ChromeEvents && params) {
-      console.log(
-        `[SSE] CDP Event: ${method} -> ${ChromeEvents[method as keyof typeof ChromeEvents]}`,
-        params,
-      )
       onEvent({
         method: ChromeEvents[method as keyof typeof ChromeEvents],
         params: params as any,
       })
     }
   })
+}
+
+/**
+ * Enable streaming for a request so that `Network.dataReceived` events
+ * include the response body data (requires Chrome 116+).
+ */
+export function enableStreamResourceContent(requestId: string) {
+  if (!chrome.debugger) return
+
+  chrome.debugger.sendCommand(
+    { tabId: chrome.devtools.inspectedWindow.tabId },
+    'Network.streamResourceContent',
+    { requestId },
+  )
 }

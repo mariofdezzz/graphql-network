@@ -71,6 +71,7 @@ export function toGraphQLSubscriptionRequestFromSSE(
     status,
     errors,
     operation: 'subscription',
+    transport: 'sse',
     size: 0,
     timings,
     headers: {

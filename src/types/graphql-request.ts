@@ -45,6 +45,7 @@ export type GraphQLSubscriptionRequest = {
   status: number
   errors: ComputedRef<number>
   operation: 'subscription'
+  transport: 'websocket' | 'sse'
   size: number
   timings: Prettify<{
     startedAt: string
