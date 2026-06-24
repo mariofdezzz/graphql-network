@@ -58,10 +58,7 @@ function closeDetail() {
       v-show="selectedTab === 'Payload'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
-      <RequestDetailPayload
-        :request="requestDetail"
-        :enabled="selectedTab === 'Payload'"
-      />
+      <RequestDetailPayload :request="requestDetail" :enabled="selectedTab === 'Payload'" />
     </div>
 
     <div
@@ -69,6 +66,17 @@ function closeDetail() {
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
       <RequestDetailPreview :request="requestDetail as GraphQLNetworkRequest" />
+    </div>
+
+    <div
+      v-show="selectedTab === 'Messages'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailMessages :request="requestDetail as GraphQLSubscriptionRequest" />
+    </div>
+
+    <div v-show="selectedTab === 'EventStream'" class="flex-1 min-h-0 overflow-hidden">
+      <RequestDetailEventStream :request="requestDetail as GraphQLSubscriptionRequest" />
     </div>
 
     <div
@@ -85,17 +93,6 @@ function closeDetail() {
         :request="requestDetail as GraphQLNetworkRequest"
         :enabled="selectedTab === 'Response'"
       />
-    </div>
-
-    <div
-      v-show="selectedTab === 'Messages'"
-      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
-    >
-      <RequestDetailMessages :request="requestDetail as GraphQLSubscriptionRequest" />
-    </div>
-
-    <div v-show="selectedTab === 'EventStream'" class="flex-1 min-h-0 overflow-hidden">
-      <RequestDetailEventStream :request="requestDetail as GraphQLSubscriptionRequest" />
     </div>
 
     <div
