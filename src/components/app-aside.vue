@@ -12,6 +12,7 @@ import RequestDetailMessages from './app-aside/request-detail-messages.vue'
 import RequestDetailPayload from './app-aside/request-detail-payload.vue'
 import RequestDetailPreview from './app-aside/request-detail-preview.vue'
 import RequestDetailResponse from './app-aside/request-detail-response.vue'
+import RequestDetailSseResponse from './app-aside/request-detail-sse-response.vue'
 import RequestDetailTabs from './app-aside/request-detail-tabs.vue'
 import RequestDetailTiming from './app-aside/request-detail-timing.vue'
 
@@ -58,7 +59,7 @@ function closeDetail() {
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
       <RequestDetailPayload
-        :request="requestDetail as GraphQLNetworkRequest"
+        :request="requestDetail"
         :enabled="selectedTab === 'Payload'"
       />
     </div>
@@ -74,7 +75,13 @@ function closeDetail() {
       v-show="selectedTab === 'Response'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
+      <RequestDetailSseResponse
+        v-if="requestDetail.operation === 'subscription' && requestDetail.transport === 'sse'"
+        :request="requestDetail as GraphQLSubscriptionRequest"
+        :enabled="selectedTab === 'Response'"
+      />
       <RequestDetailResponse
+        v-else
         :request="requestDetail as GraphQLNetworkRequest"
         :enabled="selectedTab === 'Response'"
       />

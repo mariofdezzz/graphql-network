@@ -34,6 +34,8 @@ export function isGraphqlPostData(postData: string | undefined): boolean {
 export function extractGraphqlFromPostData(postData: string | undefined): {
   query: string
   operationName: string
+  variables?: Record<string, any>
+  extensions?: Record<string, any>
 } {
   const defaults = { query: '', operationName: 'Unknown' }
 
@@ -54,6 +56,8 @@ export function extractGraphqlFromPostData(postData: string | undefined): {
     return {
       query,
       operationName: operationName || 'Unknown',
+      variables: parsed.variables,
+      extensions: parsed.extensions,
     }
   } catch {
     return defaults

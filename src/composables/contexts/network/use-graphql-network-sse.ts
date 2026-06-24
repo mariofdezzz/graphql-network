@@ -90,6 +90,11 @@ export function useGraphqlNetworkSSE(onSubscribe: (request: GraphQLSubscriptionR
         // Accumulate into stream buffer
         active.streamBuffer += decoded
 
+        // Append to reactive raw event stream
+        if (active.subscription.rawEventStream) {
+          active.subscription.rawEventStream.value += decoded
+        }
+
         // Parse new SSE messages from the accumulated buffer
         const { messages, newOffset } = parseSSEStream(
           active.streamBuffer,
@@ -150,6 +155,19 @@ export function useGraphqlNetworkSSE(onSubscribe: (request: GraphQLSubscriptionR
             eventId: (event as any).params.eventId || '',
           }
           activeSubscription.subscription.messages.push(sseMessage)
+
+          // Reconstruct raw SSE format for the Response tab
+          if (activeSubscription.subscription.rawEventStream) {
+            let raw = ''
+            if (sseMessage.eventName && sseMessage.eventName !== 'message') {
+              raw += `event: ${sseMessage.eventName}\n`
+            }
+            if (sseMessage.eventId) {
+              raw += `id: ${sseMessage.eventId}\n`
+            }
+            raw += `data: ${sseMessage.data}\n\n`
+            activeSubscription.subscription.rawEventStream.value += raw
+          }
         }
         break
       }

@@ -1,6 +1,6 @@
 import type { ChromeNetworkHeaders, GraphQLSubscriptionRequest } from '@/types/graphql-request'
 import type { SSEMessage, SSENetworkEvent } from '@/types/sse-network-event'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { extractGraphqlFromPostData } from './is-graphql-sse-request'
 import { extractOperation } from './to-graphql-request/extract-operation'
 
@@ -22,7 +22,7 @@ export function toGraphQLSubscriptionRequestFromSSE(
   console.log(`[toGraphQLSubscriptionRequestFromSSE] PostData: ${postData}`)
 
   // Extract GraphQL operation details from postData (primary source)
-  const { query, operationName } = extractGraphqlFromPostData(postData)
+  const { query, operationName, variables, extensions } = extractGraphqlFromPostData(postData)
 
   console.log(`[toGraphQLSubscriptionRequestFromSSE] Extracted operation name: ${operationName}`)
 
@@ -45,6 +45,8 @@ export function toGraphQLSubscriptionRequestFromSSE(
   // Reactive messages array
   const messages = reactive<SSEMessage[]>([])
 
+  // Reactive raw event stream buffer
+  const rawEventStream = ref('')
   // Compute errors from messages
   const errors = computed(() =>
     messages.reduce((errorCount, { data }) => {
@@ -83,6 +85,12 @@ export function toGraphQLSubscriptionRequestFromSSE(
       request: requestHeaders,
       response: responseHeaders,
     },
+    payload: {
+      query: query || undefined,
+      variables,
+      extensions,
+    },
+    rawEventStream,
     messages,
     initiator,
   }
