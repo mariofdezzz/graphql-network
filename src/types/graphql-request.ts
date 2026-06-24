@@ -1,7 +1,10 @@
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { Prettify } from '@/types/prettify'
-import type { ComputedRef } from 'vue'
-import type { Message } from './websocket-network-event'
+import type { ComputedRef, Ref } from 'vue'
+import type { SSEMessage } from './sse-network-event'
+import type { Message as WebSocketMessage } from './websocket-network-event'
+
+export type Message = WebSocketMessage | SSEMessage
 
 export type GraphQLRequest = GraphQLNetworkRequest | GraphQLSubscriptionRequest
 
@@ -42,6 +45,7 @@ export type GraphQLSubscriptionRequest = {
   status: number
   errors: ComputedRef<number>
   operation: 'subscription'
+  transport: 'websocket' | 'sse'
   size: number
   timings: Prettify<{
     startedAt: string
@@ -62,6 +66,12 @@ export type GraphQLSubscriptionRequest = {
     request: ChromeNetworkHeaders
     response: ChromeNetworkHeaders
   }
+  payload?: {
+    query?: string
+    variables?: Record<string, any>
+    extensions?: Record<string, any>
+  }
+  rawEventStream?: Ref<string>
   initiator: Initiator
   messages: Message[]
 }

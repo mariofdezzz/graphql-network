@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useLayout } from '@/composables/contexts/monaco/use-layout'
 import { useTheme } from '@/composables/contexts/monaco/use-theme'
-import type { GraphQLNetworkRequest } from '@/types/graphql-request'
+import type { GraphQLRequest } from '@/types/graphql-request'
 import { CodeEditor, type MonacoEditorConfig } from 'monaco-editor-vue3'
 import { computed, ref, toRefs } from 'vue'
 import HeadersSummary from './request-detail-headers/headers-summary.vue'
 import RequestObjectViewer from './request-detail-payload/request-object-viewer.vue'
 
 const props = defineProps<{
-  request: GraphQLNetworkRequest
+  request: GraphQLRequest
   enabled: boolean
 }>()
 const { enabled, request } = toRefs(props)

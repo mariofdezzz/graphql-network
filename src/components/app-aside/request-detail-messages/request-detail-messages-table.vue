@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Column } from '@/types/components/shared/table/column'
-import type { Message } from '@/types/websocket-network-event'
+import type { Message } from '@/types/graphql-request'
 import { computed } from 'vue'
 import RequestDetailMessagesTableColumn from './request-detail-messages-table-column.vue'
 import RequestDetailMessagesTableRow from './request-detail-messages-table-row.vue'

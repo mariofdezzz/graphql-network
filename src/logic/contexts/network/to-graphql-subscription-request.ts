@@ -55,6 +55,7 @@ export function toGraphQLSubscriptionRequest(
     status,
     errors,
     operation,
+    transport: 'websocket',
     size: 0,
     timings,
     headers: {

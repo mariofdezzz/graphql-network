@@ -5,12 +5,14 @@ import type { GraphQLNetworkRequest, GraphQLSubscriptionRequest } from '@/types/
 import { useEventListener } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import RequestDetailEventStream from './app-aside/request-detail-event-stream.vue'
 import RequestDetailHeaders from './app-aside/request-detail-headers.vue'
 import RequestDetailInitiator from './app-aside/request-detail-initiator.vue'
 import RequestDetailMessages from './app-aside/request-detail-messages.vue'
 import RequestDetailPayload from './app-aside/request-detail-payload.vue'
 import RequestDetailPreview from './app-aside/request-detail-preview.vue'
 import RequestDetailResponse from './app-aside/request-detail-response.vue'
+import RequestDetailSseResponse from './app-aside/request-detail-sse-response.vue'
 import RequestDetailTabs from './app-aside/request-detail-tabs.vue'
 import RequestDetailTiming from './app-aside/request-detail-timing.vue'
 
@@ -56,10 +58,7 @@ function closeDetail() {
       v-show="selectedTab === 'Payload'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
-      <RequestDetailPayload
-        :request="requestDetail as GraphQLNetworkRequest"
-        :enabled="selectedTab === 'Payload'"
-      />
+      <RequestDetailPayload :request="requestDetail" :enabled="selectedTab === 'Payload'" />
     </div>
 
     <div
@@ -70,20 +69,30 @@ function closeDetail() {
     </div>
 
     <div
-      v-show="selectedTab === 'Response'"
-      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
-    >
-      <RequestDetailResponse
-        :request="requestDetail as GraphQLNetworkRequest"
-        :enabled="selectedTab === 'Response'"
-      />
-    </div>
-
-    <div
       v-show="selectedTab === 'Messages'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
       <RequestDetailMessages :request="requestDetail as GraphQLSubscriptionRequest" />
+    </div>
+
+    <div v-show="selectedTab === 'EventStream'" class="flex-1 min-h-0 overflow-hidden">
+      <RequestDetailEventStream :request="requestDetail as GraphQLSubscriptionRequest" />
+    </div>
+
+    <div
+      v-show="selectedTab === 'Response'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailSseResponse
+        v-if="requestDetail.operation === 'subscription' && requestDetail.transport === 'sse'"
+        :request="requestDetail as GraphQLSubscriptionRequest"
+        :enabled="selectedTab === 'Response'"
+      />
+      <RequestDetailResponse
+        v-else
+        :request="requestDetail as GraphQLNetworkRequest"
+        :enabled="selectedTab === 'Response'"
+      />
     </div>
 
     <div

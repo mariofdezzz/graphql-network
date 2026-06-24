@@ -11,10 +11,18 @@ const props = defineProps<{
 const tabs = computed(() =>
   [
     'Headers',
-    'response' in props.request && props.request.response ? 'Payload' : null,
+    'payload' in props.request && props.request.payload ? 'Payload' : null,
     props.request.operation !== 'subscription' ? 'Preview' : null,
-    props.request.operation === 'subscription' ? 'Messages' : null,
-    props.request.operation !== 'subscription' ? 'Response' : null,
+    props.request.operation === 'subscription' && props.request.transport === 'websocket'
+      ? 'Messages'
+      : null,
+    props.request.operation === 'subscription' && props.request.transport === 'sse'
+      ? 'EventStream'
+      : null,
+    props.request.operation !== 'subscription' ||
+    (props.request.operation === 'subscription' && props.request.transport === 'sse')
+      ? 'Response'
+      : null,
     'Initiator',
     props.request.operation !== 'subscription'
       ? 'Timing' // FIXME: show timing on websocket requests
