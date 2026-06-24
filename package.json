@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite build --watch --mode development",
-    "_dev": "vite",
+    "dev:mock": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",

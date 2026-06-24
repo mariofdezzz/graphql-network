@@ -12,6 +12,7 @@ export const wsMockRequests = shallowReactive<GraphQLRequest[]>([
     status: 101,
     errors: computed(() => 0),
     operation: 'subscription',
+    transport: 'sse',
     size: 0,
     timings: {
       startedAt: new Date().toISOString(),
