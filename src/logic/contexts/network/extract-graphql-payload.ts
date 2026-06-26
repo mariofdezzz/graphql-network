@@ -113,7 +113,7 @@ export function extractGraphqlPayload(postData: PostData | undefined): Extracted
 
   const boundaryMatch = /boundary=([^\s;]+)/.exec(postData.mimeType ?? '')
   if (boundaryMatch && postData.text) {
-    parts = parseMultipartBody(postData.text, boundaryMatch[1])
+    parts = parseMultipartBody(postData.text, boundaryMatch[1]!)
   }
 
   if (!parts || parts.length === 0) {
