@@ -3,7 +3,7 @@ import { useNetworkStore } from '@/stores/network'
 import type { GraphQLRequest } from '@/types/graphql-request'
 import type { ChartOptions } from 'chart.js'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { timeline } from '../logic/components/app-waterfall/timeline'
 
@@ -22,12 +22,15 @@ const requestByStack = computed(() =>
         const latest = acc
           .map((array) => array.at(-1)!)
           .reduce((prev, curr) => {
-            const prevEnd = new Date(prev.timings.startedAt).getTime() + (prev.timings.total ?? 0)
-            const currStart = new Date(curr.timings.startedAt).getTime() + (curr.timings.total ?? 0)
+            const prevEnd =
+              new Date(prev.timings.startedAt).getTime() + (unref(prev.timings.total) ?? 0)
+            const currStart =
+              new Date(curr.timings.startedAt).getTime() + (unref(curr.timings.total) ?? 0)
             return prevEnd < currStart ? prev : curr
           })
 
-        const latestEnd = new Date(latest.timings.startedAt).getTime() + (latest.timings.total ?? 0)
+        const latestEnd =
+          new Date(latest.timings.startedAt).getTime() + (unref(latest.timings.total) ?? 0)
         const reqStart = new Date(req.timings.startedAt).getTime()
 
         if (reqStart > latestEnd) {
@@ -59,7 +62,8 @@ const spaces = computed(() =>
       }
       const timeDifference =
         new Date(req.timings.startedAt).getTime() -
-        (new Date(arr[idx - 1]!.timings.startedAt).getTime() + (arr[idx - 1]!.timings.total ?? 0))
+        (new Date(arr[idx - 1]!.timings.startedAt).getTime() +
+          (unref(arr[idx - 1]!.timings.total) ?? 0))
 
       return {
         borderSkipped: false,

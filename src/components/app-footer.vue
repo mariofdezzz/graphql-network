@@ -2,7 +2,7 @@
 import SharedHorizontalDivider from '@/components/shared/shared-horizontal-divider.vue'
 import { formatBytes } from '@/logic/contexts/size/format-bytes'
 import type { GraphQLRequest } from '@/types/graphql-request'
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 
 const props = defineProps<{
   requests: GraphQLRequest[]
@@ -10,7 +10,7 @@ const props = defineProps<{
 
 const transferred = computed(() => {
   const accumulated = props.requests.reduce((acc, col) => {
-    return acc + (col.size ?? 0)
+    return acc + (unref(col.size) ?? 0)
   }, 0)
 
   return formatBytes(accumulated)

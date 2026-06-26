@@ -35,9 +35,10 @@ const times = computed(() => {
 })
 
 function getTime(row: GraphQLRequest) {
+  const total = unref(row.timings.total)
   return '_blocked_queueing' in row.timings
-    ? row.timings.total - Math.max(row.timings._blocked_queueing ?? 0, 0)
-    : row.timings.total
+    ? (total as number) - Math.max(row.timings._blocked_queueing ?? 0, 0)
+    : total
 }
 
 function focusChange(row: GraphQLRequest) {
@@ -92,7 +93,7 @@ function focusChange(row: GraphQLRequest) {
 
     <SharedColumn v-if="!hideColumns" :field="REQUEST_COLUMNS_TO_KEYS.size" header="Size" sortable>
       <template #default="{ row }">
-        {{ formatBytes(row.size) }}
+        {{ formatBytes(unref(row.size)) }}
       </template>
     </SharedColumn>
 

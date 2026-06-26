@@ -1,7 +1,7 @@
 import type { GraphQLNetworkRequest, GraphQLRequest } from '@/types/graphql-request'
 import { faker } from '@faker-js/faker'
 import { pascalCase } from 'case-anything'
-import { computed, reactive, shallowReactive } from 'vue'
+import { computed, reactive, ref, shallowReactive } from 'vue'
 
 let referenceDate = faker.date.recent().getTime()
 
@@ -13,7 +13,7 @@ export const wsMockRequests = shallowReactive<GraphQLRequest[]>([
     errors: computed(() => 0),
     operation: 'subscription',
     transport: 'sse',
-    size: 0,
+    size: ref(0),
     timings: {
       startedAt: new Date().toISOString(),
       wallTime: 1231231,

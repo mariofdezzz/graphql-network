@@ -103,10 +103,7 @@ function closeDetail() {
     </div>
 
     <div v-show="selectedTab === 'Timing'" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-      <RequestDetailTiming
-        v-show="selectedTab === 'Timing'"
-        :request="requestDetail as GraphQLNetworkRequest"
-      />
+      <RequestDetailTiming :request="requestDetail" />
     </div>
   </aside>
 </template>

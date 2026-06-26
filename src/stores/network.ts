@@ -4,7 +4,7 @@ import { useSortedRequests } from '@/composables/contexts/network/use-sorted-req
 import { onPageReload } from '@/logic/contexts/chrome/on-page-reload'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore, storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import { useRequestDetailStore } from './request-detail'
 
 export const useNetworkStore = defineStore('network', () => {
@@ -38,7 +38,7 @@ export const useNetworkStore = defineStore('network', () => {
   const timelineEndAt = computed(() => {
     return new Date(
       requests.value
-        .map(({ timings }) => new Date(timings.startedAt).getTime() + (timings.total ?? 0))
+        .map(({ timings }) => new Date(timings.startedAt).getTime() + (unref(timings.total) ?? 0))
         .reduce((current, endedAt) => (endedAt > current ? endedAt : current), 0),
     )
   })

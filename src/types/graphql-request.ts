@@ -46,15 +46,23 @@ export type GraphQLSubscriptionRequest = {
   errors: ComputedRef<number>
   operation: 'subscription'
   transport: 'websocket' | 'sse'
-  size: number
+  size: Ref<number>
   timings: Prettify<{
     startedAt: string
-    total?: number
+    total?: number | ComputedRef<number>
     wallTime: number
     baseTimestamp: number
-    // _blocked_queueing?: number
-    // waterfall: number
+    responseReceivedTimestamp?: number
+    /** HAR-equivalent phases extracted from CDP ResourceTiming (ms) */
+    _blocked_queueing?: number
+    blocked?: number
+    dns?: number
+    connect?: number
+    ssl?: number
+    send?: number
+    wait?: number
   }>
+  closedAt?: Ref<Date | undefined>
   //  & ChromeNetworkRequest['timings']
   headers: {
     general: {

@@ -4,7 +4,7 @@ import type {
   WebSocketNetworkEvent,
   WebSocketNetworkFrameEvent,
 } from '@/types/websocket-network-event'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { extractOperation } from './to-graphql-request/extract-operation'
 import { extractName } from './to-graphql-subscription-request/extract-name'
 
@@ -56,7 +56,7 @@ export function toGraphQLSubscriptionRequest(
     errors,
     operation,
     transport: 'websocket',
-    size: 0,
+    size: ref(0),
     timings,
     headers: {
       general: {

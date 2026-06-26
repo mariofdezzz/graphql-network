@@ -6,13 +6,12 @@ export function formatTime(milliseconds: number, decimals = 0) {
   const k = 1000
   const sizes = ['µs', 'ms', 's', 'min']
 
-  const i = Math.floor(Math.log(microseconds) / Math.log(k))
+  let i = Math.floor(Math.log(microseconds) / Math.log(k))
 
-  if (i === 0 && microseconds >= 100) {
-    return (microseconds / 1000).toFixed(decimals) + ' ms'
-  }
+  if (i === 0 && microseconds >= 100) i = 1
+  if (microseconds >= 60_000_000) i = 3
 
-  const result = generateResult(microseconds, i, decimals)
+  const result = generateResult(microseconds, i, i === 3 ? 1 : decimals)
 
   return result + ' ' + sizes[i]
 }

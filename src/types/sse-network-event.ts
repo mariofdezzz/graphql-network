@@ -36,9 +36,27 @@ export type SSENetworkResponseReceivedEvent = {
       statusText: string
       headers: Record<string, string>
       mimeType: string
+      timing?: CDPResourceTiming
     }
     type: 'EventSource'
   }
+}
+
+/** Chrome DevTools Protocol Network.ResourceTiming — all offsets are ms from requestTime */
+export type CDPResourceTiming = {
+  requestTime: number
+  proxyStart: number
+  proxyEnd: number
+  dnsStart: number
+  dnsEnd: number
+  connectStart: number
+  connectEnd: number
+  sslStart: number
+  sslEnd: number
+  sendStart: number
+  sendEnd: number
+  receiveHeadersStart: number
+  receiveHeadersEnd: number
 }
 
 export type SSENetworkDataReceivedEvent = {

@@ -3,15 +3,20 @@
 import { useCharts } from '@/composables/components/app-aside/request-detail-timing/use-charts'
 import { useRequestTimings } from '@/composables/components/app-aside/request-detail-timing/use-request-timings'
 import { formatTime } from '@/logic/contexts/time/format-time'
-import type { GraphQLNetworkRequest } from '@/types/graphql-request'
-import { toRefs } from 'vue'
+import type { GraphQLRequest } from '@/types/graphql-request'
+import { computed, toRefs, unref } from 'vue'
 import { Bar } from 'vue-chartjs'
 
 const props = defineProps<{
-  request: GraphQLNetworkRequest
+  request: GraphQLRequest
 }>()
 
 const { request } = toRefs(props)
+
+const isFinished = computed(() => {
+  const req = request.value
+  return !('closedAt' in req) || unref(req.closedAt) !== undefined
+})
 
 const timeData = useRequestTimings(request)
 const { queueing, stalled, dns, connect, ssl, sent, wait, download, total, requestStartedAt } =
@@ -148,6 +153,10 @@ const {
 
       <span class="text-end">{{ formatTime(download, 2) }} </span>
     </div>
+
+    <span v-if="!isFinished" class="text-timing-caution font-bold"
+      >CAUTION: request is not finished yet!</span
+    >
 
     <div class="flex items-center justify-between">
       <a

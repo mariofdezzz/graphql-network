@@ -90,6 +90,9 @@ export function useGraphqlNetworkSSE(onSubscribe: (request: GraphQLSubscriptionR
         // Accumulate into stream buffer
         active.streamBuffer += decoded
 
+        // Track raw bytes received
+        active.subscription.size.value += decoded.length
+
         // Append to reactive raw event stream
         if (active.subscription.rawEventStream) {
           active.subscription.rawEventStream.value += decoded
@@ -174,6 +177,15 @@ export function useGraphqlNetworkSSE(onSubscribe: (request: GraphQLSubscriptionR
 
       case 'loadingFinished':
       case 'loadingFailed': {
+        // Mark the subscription as closed
+        const closing = activeSubscriptions.get(requestId)
+        if (closing?.subscription.closedAt) {
+          closing.subscription.closedAt.value = new Date(
+            (closing.subscription.timings.wallTime +
+              ((event as any).params.timestamp - closing.subscription.timings.baseTimestamp)) *
+              1000,
+          )
+        }
         // Cleanup
         pendingRequests.delete(requestId)
         activeSubscriptions.delete(requestId)
