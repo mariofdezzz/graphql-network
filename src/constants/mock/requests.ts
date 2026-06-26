@@ -5,6 +5,69 @@ import { computed, reactive, ref, shallowReactive } from 'vue'
 
 let referenceDate = faker.date.recent().getTime()
 
+export const formDataMockRequest: GraphQLNetworkRequest = {
+  id: crypto.randomUUID(),
+  name: 'UploadGodAvatar',
+  status: 200,
+  errors: 0,
+  corsError: false,
+  operation: 'mutation',
+  size: 102400,
+  timings: {
+    startedAt: new Date().toISOString(),
+    total: 320,
+    waterfall: new Date().getTime(),
+    blocked: 2,
+    dns: 0,
+    connect: 0,
+    send: 1,
+    wait: 300,
+    receive: 17,
+    ssl: 0,
+  },
+  headers: {
+    general: {
+      url: 'http://localhost:4000/graphql',
+      method: 'POST',
+      status: 200,
+      remoteAddress: '127.0.0.1:4000',
+    },
+    request: [
+      { name: 'content-type', value: 'multipart/form-data; boundary=----boundary123' },
+      { name: 'accept', value: '*/*' },
+    ],
+    response: [{ name: 'content-type', value: 'application/json' }],
+  },
+  payload: {
+    query: `mutation UploadGodAvatar($id: ID!, $file: Upload!) {\n  uploadGodAvatar(id: $id, file: $file) {\n    id\n    avatarUrl\n  }\n}`,
+    variables: { id: '1', file: null },
+    operationName: 'UploadGodAvatar',
+  },
+  files: [{ name: '0', fileName: 'zeus-avatar.png', contentType: 'image/png' }],
+  initiator: {
+    type: 'script',
+    stack: {
+      callFrames: [
+        {
+          functionName: 'uploadAvatar',
+          scriptId: '42',
+          url: 'http://localhost:5173/src/app.vue',
+          lineNumber: 88,
+          columnNumber: 12,
+        },
+      ],
+    },
+  },
+  response: {
+    data: {
+      uploadGodAvatar: {
+        id: '1',
+        avatarUrl: 'https://cdn.example.com/avatars/zeus-avatar.png',
+      },
+    },
+  },
+}
+
 export const wsMockRequests = shallowReactive<GraphQLRequest[]>([
   {
     id: crypto.randomUUID(),

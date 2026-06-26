@@ -1,8 +1,11 @@
+import type { FileMetadata } from '@/logic/contexts/network/extract-graphql-payload'
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { Prettify } from '@/types/prettify'
 import type { ComputedRef, Ref } from 'vue'
 import type { SSEMessage } from './sse-network-event'
 import type { Message as WebSocketMessage } from './websocket-network-event'
+
+export type { FileMetadata }
 
 export type Message = WebSocketMessage | SSEMessage
 
@@ -35,6 +38,7 @@ export type GraphQLNetworkRequest = {
     response: ChromeNetworkHeaders
   }
   payload?: any
+  files?: FileMetadata[]
   initiator: Initiator
   response?: any
 }

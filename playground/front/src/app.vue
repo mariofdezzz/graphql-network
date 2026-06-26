@@ -52,6 +52,15 @@ const CREATE_GOD_MUTATION = gql`
   }
 `
 
+const UPLOAD_GOD_AVATAR_MUTATION = gql`
+  mutation UploadGodAvatar($id: ID!, $file: File!) {
+    uploadGodAvatar(id: $id, file: $file) {
+      id
+      name
+    }
+  }
+`
+
 const GOD_ACTION_SUBSCRIPTION = gql`
   subscription GodAction {
     godAction {
@@ -78,9 +87,53 @@ const GOD_ACTION_SUBSCRIPTION = gql`
   }
 `
 
+const UPLOAD_FAVICON_MUTATION = gql`
+  mutation UploadFavicon($file: File!) {
+    uploadFavicon(file: $file) {
+      name
+      size
+    }
+  }
+`
+
 const toasts = ref<Toast[]>([])
+const uploadGodId = ref('1')
+const uploadFile = ref<File | null>(null)
+const uploadStatus = ref<string | null>(null)
+const uploadLoading = ref(false)
+
+async function handleGodAvatarUpload() {
+  if (!uploadFile.value) return
+
+  uploadLoading.value = true
+  uploadStatus.value = null
+
+  const operations = JSON.stringify({
+    query: `mutation UploadGodAvatar($id: ID!, $file: File!) { uploadGodAvatar(id: $id, file: $file) { id name } }`,
+    variables: { id: uploadGodId.value, file: null },
+  })
+  const map = JSON.stringify({ '0': ['variables.file'] })
+
+  const body = new FormData()
+  body.append('operations', operations)
+  body.append('map', map)
+  body.append('0', uploadFile.value, uploadFile.value.name)
+
+  try {
+    const res = await fetch('http://localhost:4000/graphql', { method: 'POST', body })
+    const json = await res.json()
+    uploadStatus.value = json.data
+      ? `Uploaded for ${json.data.uploadGodAvatar.name}`
+      : `Error: ${json.errors?.[0]?.message}`
+  } catch (e: any) {
+    uploadStatus.value = `Error: ${e.message}`
+  } finally {
+    uploadLoading.value = false
+  }
+}
 const { result, loading, error, refetch } = useQuery<{ gods: God[] }>(GODS_QUERY)
 const { mutate: createGod } = useMutation(CREATE_GOD_MUTATION)
+const { mutate: uploadFavicon } = useMutation(UPLOAD_FAVICON_MUTATION)
 const { onResult } = useSubscription(GOD_ACTION_SUBSCRIPTION)
 
 const actionIcons: Record<GodActionType, string> = {
@@ -127,6 +180,13 @@ onMounted(() => {
     })
     await refetch()
   }, 1500)
+
+  fetch('/favicon.ico')
+    .then((res) => res.blob())
+    .then((blob) => {
+      const file = new File([blob], 'favicon.ico', { type: blob.type })
+      return uploadFavicon({ file })
+    })
 })
 </script>
 
@@ -178,6 +238,53 @@ onMounted(() => {
         <!-- Empty State -->
         <div v-else class="text-center py-12">
           <p class="text-gray-600">No gods found</p>
+        </div>
+
+        <!-- Upload Avatar Section -->
+        <div class="mt-12 bg-white rounded-xl shadow p-6 max-w-md mx-auto">
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Upload God Avatar</h2>
+          <p class="text-sm text-gray-500 mb-4">
+            Sends a <code class="bg-gray-100 px-1 rounded">multipart/form-data</code> GraphQL
+            mutation — visible in the extension as a FormData request.
+          </p>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">God ID</label>
+              <input
+                v-model="uploadGodId"
+                type="text"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                placeholder="1"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Avatar file</label>
+              <input
+                type="file"
+                accept="image/*"
+                class="block w-full text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                @change="
+                  (e) => {
+                    uploadFile = (e.target as HTMLInputElement).files?.[0] ?? null
+                  }
+                "
+              />
+            </div>
+            <button
+              :disabled="!uploadFile || uploadLoading"
+              class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              @click="handleGodAvatarUpload"
+            >
+              {{ uploadLoading ? 'Uploading…' : 'Upload avatar' }}
+            </button>
+            <p
+              v-if="uploadStatus"
+              class="text-sm text-center"
+              :class="uploadStatus.startsWith('Error') ? 'text-red-600' : 'text-green-600'"
+            >
+              {{ uploadStatus }}
+            </p>
+          </div>
         </div>
       </div>
     </div>

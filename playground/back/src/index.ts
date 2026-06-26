@@ -100,6 +100,8 @@ const godsData: God[] = [
 
 export const schema = createSchema({
   typeDefs: /* GraphQL */ `
+    scalar File
+
     enum GodActionType {
       KILLED
       BLESSED
@@ -124,6 +126,11 @@ export const schema = createSchema({
       affected: God!
     }
 
+    type FileInfo {
+      name: String!
+      size: Int!
+    }
+
     input CreateGodInput {
       name: String!
       domain: String!
@@ -139,6 +146,8 @@ export const schema = createSchema({
 
     type Mutation {
       createGod(input: CreateGodInput!): God!
+      uploadGodAvatar(id: ID!, file: File!): God!
+      uploadFavicon(file: File!): FileInfo!
     }
 
     type Subscription {
@@ -157,6 +166,18 @@ export const schema = createSchema({
         }
         godsData.push(newGod)
         return newGod
+      },
+      uploadGodAvatar: async (_, { id, file }: { id: string; file: File }) => {
+        const god = godsData.find((g) => g.id === id)
+        if (!god) throw new Error(`God with id ${id} not found`)
+        // In a real app the file would be stored; here we just confirm receipt
+        console.info(
+          `Received avatar upload for god ${god.name}: ${file.name} (${file.size} bytes)`,
+        )
+        return god
+      },
+      uploadFavicon: async (_, { file }: { file: File }) => {
+        return { name: file.name, size: file.size }
       },
     },
     Subscription: {

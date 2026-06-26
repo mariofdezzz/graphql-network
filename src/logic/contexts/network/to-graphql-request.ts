@@ -1,10 +1,10 @@
 import type { ChromeNetworkRequest } from '@/types/chrome-network-request'
 import type { GraphQLNetworkRequest, GraphQLRequest } from '@/types/graphql-request'
+import { extractGraphqlPayload } from './extract-graphql-payload'
 import { hasCorsErrors } from './has-cors-errors'
 import { isPreflightRequest } from './is-preflight-request'
 import { extractName } from './to-graphql-request/extract-name'
 import { extractOperation } from './to-graphql-request/extract-operation'
-import { extractPayload } from './to-graphql-request/extract-payload'
 import { extractQuery } from './to-graphql-request/extract-query'
 
 export async function toGraphQLRequest(
@@ -14,7 +14,7 @@ export async function toGraphQLRequest(
   try {
     const isPreflight = isPreflightRequest(request)
 
-    const payload = extractPayload(request)
+    const { payload, files } = extractGraphqlPayload(request.request.postData as any)
     const query = extractQuery(payload)
     const operation = isPreflight
       ? 'preflight'
@@ -61,6 +61,7 @@ export async function toGraphQLRequest(
         request: request.request.headers,
       },
       payload,
+      files,
       initiator: request._initiator as GraphQLRequest['initiator'],
       response,
     }
