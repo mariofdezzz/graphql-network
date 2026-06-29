@@ -1,5 +1,5 @@
 import { createSchema, createYoga } from 'graphql-yoga'
-import { createServer } from 'node:http'
+import { createServer, type ServerResponse } from 'node:http'
 
 type GodActionType = 'KILLED' | 'BLESSED' | 'CHALLENGED' | 'BETRAYED' | 'SAVED'
 
@@ -148,6 +148,7 @@ export const schema = createSchema({
       createGod(input: CreateGodInput!): God!
       uploadGodAvatar(id: ID!, file: File!): God!
       uploadFavicon(file: File!): FileInfo!
+      setCookie: Boolean!
     }
 
     type Subscription {
@@ -178,6 +179,10 @@ export const schema = createSchema({
       },
       uploadFavicon: async (_, { file }: { file: File }) => {
         return { name: file.name, size: file.size }
+      },
+      setCookie: (_, __, context: { res: ServerResponse }) => {
+        context.res.setHeader('Set-Cookie', 'playground=olympus; Path=/; HttpOnly')
+        return true
       },
     },
     Subscription: {

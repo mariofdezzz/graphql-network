@@ -6,6 +6,7 @@ import { createClient } from 'graphql-sse'
 
 const httpLink = createUploadLink({
   uri: 'http://localhost:4000/graphql',
+  credentials: 'include',
 })
 
 const sseClient = createClient({
@@ -47,4 +48,5 @@ const cache = new InMemoryCache()
 export const apolloClient = new ApolloClient({
   link: splitLink,
   cache,
+  credentials: 'include',
 })

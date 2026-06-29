@@ -5,6 +5,7 @@ import type { GraphQLNetworkRequest, GraphQLSubscriptionRequest } from '@/types/
 import { useEventListener } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import RequestDetailCookies from './app-aside/request-detail-cookies.vue'
 import RequestDetailEventStream from './app-aside/request-detail-event-stream.vue'
 import RequestDetailHeaders from './app-aside/request-detail-headers.vue'
 import RequestDetailInitiator from './app-aside/request-detail-initiator.vue'
@@ -104,6 +105,13 @@ function closeDetail() {
 
     <div v-show="selectedTab === 'Timing'" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
       <RequestDetailTiming :request="requestDetail" />
+    </div>
+
+    <div
+      v-show="selectedTab === 'Cookies'"
+      class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+    >
+      <RequestDetailCookies :request="requestDetail" />
     </div>
   </aside>
 </template>

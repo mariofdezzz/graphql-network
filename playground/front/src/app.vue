@@ -96,6 +96,12 @@ const UPLOAD_FAVICON_MUTATION = gql`
   }
 `
 
+const SET_COOKIE_MUTATION = gql`
+  mutation SetCookie {
+    setCookie
+  }
+`
+
 const toasts = ref<Toast[]>([])
 const uploadGodId = ref('1')
 const uploadFile = ref<File | null>(null)
@@ -134,6 +140,7 @@ async function handleGodAvatarUpload() {
 const { result, loading, error, refetch } = useQuery<{ gods: God[] }>(GODS_QUERY)
 const { mutate: createGod } = useMutation(CREATE_GOD_MUTATION)
 const { mutate: uploadFavicon } = useMutation(UPLOAD_FAVICON_MUTATION)
+const { mutate: setCookie } = useMutation(SET_COOKIE_MUTATION)
 const { onResult } = useSubscription(GOD_ACTION_SUBSCRIPTION)
 
 const actionIcons: Record<GodActionType, string> = {
@@ -238,6 +245,20 @@ onMounted(() => {
         <!-- Empty State -->
         <div v-else class="text-center py-12">
           <p class="text-gray-600">No gods found</p>
+        </div>
+
+        <!-- Set Cookie Section -->
+        <div class="mt-12 bg-white rounded-xl shadow p-6 max-w-md mx-auto text-center">
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Set Cookie</h2>
+          <p class="text-sm text-gray-500 mb-4">
+            Sends a mutation that returns a <code class="bg-gray-100 px-1 rounded">Set-Cookie</code> response header.
+          </p>
+          <button
+            class="bg-indigo-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+            @click="setCookie()"
+          >
+            Set Cookie
+          </button>
         </div>
 
         <!-- Upload Avatar Section -->
