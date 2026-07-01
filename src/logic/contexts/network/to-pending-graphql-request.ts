@@ -26,6 +26,8 @@ export function toPendingGraphQLRequest(event: HttpNetworkRequestSentEvent): Gra
       startedAt,
       total: 0,
       waterfall: wallTime * 1000,
+      wait: 0,
+      receive: 0,
     },
     headers: {
       general: {
