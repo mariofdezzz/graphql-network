@@ -23,11 +23,12 @@ const formatter = new Intl.DateTimeFormat('en', {
 
 type SSERow = SSEMessage & { id: string }
 
-const rows = computed<SSERow[]>(() =>
-  (props.request.messages as SSEMessage[]).map((msg, index) => ({
-    ...msg,
-    id: String(index),
-  })),
+const rows = computed<SSERow[]>(
+  () =>
+    (props.request.messages as SSEMessage[])?.map((msg, index) => ({
+      ...msg,
+      id: String(index),
+    })) ?? [],
 )
 
 function onSelect(row: SSERow) {
