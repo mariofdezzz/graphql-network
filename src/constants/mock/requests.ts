@@ -7,6 +7,7 @@ let referenceDate = faker.date.recent().getTime()
 
 export const formDataMockRequest: GraphQLNetworkRequest = {
   id: crypto.randomUUID(),
+  _status: 'completed',
   name: 'UploadGodAvatar',
   status: 200,
   errors: 0,
@@ -164,6 +165,7 @@ export const mockRequests: GraphQLRequest[] = faker.helpers.multiple(
 
     return {
       id: faker.string.uuid(),
+      _status: 'completed' as const,
       name: pascalCase(faker.lorem.words({ min: 2, max: 5 })),
       status: faker.helpers.arrayElement([200, 201, 400, 403, 404, 500]),
       errors: faker.number.int({ min: 0, max: 3 }),

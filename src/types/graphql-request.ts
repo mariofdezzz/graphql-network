@@ -9,10 +9,14 @@ export type { FileMetadata }
 
 export type Message = WebSocketMessage | SSEMessage
 
+export type GraphQLNetworkRequestStatus = 'pending' | 'completed' | 'cancelled'
+
 export type GraphQLRequest = GraphQLNetworkRequest | GraphQLSubscriptionRequest
 
 export type GraphQLNetworkRequest = {
   id: string
+  _status: GraphQLNetworkRequestStatus
+  _requestId?: string
   name: string
   status: number
   errors: number

@@ -40,4 +40,5 @@ body,
   --color-ws-message-received-arrow: light-dark(#b3271e, #f2b8b5);
   --color-ws-message-sent: light-dark(#e2f7e8, #1c3d26);
   --color-timing-caution: light-dark(#f29900, #f29900);
+  --color-pending: light-dark(#757575, #8e8e8e);
 }

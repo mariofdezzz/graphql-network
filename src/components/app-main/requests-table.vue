@@ -4,7 +4,7 @@ import { REQUEST_COLUMNS_TO_KEYS } from '@/constants/request-columns-to-keys'
 import { formatBytes } from '@/logic/contexts/size/format-bytes'
 import { formatTime } from '@/logic/contexts/time/format-time'
 import { useRequestDetailStore } from '@/stores/request-detail'
-import type { GraphQLRequest } from '@/types/graphql-request'
+import type { GraphQLNetworkRequestStatus, GraphQLRequest } from '@/types/graphql-request'
 import { computed, unref } from 'vue'
 import SharedColumn from '../shared/table/shared-column.vue'
 import SharedTable from '../shared/table/shared-table.vue'
@@ -41,6 +41,10 @@ function getTime(row: GraphQLRequest) {
     : total
 }
 
+function getRequestStatus(row: GraphQLRequest): GraphQLNetworkRequestStatus | undefined {
+  return '_status' in row ? (row._status as GraphQLNetworkRequestStatus) : undefined
+}
+
 function focusChange(row: GraphQLRequest) {
   if (requestDetailStore.requestDetail) {
     requestDetailStore.requestDetail = row
@@ -75,10 +79,14 @@ function focusChange(row: GraphQLRequest) {
       sortable
     >
       <template #default="{ row }">
-        <template v-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
+        <template v-if="getRequestStatus(row) === 'pending'">
+          <span class="text-pending">(pending)</span>
+        </template>
+        <template v-else-if="getRequestStatus(row) === 'cancelled'"> (cancelled) </template>
+        <template v-else-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
           (http:{{ row.status }})
         </template>
-        <template v-if="row.corsError"> (CORS error) </template>
+        <template v-else-if="row.corsError"> (CORS error) </template>
         <template v-else-if="unref(row.errors) > 0"> {{ row.errors }} errors </template>
         <template v-else> ok </template>
       </template>
@@ -93,13 +101,27 @@ function focusChange(row: GraphQLRequest) {
 
     <SharedColumn v-if="!hideColumns" :field="REQUEST_COLUMNS_TO_KEYS.size" header="Size" sortable>
       <template #default="{ row }">
-        {{ formatBytes(unref(row.size)) }}
+        <template v-if="getRequestStatus(row) === 'pending'">
+          <span class="text-pending">(pending)</span>
+        </template>
+        <template v-else-if="getRequestStatus(row) === 'cancelled'"> — </template>
+        <template v-else>
+          {{ formatBytes(unref(row.size)) }}
+        </template>
       </template>
     </SharedColumn>
 
     <SharedColumn v-if="!hideColumns" :field="REQUEST_COLUMNS_TO_KEYS.time" header="Time" sortable>
       <template #default="{ row }">
-        {{ times[row.id] ? formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0) : 'Pending' }}
+        <template v-if="getRequestStatus(row) === 'pending'">
+          <span class="text-pending">(pending)</span>
+        </template>
+        <template v-else-if="getRequestStatus(row) === 'cancelled'"> (cancelled) </template>
+        <template v-else>
+          {{
+            times[row.id] ? formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0) : 'Pending'
+          }}
+        </template>
       </template>
     </SharedColumn>
 
@@ -110,7 +132,12 @@ function focusChange(row: GraphQLRequest) {
       sortable
     >
       <template #default="{ row }">
-        <RequestTableRowWaterfall :request="row" />
+        <template
+          v-if="getRequestStatus(row) === 'pending' || getRequestStatus(row) === 'cancelled'"
+        />
+        <template v-else>
+          <RequestTableRowWaterfall :request="row" />
+        </template>
       </template>
     </SharedColumn>
   </SharedTable>

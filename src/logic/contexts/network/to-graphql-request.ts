@@ -33,6 +33,7 @@ export async function toGraphQLRequest(
 
     return {
       id: crypto.randomUUID(),
+      _status: 'completed',
       name,
       status: request.response.status,
       errors,
