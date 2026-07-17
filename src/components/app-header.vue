@@ -37,7 +37,7 @@ const preserveLog = ref(false)
       <AppHeaderPreserveLog v-model:preserveLog="preserveLog" />
 
       <a
-        href="https://github.com/mariofdezzz/graphql-network-issues/issues/new?template=bug_report.md"
+        href="https://github.com/mariofdezzz/graphql-network/issues/new?template=bug_report.md"
         target="_blank"
         rel="noopener noreferrer"
         class="p-1 hover:bg-base-hover rounded transition-colors ml-auto"

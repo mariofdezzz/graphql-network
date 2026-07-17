@@ -1,48 +1,48 @@
-# graphql-network
+# GraphQL Network Issues - Chrome DevTools Extension
 
-This template should help get you started developing with Vue 3 in Vite.
+A Google Chrome extension for analyzing and monitoring GraphQL network requests in Chrome's developer tools (F12).
 
-## Recommended IDE Setup
+## 🎯 Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Detailed analysis of GraphQL requests
+- Real-time network traffic monitoring
+- Native integration with Chrome DevTools
+- Clear visualization of queries, mutations, and fragments
 
-## Recommended Browser Setup
+## 🔧 Requirements
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- Google Chrome v140 or higher
+- (Compatibility with other browsers: NOT planned at this time)
 
-## Type Support for `.vue` Imports in TS
+## 📋 Usage and Support
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Report Bugs
 
-## Customize configuration
+If you encounter an issue or unexpected behavior:
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+1. Open a [new issue](../../issues/new?template=bug_report.md)
+2. Provide as much detail as possible
+3. Include steps to reproduce the problem
 
-## Project Setup
+### Request Features
 
-```sh
-npm install
-```
+Have an idea to improve the extension?
 
-### Compile and Hot-Reload for Development
+1. Open a [new issue](../../issues/new?template=feature_request.md)
+2. Describe the desired functionality and its use case
+3. Include examples if possible
 
-```sh
-npm run dev
-```
+## 🤝 Contributing
 
-### Type-Check, Compile and Minify for Production
+Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before contributing.
 
-```sh
-npm run build
-```
+## Local development
 
-### Lint with [ESLint](https://eslint.org/)
+To be able to test all features, a server & client will be executed in order to use debugger from the client. You can access it from the link that appears on terminal:
 
 ```sh
-npm run lint
+pnpm i
+pnpm -r --include-workspace-root run dev
 ```
+
+You will need to install chrome extension locally, using the compiled extension (./dist folder) in order to visualize changes while debugging. Remember to disable the chrome extension if installed.
