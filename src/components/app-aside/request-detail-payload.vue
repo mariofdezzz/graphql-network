@@ -95,6 +95,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
           :value="JSON.stringify(payload.variables, null, 2)"
           language="json"
           :options="options"
+          @editorDidMount="onEditorDidMount"
         />
       </template>
 
@@ -126,6 +127,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
           :value="JSON.stringify(payload.extensions, null, 2)"
           language="json"
           :options="options"
+          @editorDidMount="onEditorDidMount"
         />
       </template>
 

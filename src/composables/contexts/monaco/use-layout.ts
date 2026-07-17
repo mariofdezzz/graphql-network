@@ -1,18 +1,23 @@
+import { MAIN_SPLITTER_RESIZE_EVENT } from '@/constants/events'
 import type { IStandaloneCodeEditor } from '@/types/monaco/standalone-code-editor'
+import { useEventBus } from '@vueuse/core'
 import { nextTick, ref, watch, type Ref } from 'vue'
 import { useWindowResize } from '../window/use-window-resize'
 
 export function useLayout(trigger: Ref<boolean>, request: Ref<any>) {
-  const editor = ref<IStandaloneCodeEditor>()
+  const editors = ref<IStandaloneCodeEditor[]>([])
+  const bus = useEventBus(MAIN_SPLITTER_RESIZE_EVENT)
 
   function onEditorDidMount(_editor: IStandaloneCodeEditor) {
-    editor.value = _editor
+    if (!editors.value.includes(_editor)) {
+      editors.value.push(_editor)
+    }
   }
 
   watch(trigger, (enabled) => {
     if (enabled) {
       nextTick(() => {
-        editor.value?.layout(undefined, true)
+        updateLayout()
       })
     }
   })
@@ -25,14 +30,22 @@ export function useLayout(trigger: Ref<boolean>, request: Ref<any>) {
     updateLayout()
   })
 
+  bus.on(() => {
+    updateLayout()
+  })
+
   async function updateLayout() {
     await nextTick()
 
-    editor.value?.layout({ width: 0, height: 0 }, true)
+    editors.value.forEach((editor) => {
+      editor?.layout({ width: 0, height: 0 }, true)
+    })
 
     await nextTick()
 
-    editor.value?.layout(undefined, true)
+    editors.value.forEach((editor) => {
+      editor?.layout(undefined, true)
+    })
   }
 
   return {

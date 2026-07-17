@@ -6,6 +6,10 @@ import AppMain from '@/components/app-main.vue'
 import { useNetworkStore } from '@/stores/network'
 import { storeToRefs } from 'pinia'
 // import AppWaterfall from './components/app-waterfall.vue'
+import { useEventBus } from '@vueuse/core'
+import { SplitterGroup, SplitterPanel, SplitterResizeHandle } from 'reka-ui'
+import { MAIN_SPLITTER_RESIZE_EVENT } from './constants/events'
+import { MAIN_SPLITTER_ID } from './constants/splitters'
 import { useRequestDetailStore } from './stores/request-detail'
 
 const networkStore = useNetworkStore()
@@ -13,6 +17,10 @@ const { requests } = storeToRefs(networkStore)
 
 const requestDetailStore = useRequestDetailStore()
 const { requestDetail: selectedRequest } = storeToRefs(requestDetailStore)
+
+const bus = useEventBus(MAIN_SPLITTER_RESIZE_EVENT)
+
+const emitSplitterResize = () => bus.emit()
 </script>
 
 <template>
@@ -21,14 +29,23 @@ const { requestDetail: selectedRequest } = storeToRefs(requestDetailStore)
 
     <!-- <AppWaterfall /> -->
 
-    <div class="flex-1 flex min-h-0">
-      <div class="flex flex-col min-h-0" :class="[selectedRequest ? 'flex-[0_0_300px]' : 'flex-1']">
+    <SplitterGroup
+      :id="MAIN_SPLITTER_ID"
+      direction="horizontal"
+      :autoSaveId="MAIN_SPLITTER_ID"
+      class="flex-1 min-h-0"
+    >
+      <SplitterPanel sizeUnit="px" :minSize="50" class="flex flex-col min-h-0 h-full">
         <AppMain class="flex-1" :requests />
 
         <AppFooter :requests />
-      </div>
+      </SplitterPanel>
 
-      <AppAside class="flex-1" />
-    </div>
+      <SplitterResizeHandle v-if="selectedRequest" />
+
+      <SplitterPanel v-if="selectedRequest" @resize="emitSplitterResize" :minSize="5">
+        <AppAside class="flex-1" />
+      </SplitterPanel>
+    </SplitterGroup>
   </div>
 </template>
