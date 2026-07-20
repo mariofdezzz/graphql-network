@@ -6,6 +6,7 @@ import GodCard from './components/GodCard.vue'
 import GodCardSkeleton from './components/GodCardSkeleton.vue'
 
 type GodActionType = 'KILLED' | 'BLESSED' | 'CHALLENGED' | 'BETRAYED' | 'SAVED'
+type Protocol = 'SSE' | 'WS'
 
 interface God {
   id: string
@@ -22,6 +23,7 @@ interface Toast {
   event: GodActionType
   actor: God
   affected: God
+  protocol: Protocol
 }
 
 const GODS_QUERY = gql`
@@ -100,41 +102,46 @@ const toasts = ref<Toast[]>([])
 const uploadGodId = ref('1')
 const uploadFile = ref<File | null>(null)
 const uploadStatus = ref<string | null>(null)
-const uploadLoading = ref(false)
+
+// Connection status tracking
+const sseConnected = ref(false)
+const wsConnected = ref(false)
+const sseEventCount = ref(0)
+const wsEventCount = ref(0)
+
+const { result, loading, error, refetch } = useQuery<{ gods: God[] }>(GODS_QUERY)
+const { mutate: createGod } = useMutation(CREATE_GOD_MUTATION)
+const { mutate: uploadFavicon } = useMutation(UPLOAD_FAVICON_MUTATION)
+const { mutate: uploadGodAvatar, loading: uploadAvatarLoading } = useMutation(
+  UPLOAD_GOD_AVATAR_MUTATION,
+)
 
 async function handleGodAvatarUpload() {
   if (!uploadFile.value) return
 
-  uploadLoading.value = true
   uploadStatus.value = null
 
-  const operations = JSON.stringify({
-    query: `mutation UploadGodAvatar($id: ID!, $file: File!) { uploadGodAvatar(id: $id, file: $file) { id name } }`,
-    variables: { id: uploadGodId.value, file: null },
-  })
-  const map = JSON.stringify({ '0': ['variables.file'] })
-
-  const body = new FormData()
-  body.append('operations', operations)
-  body.append('map', map)
-  body.append('0', uploadFile.value, uploadFile.value.name)
-
   try {
-    const res = await fetch('http://localhost:4000/graphql', { method: 'POST', body })
-    const json = await res.json()
-    uploadStatus.value = json.data
-      ? `Uploaded for ${json.data.uploadGodAvatar.name}`
-      : `Error: ${json.errors?.[0]?.message}`
-  } catch (e: any) {
-    uploadStatus.value = `Error: ${e.message}`
-  } finally {
-    uploadLoading.value = false
+    const result = await uploadGodAvatar({
+      id: uploadGodId.value,
+      file: uploadFile.value,
+    })
+
+    if (result?.data) {
+      uploadStatus.value = `Uploaded for ${result.data.uploadGodAvatar.name}`
+    }
+  } catch (e) {
+    uploadStatus.value = `Error: ${(e as Error).message}`
   }
 }
-const { result, loading, error, refetch } = useQuery<{ gods: God[] }>(GODS_QUERY)
-const { mutate: createGod } = useMutation(CREATE_GOD_MUTATION)
-const { mutate: uploadFavicon } = useMutation(UPLOAD_FAVICON_MUTATION)
-const { onResult } = useSubscription(GOD_ACTION_SUBSCRIPTION)
+
+// SSE Subscription (port 4000)
+const { onResult: onResultSSE } = useSubscription(GOD_ACTION_SUBSCRIPTION)
+
+// WebSocket Subscription (port 4001)
+const { onResult: onResultWS } = useSubscription(GOD_ACTION_SUBSCRIPTION, null, {
+  clientId: 'wsClient',
+})
 
 const actionIcons: Record<GodActionType, string> = {
   KILLED: '⚡',
@@ -152,12 +159,35 @@ const actionColors: Record<GodActionType, string> = {
   SAVED: 'bg-green-500',
 }
 
-onResult((result) => {
+// Handle SSE subscription results
+onResultSSE((result) => {
   if (result.data?.godAction) {
+    sseConnected.value = true
+    sseEventCount.value++
     const { event, actor, affected } = result.data.godAction
-    const toastId = Date.now().toString()
-    const toast: Toast = { id: toastId, event, actor, affected }
+    const toastId = `sse-${Date.now()}`
+    const toast: Toast = { id: toastId, event, actor, affected, protocol: 'SSE' }
     toasts.value.push(toast)
+
+    console.log('📡 SSE Event:', { event, actor: actor.name, affected: affected.name })
+
+    setTimeout(() => {
+      toasts.value = toasts.value.filter((t) => t.id !== toastId)
+    }, 4000)
+  }
+})
+
+// Handle WebSocket subscription results
+onResultWS((result) => {
+  if (result.data?.godAction) {
+    wsConnected.value = true
+    wsEventCount.value++
+    const { event, actor, affected } = result.data.godAction
+    const toastId = `ws-${Date.now()}`
+    const toast: Toast = { id: toastId, event, actor, affected, protocol: 'WS' }
+    toasts.value.push(toast)
+
+    console.log('🔌 WebSocket Event:', { event, actor: actor.name, affected: affected.name })
 
     setTimeout(() => {
       toasts.value = toasts.value.filter((t) => t.id !== toastId)
@@ -193,6 +223,22 @@ onMounted(() => {
 <template>
   <UApp>
     <div class="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-12 px-4">
+      <!-- Connection Status Indicators -->
+      <div class="fixed top-4 right-4 space-y-2 z-50">
+        <div class="bg-white rounded-lg shadow-lg px-4 py-3 text-xs space-y-2">
+          <div class="flex items-center gap-2">
+            <div :class="['w-2 h-2 rounded-full', sseConnected ? 'bg-green-500' : 'bg-gray-300']" />
+            <span class="font-medium">SSE (4000)</span>
+            <span class="text-gray-500">{{ sseEventCount }} events</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div :class="['w-2 h-2 rounded-full', wsConnected ? 'bg-blue-500' : 'bg-gray-300']" />
+            <span class="font-medium">WebSocket (4001)</span>
+            <span class="text-gray-500">{{ wsEventCount }} events</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Toast Container -->
       <div class="fixed bottom-4 right-4 space-y-2 z-50">
         <div
@@ -203,12 +249,24 @@ onMounted(() => {
             'rounded-lg shadow-lg p-4 text-white text-sm font-medium max-w-xs',
           ]"
         >
-          <div class="flex items-center gap-2">
-            <span>{{ actionIcons[toast.event] }}</span>
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2 flex-1">
+              <span>{{ actionIcons[toast.event] }}</span>
+              <span
+                >{{ toast.actor.name }} {{ toast.event.toLowerCase() }}
+                {{ toast.affected.name }}</span
+              >
+            </div>
             <span
-              >{{ toast.actor.name }} {{ toast.event.toLowerCase() }}
-              {{ toast.affected.name }}</span
+              :class="[
+                'text-[10px] font-bold px-2 py-0.5 rounded',
+                toast.protocol === 'SSE'
+                  ? 'bg-white/20 border border-white/30'
+                  : 'bg-black/20 border border-white/30',
+              ]"
             >
+              {{ toast.protocol }}
+            </span>
           </div>
         </div>
       </div>
@@ -264,18 +322,18 @@ onMounted(() => {
                 accept="image/*"
                 class="block w-full text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                 @change="
-                  (e) => {
-                    uploadFile = (e.target as HTMLInputElement).files?.[0] ?? null
+                  (e: Event) => {
+                    uploadFile = (e.target as any)?.files?.[0] ?? null
                   }
                 "
               />
             </div>
             <button
-              :disabled="!uploadFile || uploadLoading"
+              :disabled="!uploadFile || uploadAvatarLoading"
               class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               @click="handleGodAvatarUpload"
             >
-              {{ uploadLoading ? 'Uploading…' : 'Upload avatar' }}
+              {{ uploadAvatarLoading ? 'Uploading…' : 'Upload avatar' }}
             </button>
             <p
               v-if="uploadStatus"

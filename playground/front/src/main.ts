@@ -1,14 +1,17 @@
 import './assets/css/main.css'
 
 import ui from '@nuxt/ui/vue-plugin'
-import { DefaultApolloClient } from '@vue/apollo-composable'
+import { ApolloClients } from '@vue/apollo-composable'
 import { createApp, h, provide } from 'vue'
-import { apolloClient } from './apollo'
+import { apolloClient, apolloClientWS } from './apollo'
 import App from './app.vue'
 
 const app = createApp({
   setup() {
-    provide(DefaultApolloClient, apolloClient)
+    provide(ApolloClients, {
+      default: apolloClient,
+      wsClient: apolloClientWS,
+    })
   },
 
   render: () => h(App),

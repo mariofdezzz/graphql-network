@@ -1,5 +1,7 @@
+import { handleProtocols, makeServer } from 'graphql-ws'
 import { createSchema, createYoga } from 'graphql-yoga'
 import { createServer } from 'node:http'
+import { WebSocketServer } from 'ws'
 
 type GodActionType = 'KILLED' | 'BLESSED' | 'CHALLENGED' | 'BETRAYED' | 'SAVED'
 
@@ -212,10 +214,66 @@ export const schema = createSchema({
   },
 })
 
-const yoga = createYoga({ schema })
+// SSE Server (port 4000)
+function createSSEServer() {
+  const yoga = createYoga({ schema })
+  const server = createServer(yoga)
 
-const server = createServer(yoga)
+  server.listen(4000, () => {
+    console.info('✅ SSE Server running on http://localhost:4000/graphql')
+  })
 
-server.listen(4000, () => {
-  console.info('Server is running on http://localhost:4000/graphql')
-})
+  return server
+}
+
+// WebSocket Server (port 4001)
+function createWSServer() {
+  const yoga = createYoga({ schema })
+  const httpServer = createServer(yoga)
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/graphql',
+    handleProtocols,
+  })
+
+  const server = makeServer({
+    schema,
+    onConnect: (ctx) => {
+      console.info('🔌 WebSocket client connected')
+      return true
+    },
+    onDisconnect: (ctx) => {
+      console.info('🔌 WebSocket client disconnected')
+    },
+    onSubscribe: (ctx, msg) => {
+      console.info('🔌 WebSocket subscription started:', msg.operationName || 'anonymous')
+    },
+  })
+
+  wsServer.on('connection', (socket, request) => {
+    const closed = server.opened(
+      {
+        protocol: socket.protocol,
+        send: (data) =>
+          new Promise((resolve, reject) => {
+            socket.send(data, (err) => (err ? reject(err) : resolve()))
+          }),
+        close: (code, reason) => socket.close(code, reason),
+        onMessage: (cb) => socket.on('message', async (event) => cb(event.toString())),
+      },
+      { socket, request },
+    )
+
+    socket.once('close', (code, reason) => closed(code, reason.toString()))
+  })
+
+  httpServer.listen(4001, () => {
+    console.info('✅ WebSocket Server running on http://localhost:4001/graphql')
+  })
+
+  return { httpServer, wsServer }
+}
+
+createSSEServer()
+createWSServer()
