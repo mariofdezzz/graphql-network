@@ -24,10 +24,7 @@ const tabs = computed(() =>
       ? 'Response'
       : null,
     'Initiator',
-    props.request.operation !== 'subscription' ||
-    (props.request.operation === 'subscription' && props.request.transport === 'sse')
-      ? 'Timing' // FIXME: show timing on websocket requests
-      : null,
+    'Timing', // Now showing timing for all requests including websocket subscriptions
     // 'Cookies' // TODO
   ].filter((tab): tab is string => tab !== null),
 )

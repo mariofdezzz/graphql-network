@@ -247,7 +247,7 @@ function createWSServer() {
       console.info('🔌 WebSocket client disconnected')
     },
     onSubscribe: (ctx, msg) => {
-      console.info('🔌 WebSocket subscription started:', msg.operationName || 'anonymous')
+      console.info('🔌 WebSocket subscription started:', msg?.operationName || 'anonymous')
     },
   })
 
@@ -257,6 +257,10 @@ function createWSServer() {
         protocol: socket.protocol,
         send: (data) =>
           new Promise((resolve, reject) => {
+            if (socket.readyState !== WebSocket.OPEN) {
+              resolve()
+              return
+            }
             socket.send(data, (err) => (err ? reject(err) : resolve()))
           }),
         close: (code, reason) => socket.close(code, reason),

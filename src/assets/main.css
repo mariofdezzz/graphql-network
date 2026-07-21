@@ -41,4 +41,6 @@ body,
   --color-ws-message-sent: light-dark(#e2f7e8, #1c3d26);
   --color-timing-caution: light-dark(#f29900, #f29900);
   --color-pending: light-dark(#757575, #8e8e8e);
+
+  --spacing-0\.75: calc(var(--spacing) * 0.75); /* 3px */
 }

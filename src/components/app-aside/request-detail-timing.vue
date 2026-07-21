@@ -18,6 +18,11 @@ const isFinished = computed(() => {
   return !('closedAt' in req) || unref(req.closedAt) !== undefined
 })
 
+const isWebSocketSubscription = computed(() => {
+  const req = request.value
+  return req.operation === 'subscription' && req.transport === 'websocket'
+})
+
 const timeData = useRequestTimings(request)
 const { queueing, stalled, dns, connect, ssl, sent, wait, download, total, requestStartedAt } =
   timeData
@@ -78,7 +83,7 @@ const {
 
       <span class="text-end">{{ formatTime(stalled, 2) }} </span>
 
-      <template v-if="dns">
+      <template v-if="dns && !isWebSocketSubscription">
         <span class="ps-4">DNS Lookup</span>
 
         <div class="h-4">
@@ -88,7 +93,7 @@ const {
         <span class="text-end">{{ formatTime(dns, 2) }} </span>
       </template>
 
-      <template v-if="connect">
+      <template v-if="connect && !isWebSocketSubscription">
         <span class="ps-4">Initial Connection</span>
 
         <div class="h-4">
@@ -103,7 +108,7 @@ const {
         <span class="text-end">{{ formatTime(connect, 2) }} </span>
       </template>
 
-      <template v-if="ssl">
+      <template v-if="ssl && !isWebSocketSubscription">
         <span class="ps-4">SSL</span>
 
         <div class="h-4">
@@ -119,9 +124,9 @@ const {
 
       <span class="text-request-timing-header">DURATION</span>
 
-      <span class="ps-4">Request sent</span>
+      <span v-if="!isWebSocketSubscription" class="ps-4">Request sent</span>
 
-      <div class="h-4">
+      <div v-if="!isWebSocketSubscription" class="h-4">
         <Bar
           id="timing-request-sent-chart"
           :options="options"
@@ -130,15 +135,15 @@ const {
         ></Bar>
       </div>
 
-      <span class="text-end">{{ formatTime(sent, 2) }} </span>
+      <span v-if="!isWebSocketSubscription" class="text-end">{{ formatTime(sent, 2) }} </span>
 
-      <span class="ps-4">Waiting for server response</span>
+      <span v-if="!isWebSocketSubscription" class="ps-4">Waiting for server response</span>
 
-      <div class="h-4">
+      <div v-if="!isWebSocketSubscription" class="h-4">
         <Bar id="timing-waiting-chart" :options="options" :data="waitData" class="w-full!"></Bar>
       </div>
 
-      <span class="text-end">{{ formatTime(wait, 2) }} </span>
+      <span v-if="!isWebSocketSubscription" class="text-end">{{ formatTime(wait, 2) }} </span>
 
       <span class="ps-4">Content Download</span>
 

@@ -36,6 +36,14 @@ const times = computed(() => {
 
 function getTime(row: GraphQLRequest) {
   const total = unref(row.timings.total)
+
+  // For WebSocket subscriptions, show Pending if not closed
+  if (row.operation === 'subscription' && row.transport === 'websocket' && 'closedAt' in row) {
+    if (!unref(row.closedAt)) {
+      return undefined
+    }
+  }
+
   return '_blocked_queueing' in row.timings
     ? (total as number) - Math.max(row.timings._blocked_queueing ?? 0, 0)
     : total
@@ -114,13 +122,14 @@ function focusChange(row: GraphQLRequest) {
     <SharedColumn v-if="!hideColumns" :field="REQUEST_COLUMNS_TO_KEYS.time" header="Time" sortable>
       <template #default="{ row }">
         <template v-if="getRequestStatus(row) === 'pending'">
-          <span class="text-pending">(pending)</span>
+          <span class="text-pending"> Pending </span>
         </template>
         <template v-else-if="getRequestStatus(row) === 'cancelled'"> (cancelled) </template>
+        <template v-else-if="times[row.id] === undefined">
+          <span class="text-pending"> Pending </span>
+        </template>
         <template v-else>
-          {{
-            times[row.id] ? formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0) : 'Pending'
-          }}
+          {{ formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0) }}
         </template>
       </template>
     </SharedColumn>

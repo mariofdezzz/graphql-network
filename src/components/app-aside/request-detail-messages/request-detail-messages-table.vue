@@ -40,26 +40,27 @@ const columns: Column[] = [
 </script>
 
 <template>
-  <div class="h-full flex flex-col">
-    <!-- header -->
+  <div class="h-full min-h-0 grid grid-rows-[auto_1fr]">
     <div class="grid gap-px bg-on-base-disabled *:bg-table-base grid-cols-[1fr_100px_200px]">
       <RequestDetailMessagesTableColumn :columns />
     </div>
 
-    <!-- rows -->
-    <RequestDetailMessagesTableRow
-      v-for="(row, index) in messages"
-      :key="index"
-      :row
-      :columns
-      :selected="selectedRow === index"
-      class="*:bg-table-base"
-      @click="selectedRow = index"
-    />
+    <div class="overflow-auto min-h-0">
+      <RequestDetailMessagesTableRow
+        v-for="(row, index) in messages"
+        :key="index"
+        :row
+        :columns
+        :selected="selectedRow === index"
+        class="*:bg-table-base"
+        @click="selectedRow = index"
+      />
 
-    <!-- empty space -->
-    <div class="flex-1 grid gap-px bg-on-base-disabled *:bg-base-color grid-cols-[1fr_100px_200px]">
-      <div v-for="(column, index) in columns" :key="index" class="first:pl-px last:pr-px"></div>
+      <div
+        class="flex-1 grid gap-px bg-on-base-disabled *:bg-base-color grid-cols-[1fr_100px_200px]"
+      >
+        <div v-for="(column, index) in columns" :key="index" class="first:pl-px last:pr-px"></div>
+      </div>
     </div>
   </div>
 </template>

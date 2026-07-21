@@ -58,6 +58,16 @@ export function useGraphqlNetworkSubscriptions(
         pendingRequests.get(requestId)?.push(event)
         updateActiveSubscription(requestId, event)
 
+        // Mark the subscription as closed
+        const closing = activeSubscriptions.get(requestId)
+        if (closing?.subscription.closedAt) {
+          closing.subscription.closedAt.value = new Date(
+            (closing.subscription.timings.wallTime +
+              (event.params.timestamp - closing.subscription.timings.baseTimestamp)) *
+              1000,
+          )
+        }
+
         // console.log('Subscription ended:', activeSubscriptions.get(requestId))
 
         pendingRequests.delete(requestId)

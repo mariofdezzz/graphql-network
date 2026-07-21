@@ -30,14 +30,32 @@ export function toGraphQLSubscriptionRequest(
 
   const status = handshakeEvent.params.response.status
   const startedAtDate = new Date(handshakeRequestEvent.params.wallTime * 1000)
-  const timings = {
+
+  // Create base timings object for message timestamp calculation
+  const baseTimings = {
     startedAt: startedAtDate.toISOString(),
     wallTime: handshakeRequestEvent.params.wallTime,
     baseTimestamp: handshakeRequestEvent.params.timestamp,
+    responseReceivedTimestamp: handshakeEvent.params.timestamp,
     waterfall: startedAtDate.getTime(),
   }
 
-  const messages = reactive(toMessages(events, timings))
+  const messages = reactive(toMessages(events, baseTimings as any))
+
+  // Reactive closed-at (set when closed event fires)
+  const closedAt = ref<Date | undefined>(undefined)
+
+  // Reactive total elapsed time (ms from startedAt to last message time, message-driven)
+  const totalMs = computed<number>(() => {
+    if (messages.length === 0) return 0
+    const last = messages[messages.length - 1]!
+    return last.time.getTime() - startedAtDate.getTime()
+  })
+
+  const timings = {
+    ...baseTimings,
+    total: totalMs,
+  }
 
   const errors = computed(() =>
     messages.reduce((errors, { data }) => {
@@ -69,6 +87,7 @@ export function toGraphQLSubscriptionRequest(
     },
     messages,
     initiator: createdEvent.params.initiator,
+    closedAt,
   }
 }
 
