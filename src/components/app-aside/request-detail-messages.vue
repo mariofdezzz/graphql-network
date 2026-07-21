@@ -3,6 +3,7 @@ import CancelIcon from '@/components/icons/cancel-icon.vue'
 import FilterEmptyIcon from '@/components/icons/filter-empty-icon.vue'
 import StopIcon from '@/components/icons/stop-icon.vue'
 import type { GraphQLSubscriptionRequest, Message } from '@/types/graphql-request'
+import { useLocalStorage } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import RequestDetailMessagesTable from './request-detail-messages/request-detail-messages-table.vue'
 import RequestDetailMessagesViewer from './request-detail-messages/request-detail-messages-viewer.vue'
@@ -13,7 +14,7 @@ const props = defineProps<{
 
 const selected = ref<Message>()
 const typeFilter = ref<'all' | 'send' | 'receive'>('all')
-const regexFilter = ref('')
+const regexFilter = useLocalStorage('messages-regex-filter', '')
 
 function clearMessages() {
   // eslint-disable-next-line vue/no-mutating-props
