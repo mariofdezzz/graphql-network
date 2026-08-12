@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useLayout } from '@/composables/contexts/monaco/use-layout'
 import { useTheme } from '@/composables/contexts/monaco/use-theme'
+import { PAYLOAD_SPLITTER_ID } from '@/constants/splitters.ts'
 import type { FileMetadata, GraphQLNetworkRequest, GraphQLRequest } from '@/types/graphql-request'
 import { CodeEditor, type MonacoEditorConfig } from 'monaco-editor-vue3'
-import { computed, ref, toRefs } from 'vue'
-import HeadersSummary from './request-detail-headers/headers-summary.vue'
+import { SplitterGroup, SplitterResizeHandle } from 'reka-ui'
+import { computed, ref, toRefs, useTemplateRef } from 'vue'
+import CollapsibleSplitterPanel from './request-detail-payload/collapsible-splitter-panel.vue'
 import RequestObjectViewer from './request-detail-payload/request-object-viewer.vue'
 
 const props = defineProps<{
@@ -15,6 +17,7 @@ const { enabled, request } = toRefs(props)
 
 const { onEditorDidMount } = useLayout(enabled, request)
 
+const parent = useTemplateRef('parent')
 const showVariableSource = ref(false)
 const showExtensionsSource = ref(false)
 
@@ -23,6 +26,7 @@ const options: MonacoEditorConfig = {
   minimap: { enabled: false },
   wordWrap: 'on',
 }
+useTheme(options)
 
 const payload = computed<{
   query?: string
@@ -30,20 +34,13 @@ const payload = computed<{
   extensions?: Record<string, any>
 }>(() => props.request.payload ?? {})
 
-const sectionsCount = computed(() => {
-  let count = 0
-  if (payload.value.query) count++
-  if (payload.value.variables && Object.keys(payload.value.variables).length > 0) count++
-  if (payload.value.extensions && Object.keys(payload.value.extensions).length > 0) count++
-  if (files.value && files.value.length > 0) count++
-  return count
-})
-
-const gridTemplateRows = computed(() => {
-  return `grid-template-rows: repeat(${sectionsCount.value}, 1fr)`
-})
-
-useTheme(options)
+const showQuery = computed(() => Boolean(payload.value.query))
+const showVariables = computed(() =>
+  Boolean(payload.value.variables && Object.keys(payload.value.variables).length > 0),
+)
+const showExtensions = computed(() =>
+  Boolean(payload.value.extensions && Object.keys(payload.value.extensions).length > 0),
+)
 
 const files = computed<FileMetadata[] | undefined>(() => {
   const req = props.request as GraphQLNetworkRequest
@@ -54,14 +51,25 @@ const files = computed<FileMetadata[] | undefined>(() => {
 <template>
   <div v-if="!request.payload"></div>
 
-  <div class="h-full grid" :style="[gridTemplateRows]" v-else>
-    <details
-      v-if="payload.query"
-      open
+  <!-- <div class="h-full grid" :style="[gridTemplateRows]" v-else> -->
+
+  <SplitterGroup
+    v-else
+    :id="PAYLOAD_SPLITTER_ID"
+    direction="vertical"
+    :autoSaveId="PAYLOAD_SPLITTER_ID"
+    class="flex-1 min-h-0"
+    ref="parent"
+  >
+    <CollapsibleSplitterPanel
+      v-if="showQuery"
       name="query"
-      class="flex flex-col open:details-content:flex-1 min-h-0 overflow-y-auto"
+      :hasPreviousElement="false"
+      :parentElement="parent"
     >
-      <HeadersSummary class="border-t-0"> Query </HeadersSummary>
+      <template #header>
+        <span>Query</span>
+      </template>
 
       <CodeEditor
         :value="payload.query"
@@ -69,15 +77,17 @@ const files = computed<FileMetadata[] | undefined>(() => {
         :options="options"
         @editorDidMount="onEditorDidMount"
       />
-    </details>
+    </CollapsibleSplitterPanel>
 
-    <details
-      v-if="payload.variables && Object.keys(payload.variables).length > 0"
-      open
+    <SplitterResizeHandle v-if="showQuery" />
+
+    <CollapsibleSplitterPanel
+      v-if="showVariables"
       name="variables"
-      class="flex flex-col open:details-content:flex-1 min-h-0 overflow-y-auto"
+      :hasPreviousElement="showQuery"
+      :parentElement="parent"
     >
-      <HeadersSummary :class="{ 'border-t-0': !payload.query }">
+      <template #header>
         <span>Variables</span>
 
         <span class="px-5"></span>
@@ -88,7 +98,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
         >
           {{ showVariableSource ? 'View parsed' : 'View source' }}
         </button>
-      </HeadersSummary>
+      </template>
 
       <template v-if="showVariableSource">
         <CodeEditor
@@ -100,18 +110,21 @@ const files = computed<FileMetadata[] | undefined>(() => {
       </template>
 
       <div v-else class="py-2">
-        <RequestObjectViewer :object="payload.variables" />
+        <RequestObjectViewer :object="payload.variables!" />
       </div>
-    </details>
+    </CollapsibleSplitterPanel>
 
-    <details
+    <SplitterResizeHandle v-if="showVariables" />
+
+    <CollapsibleSplitterPanel
       v-if="payload.extensions && Object.keys(payload.extensions).length > 0"
-      open
       name="extensions"
-      class="flex flex-col open:details-content:flex-1 min-h-0 overflow-y-auto"
+      :hasPreviousElement="showQuery || showVariables"
+      :parentElement="parent"
     >
-      <HeadersSummary :class="{ 'border-t-0': !payload.query && !payload.variables }">
-        Extensions
+      <template #header>
+        <span>Extensions</span>
+
         <span class="px-5"></span>
 
         <button
@@ -120,7 +133,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
         >
           {{ showExtensionsSource ? 'View parsed' : 'View source' }}
         </button>
-      </HeadersSummary>
+      </template>
 
       <template v-if="showExtensionsSource">
         <CodeEditor
@@ -134,21 +147,19 @@ const files = computed<FileMetadata[] | undefined>(() => {
       <div v-else class="py-2">
         <RequestObjectViewer :object="payload.extensions" />
       </div>
-    </details>
+    </CollapsibleSplitterPanel>
 
-    <details
+    <SplitterResizeHandle v-if="payload.extensions && Object.keys(payload.extensions).length > 0" />
+
+    <CollapsibleSplitterPanel
       v-if="files && files.length > 0"
-      open
       name="files"
-      class="flex flex-col open:details-content:flex-1 min-h-0 overflow-y-auto"
+      :hasPreviousElement="showQuery || showVariables || showExtensions"
+      :parentElement="parent"
     >
-      <HeadersSummary
-        :class="{
-          'border-t-0': !payload.query && !payload.variables && !payload.extensions,
-        }"
-      >
-        Files
-      </HeadersSummary>
+      <template #header>
+        <span>Files</span>
+      </template>
 
       <ul class="py-2 px-3 space-y-1">
         <li v-for="file in files" :key="file.name" class="flex items-start gap-2 text-xs font-mono">
@@ -161,6 +172,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
           </span>
         </li>
       </ul>
-    </details>
-  </div>
+    </CollapsibleSplitterPanel>
+  </SplitterGroup>
+  <!-- </div> -->
 </template>

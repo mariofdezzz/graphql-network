@@ -1,4 +1,7 @@
-import { MAIN_SPLITTER_RESIZE_EVENT } from '@/constants/events'
+import {
+  MAIN_SPLITTER_RESIZE_EVENT,
+  REQUEST_DETAIL_PAYLOAD_SPLITTER_RESIZE_EVENT,
+} from '@/constants/events'
 import type { IStandaloneCodeEditor } from '@/types/monaco/standalone-code-editor'
 import { useEventBus } from '@vueuse/core'
 import { nextTick, ref, watch, type Ref } from 'vue'
@@ -6,7 +9,8 @@ import { useWindowResize } from '../window/use-window-resize'
 
 export function useLayout(trigger: Ref<boolean>, request: Ref<any>) {
   const editors = ref<IStandaloneCodeEditor[]>([])
-  const bus = useEventBus(MAIN_SPLITTER_RESIZE_EVENT)
+  const mainSplitterBus = useEventBus(MAIN_SPLITTER_RESIZE_EVENT)
+  const requestDetailPayloadSplitterBus = useEventBus(REQUEST_DETAIL_PAYLOAD_SPLITTER_RESIZE_EVENT)
 
   function onEditorDidMount(_editor: IStandaloneCodeEditor) {
     if (!editors.value.includes(_editor)) {
@@ -30,7 +34,10 @@ export function useLayout(trigger: Ref<boolean>, request: Ref<any>) {
     updateLayout()
   })
 
-  bus.on(() => {
+  mainSplitterBus.on(() => {
+    updateLayout()
+  })
+  requestDetailPayloadSplitterBus.on(() => {
     updateLayout()
   })
 
