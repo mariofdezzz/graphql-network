@@ -4,10 +4,10 @@ import AppFooter from '@/components/app-footer.vue'
 import AppHeader from '@/components/app-header.vue'
 import AppMain from '@/components/app-main.vue'
 import { useNetworkStore } from '@/stores/network'
-import { storeToRefs } from 'pinia'
-// import AppWaterfall from './components/app-waterfall.vue'
 import { useEventBus } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 import { SplitterGroup, SplitterPanel, SplitterResizeHandle } from 'reka-ui'
+import AppWaterfall from './components/app-waterfall.vue'
 import { MAIN_SPLITTER_RESIZE_EVENT } from './constants/events'
 import { MAIN_SPLITTER_ID } from './constants/splitters'
 import { useRequestDetailStore } from './stores/request-detail'
@@ -27,7 +27,7 @@ const emitSplitterResize = () => bus.emit()
   <div class="h-full bg-base-color text-on-base flex flex-col text-xs">
     <AppHeader />
 
-    <!-- <AppWaterfall /> -->
+    <AppWaterfall />
 
     <SplitterGroup
       :id="MAIN_SPLITTER_ID"
