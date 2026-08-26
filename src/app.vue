@@ -38,7 +38,7 @@ const emitSplitterResize = () => bus.emit()
       <SplitterPanel sizeUnit="px" :minSize="50" class="flex flex-col min-h-0 h-full">
         <AppMain class="flex-1" :requests />
 
-        <AppFooter :requests />
+        <AppFooter />
       </SplitterPanel>
 
       <SplitterResizeHandle v-if="selectedRequest" />

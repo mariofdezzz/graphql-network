@@ -57,6 +57,7 @@ export const useNetworkStore = defineStore('network', () => {
 
   return {
     requests: sortedRequests,
+    allRequests: requests,
     nameFilter,
     invertNameFilter,
     typeFilters,
