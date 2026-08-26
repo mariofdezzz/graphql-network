@@ -9,9 +9,9 @@ defineEmits<{
 <template>
   <button
     title="Clear network log  - Ctrl L - ⌘ K"
-    class="rounded-full hover:bg-on-base-hover active:bg-on-base-active p-1"
+    class="h-6.5 w-6.5 grid place-items-center rounded-full hover:bg-on-base-hover active:bg-on-base-active"
     @click="$emit('clear')"
   >
-    <StopIcon class="h-4 w-4" />
+    <StopIcon class="h-4.5 w-4.5" />
   </button>
 </template>

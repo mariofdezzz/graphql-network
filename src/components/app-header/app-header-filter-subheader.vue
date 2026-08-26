@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import SharedHorizontalDivider from '@/components/shared/shared-horizontal-divider.vue'
 import FilterSearchInput from './app-header-filter-subheader/filter-search-input.vue'
 import FilterTypeList from './app-header-filter-subheader/filter-type-list.vue'
 import InvertFilterCheckbox from './app-header-filter-subheader/invert-filter-checkbox.vue'
-import SharedHorizontalDivider from '@/components/shared/shared-horizontal-divider.vue'
 </script>
 
 <template>
   <div
-    class="flex items-center px-2 py-1 gap-1 border-b border-on-base-disabled bg-on-base-subtle text-on-base-icon"
+    class="flex items-center px-2 py-0.75 gap-1 border-b border-on-base-disabled bg-on-base-subtle text-on-base-icon"
   >
     <FilterSearchInput />
 

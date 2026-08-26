@@ -28,7 +28,7 @@ function updateSort() {
 <template>
   <div ref="header" class="select-none relative">
     <div
-      class="w-full px-2 py-1 flex items-center justify-between overflow-hidden"
+      class="w-full px-1 py-1 flex items-center justify-between overflow-hidden"
       :class="{ 'hover:bg-on-base-hover': sortable }"
       @click="updateSort()"
     >

@@ -51,6 +51,9 @@ export function useWaterfallOptions(
           color: isDark.value ? '#5E5E5E' : '#D3E3FD',
           tickColor: isDark.value ? '#c7c7c7' : '#1f1f1f',
         },
+        border: {
+          display: false,
+        },
       },
       y: {
         display: false,
