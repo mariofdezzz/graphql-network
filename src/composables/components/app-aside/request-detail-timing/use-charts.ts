@@ -1,7 +1,7 @@
+import { useDark } from '@vueuse/core'
+import type { ChartData, ChartOptions } from 'chart.js'
 import { computed } from 'vue'
 import type { useRequestTimings } from './use-request-timings'
-import type { ChartData, ChartOptions } from 'chart.js'
-import { useDark } from '@vueuse/core'
 
 type UseChartsOptions = ReturnType<typeof useRequestTimings>
 

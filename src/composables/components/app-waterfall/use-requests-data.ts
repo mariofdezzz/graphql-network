@@ -54,8 +54,7 @@ export function useRequestsData() {
             data: [[0, timeDifference]],
             backgroundColor: 'transparent',
             stack: String(index),
-            maxBarThickness: 20,
-            categoryPercentage: 0.25,
+            maxBarThickness: 3,
           }
         }
         const timeDifference =
@@ -68,8 +67,7 @@ export function useRequestsData() {
           data: [[0, timeDifference]],
           backgroundColor: 'transparent',
           stack: String(index),
-          maxBarThickness: 20,
-          categoryPercentage: 0.25,
+          maxBarThickness: 3,
         }
       }),
     ),
