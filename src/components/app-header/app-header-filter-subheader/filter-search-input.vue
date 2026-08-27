@@ -33,7 +33,7 @@ function clearFilter() {
       v-model="nameFilter"
       type="text"
       placeholder="Filter"
-      class="w-full bg-header-base rounded-full px-6.5 h-5"
+      class="w-full bg-header-base rounded-full px-6.5 h-5 placeholder:text-on-base-icon text-on-base"
       id="name-filter"
       name="name-filter"
     />
