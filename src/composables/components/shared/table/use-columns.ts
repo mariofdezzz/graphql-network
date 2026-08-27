@@ -4,7 +4,6 @@ import { onMounted, reactive, useSlots, watchEffect, type Slot } from 'vue'
 export type ColumnContext = Column & {
   slot?: Slot
   onClick?: (row: any) => void
-  relativeWidth: number
 }
 
 export function useColumns() {
@@ -19,20 +18,15 @@ export function useColumns() {
       columns.length,
       ...children
         .filter((vnode) => (vnode.type as any)?.__name === 'shared-column')
-        .map((vnode, index, arr) => {
-          const defaultWidth = 100 / arr.length
-          return {
-            field: vnode.props?.field,
-            header: vnode.props?.header,
-            sortable: vnode.props?.sortable,
-            slot: (vnode.children as any)?.default,
-            onClick: vnode.props?.onClick,
-            relativeWidth: vnode.props?.width != null ? Number(vnode.props.width) : defaultWidth, // delete
-            sizeUnit: vnode.props?.sizeUnit,
-          }
-        }),
+        .map((vnode) => ({
+          field: vnode.props?.field,
+          header: vnode.props?.header,
+          sortable: vnode.props?.sortable,
+          slot: (vnode.children as any)?.default,
+          onClick: vnode.props?.onClick,
+          sizeUnit: vnode.props?.sizeUnit,
+        })),
     )
-    console.log('columns', columns)
   }
 
   onMounted(() => {
