@@ -3,16 +3,17 @@
   lang="ts"
   generic="T extends Record<string, any> & { id: string; hasErrors?: boolean }"
 >
-import { useColumns, type ColumnContext } from '@/composables/components/shared/table/use-columns'
+import { useColumns } from '@/composables/components/shared/table/use-columns'
 import { useSorted } from '@/composables/components/shared/table/use-sorted'
 import { MIN_TABLE_COL_WIDTH } from '@/constants/shared/table/min-table-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
+import { SplitterGroup, SplitterPanel, SplitterResizeHandle } from 'reka-ui'
 import { computed, ref, toRefs } from 'vue'
-import SharedTableColumnResizer from './shared-table-column-resizer.vue'
 import SharedTableHeader from './shared-table-header.vue'
 import SharedTableRowCell from './shared-table-row-cell.vue'
 
 const props = defineProps<{
+  id: string
   rows: Array<T>
   sort?: Sort
 }>()
@@ -26,27 +27,17 @@ const { rows } = toRefs(props)
 const { columns } = useColumns()
 const sortModel = ref(props.sort)
 const selectedRow = ref<T>()
+const layout = ref<number[]>([])
 
 const { result: sortedRows } = useSorted(rows, sortModel)
 
 const gridTemplateCols = computed(
   () =>
     'grid-template-columns: ' +
-    columns
-      .map(({ relativeWidth }, index) =>
-        index < columns.length - 1
-          ? `minmax(${MIN_TABLE_COL_WIDTH}px, ${relativeWidth}%)`
-          : `minmax(${MIN_TABLE_COL_WIDTH}px, 1fr)`,
-      )
+    Array.zip(layout.value, columns)
+      .map(([relativeWidth, column]) => `${relativeWidth}${column.sizeUnit ?? '%'}`)
       .join(' '),
 )
-const lastColumnWidth = computed(() => {
-  const totalRelativeWidth = columns
-    .slice(0, -1)
-    .reduce((sum, { relativeWidth }) => sum + relativeWidth, 0)
-  const absoluteLastColWidth = window.innerWidth * (1 - totalRelativeWidth / 100)
-  return absoluteLastColWidth
-})
 
 function select(row: T) {
   selectedRow.value = row
@@ -79,12 +70,6 @@ function focusNext(event: KeyboardEvent, row: T, index: number) {
     emit('focusChange', newRow)
   }
 }
-
-function resizeColumn(column: ColumnContext, newRelativeSize: number) {
-  columns.at(-1)!.relativeWidth += column.relativeWidth - newRelativeSize
-
-  column.relativeWidth = newRelativeSize
-}
 </script>
 
 <template>
@@ -95,16 +80,12 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
     <div class="col-span-full grid grid-cols-subgrid gap-px min-h-0">
       <div class="col-span-full grid grid-cols-subgrid *:bg-table-alternate-row">
         <SharedTableHeader
-          v-for="(column, index) in columns"
+          v-for="column in columns"
           :key="column.field"
           v-model:sort="sortModel"
           :column
-          :relativeWidth="column.relativeWidth"
-          :lastColumnWidth
-          :showResizeHandle="index !== columns.length - 1"
           :sortable="column.sortable"
           class="border-on-base-disabled"
-          @resize="resizeColumn(column, $event)"
         />
       </div>
 
@@ -135,16 +116,23 @@ function resizeColumn(column: ColumnContext, newRelativeSize: number) {
       <div v-for="i in columns.length" :key="i"></div>
     </div>
 
-    <div class="absolute h-full w-full grid gap-x-px pointer-events-none" :style="gridTemplateCols">
-      <SharedTableColumnResizer
-        v-for="(column, index) in columns"
-        :key="column.field"
-        :relativeWidth="column.relativeWidth"
-        :lastColumnWidth="lastColumnWidth"
-        :showResizeHandle="index !== columns.length - 1"
-        @resize="resizeColumn(column, $event)"
-      />
-    </div>
+    <SplitterGroup
+      :id="id + '-splitter'"
+      direction="horizontal"
+      :autoSaveId="id"
+      class="absolute h-full w-full pointer-events-none"
+      @layout="layout = $event"
+    >
+      <template v-for="(column, index) in columns" :key="column.field">
+        <SplitterResizeHandle v-if="index > 0" :id="column.field + '-resize-handle'" />
+
+        <SplitterPanel
+          :id="column.field"
+          :minSize="column.sizeUnit === 'px' ? MIN_TABLE_COL_WIDTH : 5"
+          :sizeUnit="column.sizeUnit"
+        />
+      </template>
+    </SplitterGroup>
   </div>
 
   <slot />

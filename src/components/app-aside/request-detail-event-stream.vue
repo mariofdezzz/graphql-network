@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import StopIcon from '@/components/icons/stop-icon.vue'
+import { REQUEST_EVENT_STREAM_TABLE_ID } from '@/constants/tables.ts'
 import type { GraphQLSubscriptionRequest } from '@/types/graphql-request'
 import type { SSEMessage } from '@/types/sse-network-event'
 import { computed, ref } from 'vue'
@@ -54,6 +55,7 @@ function clearMessages() {
     </div>
 
     <SharedTable
+      :id="REQUEST_EVENT_STREAM_TABLE_ID"
       :rows
       :sort="{ column: 'time', direction: 'asc' }"
       @enter="onSelect"

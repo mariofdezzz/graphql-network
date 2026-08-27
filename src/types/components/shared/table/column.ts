@@ -3,4 +3,5 @@ export type Column = {
   header: string
   sortable?: boolean
   width?: number
+  sizeUnit?: '%' | 'px'
 }

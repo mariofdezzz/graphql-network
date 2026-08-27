@@ -27,10 +27,12 @@ export function useColumns() {
             sortable: vnode.props?.sortable,
             slot: (vnode.children as any)?.default,
             onClick: vnode.props?.onClick,
-            relativeWidth: vnode.props?.width != null ? Number(vnode.props.width) : defaultWidth,
+            relativeWidth: vnode.props?.width != null ? Number(vnode.props.width) : defaultWidth, // delete
+            sizeUnit: vnode.props?.sizeUnit,
           }
         }),
     )
+    console.log('columns', columns)
   }
 
   onMounted(() => {

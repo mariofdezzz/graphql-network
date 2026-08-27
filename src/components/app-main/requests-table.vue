@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { DEFAULT_NETWORK_ORDER } from '@/constants/default-network-order'
 import { REQUEST_COLUMNS_TO_KEYS } from '@/constants/request-columns-to-keys'
+import { REQUESTS_TABLE_ID } from '@/constants/tables.ts'
 import { formatBytes } from '@/logic/contexts/size/format-bytes'
 import { formatTime } from '@/logic/contexts/time/format-time'
 import { useRequestDetailStore } from '@/stores/request-detail'
@@ -62,6 +63,7 @@ function focusChange(row: GraphQLRequest) {
 
 <template>
   <SharedTable
+    :id="REQUESTS_TABLE_ID"
     :rows="processedRows"
     :sort="DEFAULT_NETWORK_ORDER"
     @enter="requestDetailStore.requestDetail = $event"
@@ -139,6 +141,7 @@ function focusChange(row: GraphQLRequest) {
       :field="REQUEST_COLUMNS_TO_KEYS.waterfall"
       header="Waterfall"
       sortable
+      sizeUnit="px"
     >
       <template #default="{ row }">
         <template
