@@ -35,28 +35,28 @@ const hasActiveFilters = computed(() => {
   >
     <div v-if="allRequests.length > 0" class="flex gap-2">
       <span v-if="hasActiveFilters">
-        {{ requests.length }} / {{ allRequests.length }} requests
+        {{ requests.length }} / {{ allRequests.length }} {{ $t('footer.requests') }}
       </span>
-      <span v-else>{{ allRequests.length }} requests</span>
+      <span v-else>{{ allRequests.length }} {{ $t('footer.requests') }}</span>
 
       <SharedHorizontalDivider />
 
       <span v-if="hasActiveFilters">
-        {{ filteredTransferred }} / {{ totalTransferred }} transferred
+        {{ filteredTransferred }} / {{ totalTransferred }} {{ $t('footer.transferred') }}
       </span>
-      <span v-else> {{ totalTransferred }} transferred </span>
+      <span v-else> {{ totalTransferred }} {{ $t('footer.transferred') }} </span>
     </div>
 
     <div v-else class="grid place-items-center text-center gap-2 py-20">
-      <p class="font-bold text-sm">Currently recording network activity</p>
+      <p class="font-bold text-sm">{{ $t('footer.currentlyRecording') }}</p>
 
       <p class="max-w-60 whitespace-normal">
-        Perform a request or reload the page by using the "Reload page" button or by pressing ⌘ R.
+        {{ $t('footer.performRequest') }}
         <a
           href="https://developer.chrome.com/docs/devtools/network"
           class="text-blue-600 dark:text-blue-200 underline"
         >
-          Learn more
+          {{ $t('footer.learnMore') }}
         </a>
       </p>
     </div>

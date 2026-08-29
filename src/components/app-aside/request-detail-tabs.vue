@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { GraphQLRequest } from '@/types/graphql-request'
 import { computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const selected = defineModel<string>()
 
 const props = defineProps<{
@@ -10,30 +12,35 @@ const props = defineProps<{
 
 const tabs = computed(() =>
   [
-    'Headers',
-    'payload' in props.request && props.request.payload ? 'Payload' : null,
-    props.request.operation !== 'subscription' ? 'Preview' : null,
+    'headers',
+    'payload' in props.request && props.request.payload ? 'payload' : null,
+    props.request.operation !== 'subscription' ? 'preview' : null,
     props.request.operation === 'subscription' && props.request.transport === 'websocket'
-      ? 'Messages'
+      ? 'messages'
       : null,
     props.request.operation === 'subscription' && props.request.transport === 'sse'
-      ? 'EventStream'
+      ? 'event-stream'
       : null,
     props.request.operation !== 'subscription' ||
     (props.request.operation === 'subscription' && props.request.transport === 'sse')
-      ? 'Response'
+      ? 'response'
       : null,
-    'Initiator',
-    'Timing', // Now showing timing for all requests including websocket subscriptions
+    'initiator',
+    'timing', // Now showing timing for all requests including websocket subscriptions
     // 'Cookies' // TODO
-  ].filter((tab): tab is string => tab !== null),
+  ]
+    .filter((tab): tab is string => tab !== null)
+    .map((key) => ({
+      key,
+      label: t(`tabs.${key}`),
+    })),
 )
 
 watch(
   () => props.request,
   () => {
-    if (tabs.value.indexOf(selected.value!) === -1) {
-      selected.value = tabs.value[0]
+    if (tabs.value.findIndex((tab) => tab.key === selected.value!) === -1) {
+      selected.value = tabs.value[0]?.key
     }
   },
 )
@@ -43,14 +50,16 @@ watch(
   <div class="flex-1 flex items-stretch font-medium relative" role="tablist">
     <button
       v-for="tab in tabs"
-      :key="tab"
+      :key="tab.key"
       class="px-2 text-on-detail-header hover:bg-on-detail-header-hover flex items-center border-b border-transparent"
-      :class="{ 'text-on-detail-header-active border-on-detail-header-active!': selected === tab }"
+      :class="{
+        'text-on-detail-header-active border-on-detail-header-active!': selected === tab.key,
+      }"
       role="tab"
-      :aria-selected="selected === tab"
-      @click="selected = tab"
+      :aria-selected="selected === tab.key"
+      @click="selected = tab.key"
     >
-      {{ tab }}
+      {{ tab.label }}
     </button>
   </div>
 </template>

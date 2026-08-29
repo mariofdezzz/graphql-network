@@ -5,8 +5,10 @@ import { useNetworkStore } from '@/stores/network'
 import { useEventListener } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { useTemplateRef } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const networkStore = useNetworkStore()
+const { t } = useI18n()
 
 const { nameFilter } = storeToRefs(networkStore)
 
@@ -32,7 +34,7 @@ function clearFilter() {
       ref="input"
       v-model="nameFilter"
       type="text"
-      placeholder="Filter"
+      :placeholder="t('filter.placeholder')"
       class="w-full bg-header-base rounded-full px-6.5 h-5 placeholder:text-on-base-icon text-on-base"
       id="name-filter"
       name="name-filter"

@@ -1,0 +1,125 @@
+{
+  "headers": {
+    "general": "General",
+    "responseHeaders": "Response Headers",
+    "requestHeaders": "Request Headers",
+    "statusCode": "Status Code",
+    "remoteAddress": "Remote Address",
+    "requestUrl": "Request URL",
+    "requestMethod": "Request Method",
+    "requestCallStack": "Request call stack"
+  },
+  "timing": {
+    "queuedAt": "Queued at",
+    "startedAt": "Started at",
+    "resourceScheduling": "Resource Scheduling",
+    "queueing": "Queueing",
+    "connectionStart": "Connection Start",
+    "stalled": "Stalled",
+    "dnsLookup": "DNS Lookup",
+    "initialConnection": "Initial Connection",
+    "ssl": "SSL",
+    "requestResponse": "Request/Response",
+    "requestSent": "Request sent",
+    "waitingForServerResponse": "Waiting for server response",
+    "contentDownload": "Content Download",
+    "duration": "DURATION",
+    "caution": "CAUTION: request is not finished yet!",
+    "cautionExplanation": "Explanation",
+    "total": "Total Time"
+  },
+  "messages": {
+    "noMessageSelected": "No message selected",
+    "selectMessageToBrowse": "Select message to browse its content",
+    "all": "All",
+    "send": "Send",
+    "receive": "Receive"
+  },
+  "status": {
+    "pending": "(pending)",
+    "cancelled": "(cancelled)",
+    "errors": "errors",
+    "ok": "ok",
+    "corsError": "(CORS error)"
+  },
+  "footer": {
+    "requests": "requests",
+    "transferred": "transferred",
+    "currentlyRecording": "Currently recording network activity",
+    "performRequest": "Perform a request or reload the page by using the \"Reload page\" button or by pressing ⌘ R.",
+    "learnMore": "Learn more"
+  },
+  "tabs": {
+    "headers": "Headers",
+    "payload": "Payload",
+    "preview": "Preview",
+    "messages": "Messages",
+    "eventStream": "EventStream",
+    "event-stream": "EventStream",
+    "response": "Response",
+    "initiator": "Initiator",
+    "timing": "Timing"
+  },
+  "table": {
+    "name": "Name",
+    "status": "Status",
+    "type": "Type",
+    "size": "Size",
+    "time": "Time",
+    "waterfall": "Waterfall"
+  },
+  "filter": {
+    "invert": "Invert",
+    "preserveLog": "Preserve log",
+    "type": "Type",
+    "search": "Search",
+    "placeholder": "Filter",
+    "all": "All",
+    "fetch": "Fetch"
+  },
+  "payload": {
+    "query": "Query",
+    "variables": "Variables",
+    "extensions": "Extensions",
+    "files": "Files",
+    "viewSource": "View source",
+    "viewParsed": "View parsed"
+  },
+  "preview": {
+    "failedToLoad": "Failed to load response data"
+  },
+  "sse": {
+    "noData": "No event stream data received yet"
+  },
+  "initiator": {
+    "noData": "No initiator data"
+  },
+  "buttons": {
+    "clear": "Clear network log",
+    "reload": "Reload page",
+    "reportIssue": "Report an issue"
+  },
+  "appHeader": {
+    "recordNetwork": "Record network log - ⌘ E",
+    "stopRecording": "Stop recording network log - ⌘ E"
+  },
+  "keyboard": {
+    "clear": "Ctrl L",
+    "reload": "⌘ R"
+  },
+  "tooltips": {
+    "clear": "Clear network log  - Ctrl L - ⌘ K",
+    "preserveLog": "Do not clear log on page reload / navigation",
+    "filter": "Filter"
+  },
+  "graphql": {
+    "query": "Query",
+    "mutation": "Mutation",
+    "subscription": "Subscription"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "language": "Language"
+  }
+}

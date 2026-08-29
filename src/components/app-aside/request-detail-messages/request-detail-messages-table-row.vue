@@ -33,7 +33,7 @@ const formatter = new Intl.DateTimeFormat('en', {
       :class="[['length'].includes(column.field) ? 'text-end' : '']"
     >
       <!-- <span v-if="column.key === 'time'" :class="{ 'text-request-timing-header': !time }">
-        {{ time ? formatTime(time, time >= 1000 ? 2 : 0) : 'Pending' }}
+        {{ time ? formatTime(time, time >= 1000 ? 2 : 0) : $t('status.pending') }}
       </span>
 
       <span v-else-if="column.key === 'status'">

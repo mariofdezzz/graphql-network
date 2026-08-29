@@ -13,5 +13,5 @@ defineProps<{
     <RequestObjectViewer :object="request.response" />
   </div>
 
-  <RequestDetailFallbackTab v-else> Failed to load response data </RequestDetailFallbackTab>
+  <RequestDetailFallbackTab v-else> {{ $t('preview.failedToLoad') }} </RequestDetailFallbackTab>
 </template>

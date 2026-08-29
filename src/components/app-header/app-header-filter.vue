@@ -3,8 +3,10 @@ import FilterEmptyIcon from '@/components/icons/filter-empty-icon.vue'
 import FilterIcon from '@/components/icons/filter-icon.vue'
 import { useNetworkStore } from '@/stores/network'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const filterActive = defineModel('filterActive', { type: Boolean })
+const { t } = useI18n()
 
 const networkStore = useNetworkStore()
 
@@ -19,7 +21,7 @@ const hasFilter = computed(() => {
 
 <template>
   <button
-    title="Filter"
+    :title="t('tooltips.filter')"
     class="h-6.5 w-6.5 grid place-items-center rounded-full hover:bg-on-base-hover active:bg-on-base-active relative"
     :class="[hasFilter || filterActive ? 'text-primary' : '']"
     @click="filterActive = !filterActive"

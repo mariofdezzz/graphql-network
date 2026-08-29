@@ -63,9 +63,9 @@ const filteredMessages = computed(() => {
         class="bg-base-color rounded px-2 py-0.5 text-xs hover:bg-on-base-hover"
         title="Filter by type"
       >
-        <option value="all">All</option>
-        <option value="send">Send</option>
-        <option value="receive">Receive</option>
+        <option value="all">{{ $t('messages.all') }}</option>
+        <option value="send">{{ $t('messages.send') }}</option>
+        <option value="receive">{{ $t('messages.receive') }}</option>
       </select>
 
       <!-- Regex filter -->

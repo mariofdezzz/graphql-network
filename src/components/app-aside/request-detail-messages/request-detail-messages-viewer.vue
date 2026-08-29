@@ -18,8 +18,8 @@ const object = computed(() =>
 
     <div v-else class="grid place-items-center h-full">
       <div class="flex flex-col gap-1.5 items-center">
-        <p class="text-sm font-semibold">No message selected</p>
-        <p>Select message to browse its content</p>
+        <p class="text-sm font-semibold">{{ $t('messages.noMessageSelected') }}</p>
+        <p>{{ $t('messages.selectMessageToBrowse') }}</p>
       </div>
     </div>
   </div>

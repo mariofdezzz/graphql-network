@@ -71,7 +71,7 @@ function focusChange(row: GraphQLRequest) {
   >
     <SharedColumn
       :field="REQUEST_COLUMNS_TO_KEYS.name"
-      header="Name"
+      :header="$t('table.name')"
       sortable
       @click="requestDetailStore.requestDetail = $event"
     >
@@ -85,34 +85,43 @@ function focusChange(row: GraphQLRequest) {
     <SharedColumn
       v-if="!hideColumns"
       :field="REQUEST_COLUMNS_TO_KEYS.status"
-      header="Status"
+      :header="$t('table.status')"
       sortable
     >
       <template #default="{ row }">
         <template v-if="getRequestStatus(row) === 'pending'">
-          <span class="text-pending">(pending)</span>
+          <span class="text-pending">{{ $t('status.pending') }}</span>
         </template>
-        <template v-else-if="getRequestStatus(row) === 'cancelled'"> (cancelled) </template>
+        <template v-else-if="getRequestStatus(row) === 'cancelled'">
+          {{ $t('status.cancelled') }}
+        </template>
         <template v-else-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
           (http:{{ row.status }})
         </template>
-        <template v-else-if="row.corsError"> (CORS error) </template>
-        <template v-else-if="unref(row.errors) > 0"> {{ row.errors }} errors </template>
-        <template v-else> ok </template>
+        <template v-else-if="row.corsError"> {{ $t('status.corsError') }} </template>
+        <template v-else-if="unref(row.errors) > 0">
+          {{ row.errors }} {{ $t('status.errors') }}
+        </template>
+        <template v-else> {{ $t('status.ok') }} </template>
       </template>
     </SharedColumn>
 
     <SharedColumn
       v-if="!hideColumns"
       :field="REQUEST_COLUMNS_TO_KEYS.operation"
-      header="Type"
+      :header="$t('table.type')"
       sortable
     />
 
-    <SharedColumn v-if="!hideColumns" :field="REQUEST_COLUMNS_TO_KEYS.size" header="Size" sortable>
+    <SharedColumn
+      v-if="!hideColumns"
+      :field="REQUEST_COLUMNS_TO_KEYS.size"
+      :header="$t('table.size')"
+      sortable
+    >
       <template #default="{ row }">
         <template v-if="getRequestStatus(row) === 'pending'">
-          <span class="text-pending">(pending)</span>
+          <span class="text-pending">{{ $t('status.pending') }}</span>
         </template>
         <template v-else-if="getRequestStatus(row) === 'cancelled'"> — </template>
         <template v-else>
@@ -121,14 +130,21 @@ function focusChange(row: GraphQLRequest) {
       </template>
     </SharedColumn>
 
-    <SharedColumn v-if="!hideColumns" :field="REQUEST_COLUMNS_TO_KEYS.time" header="Time" sortable>
+    <SharedColumn
+      v-if="!hideColumns"
+      :field="REQUEST_COLUMNS_TO_KEYS.time"
+      :header="$t('table.time')"
+      sortable
+    >
       <template #default="{ row }">
         <template v-if="getRequestStatus(row) === 'pending'">
-          <span class="text-pending"> Pending </span>
+          <span class="text-pending"> {{ $t('status.pending') }} </span>
         </template>
-        <template v-else-if="getRequestStatus(row) === 'cancelled'"> (cancelled) </template>
+        <template v-else-if="getRequestStatus(row) === 'cancelled'">
+          {{ $t('status.cancelled') }}
+        </template>
         <template v-else-if="times[row.id] === undefined">
-          <span class="text-pending"> Pending </span>
+          <span class="text-pending"> {{ $t('status.pending') }} </span>
         </template>
         <template v-else>
           {{ formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0) }}
@@ -139,7 +155,7 @@ function focusChange(row: GraphQLRequest) {
     <SharedColumn
       v-if="!hideColumns"
       :field="REQUEST_COLUMNS_TO_KEYS.waterfall"
-      header="Waterfall"
+      :header="$t('table.waterfall')"
       sortable
       sizeUnit="px"
     >

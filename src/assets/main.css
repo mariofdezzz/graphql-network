@@ -48,6 +48,7 @@ body,
   --color-timing-caution: light-dark(#f29900, #f29900);
   --color-pending: light-dark(#757575, #8e8e8e);
   --color-record-stop: light-dark(#dc362e, #e46962);
+  --color-settings-panel: light-dark(#fff, #2e2f31);
 
   --spacing-0\.75: calc(var(--spacing) * 0.75); /* 3px */
 }

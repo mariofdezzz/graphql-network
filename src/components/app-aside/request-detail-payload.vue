@@ -68,7 +68,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
       :parentElement="parent"
     >
       <template #header>
-        <span>Query</span>
+        <span>{{ $t('payload.query') }}</span>
       </template>
 
       <CodeEditor
@@ -88,7 +88,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
       :parentElement="parent"
     >
       <template #header>
-        <span>Variables</span>
+        <span>{{ $t('payload.variables') }}</span>
 
         <span class="px-5"></span>
 
@@ -96,7 +96,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
           class="text-on-detail-header-active border border-button-border rounded-xl px-2.5 py-0.5 hover:bg-on-detail-header-hover active:bg-on-button-active"
           @click="showVariableSource = !showVariableSource"
         >
-          {{ showVariableSource ? 'View parsed' : 'View source' }}
+          {{ showVariableSource ? $t('payload.viewParsed') : $t('payload.viewSource') }}
         </button>
       </template>
 
@@ -123,7 +123,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
       :parentElement="parent"
     >
       <template #header>
-        <span>Extensions</span>
+        <span>{{ $t('payload.extensions') }}</span>
 
         <span class="px-5"></span>
 
@@ -131,7 +131,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
           class="text-on-detail-header-active border border-button-border rounded-xl px-2.5 py-0.5 hover:bg-on-detail-header-hover active:bg-on-button-active"
           @click="showExtensionsSource = !showExtensionsSource"
         >
-          {{ showExtensionsSource ? 'View parsed' : 'View source' }}
+          {{ showExtensionsSource ? $t('payload.viewParsed') : $t('payload.viewSource') }}
         </button>
       </template>
 
@@ -158,7 +158,7 @@ const files = computed<FileMetadata[] | undefined>(() => {
       :parentElement="parent"
     >
       <template #header>
-        <span>Files</span>
+        <span>{{ $t('payload.files') }}</span>
       </template>
 
       <ul class="py-2 px-3 space-y-1">

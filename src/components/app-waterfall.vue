@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useRequestsData } from '@/composables/components/app-waterfall/use-requests-data'
 import { useWaterfallOptions } from '@/logic/components/app-waterfall/options'
-import { plugins } from '@/logic/components/app-waterfall/plugins'
+import { usePlugins } from '@/logic/components/app-waterfall/plugins'
 import { Bar } from 'vue-chartjs'
 
 const { data } = useRequestsData()
 const { options } = useWaterfallOptions(data)
+const { plugins } = usePlugins()
 </script>
 
 <template>

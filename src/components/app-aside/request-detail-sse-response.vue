@@ -38,5 +38,5 @@ watchEffect(() => {
     @editorDidMount="onEditorDidMount"
   />
 
-  <RequestDetailFallbackTab v-else> No event stream data received yet </RequestDetailFallbackTab>
+  <RequestDetailFallbackTab v-else> {{ $t('sse.noData') }} </RequestDetailFallbackTab>
 </template>

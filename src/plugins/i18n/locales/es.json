@@ -1,0 +1,125 @@
+{
+  "headers": {
+    "general": "General",
+    "responseHeaders": "Encabezados de Respuesta",
+    "requestHeaders": "Encabezados de Solicitud",
+    "statusCode": "Código de Estado",
+    "remoteAddress": "Dirección Remota",
+    "requestUrl": "URL de Solicitud",
+    "requestMethod": "Método de Solicitud",
+    "requestCallStack": "Pila de llamadas de solicitud"
+  },
+  "timing": {
+    "queuedAt": "Puesto en cola en",
+    "startedAt": "Iniciado en",
+    "resourceScheduling": "Programación de Recursos",
+    "queueing": "Cola",
+    "connectionStart": "Inicio de Conexión",
+    "stalled": "Detenido",
+    "dnsLookup": "Búsqueda DNS",
+    "initialConnection": "Conexión Inicial",
+    "ssl": "SSL",
+    "requestResponse": "Solicitud/Respuesta",
+    "requestSent": "Solicitud enviada",
+    "waitingForServerResponse": "Esperando respuesta del servidor",
+    "contentDownload": "Descarga de Contenido",
+    "duration": "DURACIÓN",
+    "caution": "¡ADVERTENCIA: la solicitud aún no ha finalizado!",
+    "cautionExplanation": "Explicación",
+    "total": "Tiempo Total"
+  },
+  "messages": {
+    "noMessageSelected": "Ningún mensaje seleccionado",
+    "selectMessageToBrowse": "Selecciona un mensaje para ver su contenido",
+    "all": "Todos",
+    "send": "Enviar",
+    "receive": "Recibir"
+  },
+  "status": {
+    "pending": "(pendiente)",
+    "cancelled": "(cancelado)",
+    "errors": "errores",
+    "ok": "ok",
+    "corsError": "(error CORS)"
+  },
+  "footer": {
+    "requests": "solicitudes",
+    "transferred": "transferido",
+    "currentlyRecording": "Actualmente registrando actividad de red",
+    "performRequest": "Realiza una solicitud o recarga la página usando el botón \"Recargar página\" o presionando ⌘ R.",
+    "learnMore": "Más información"
+  },
+  "tabs": {
+    "headers": "Encabezados",
+    "payload": "Carga",
+    "preview": "Vista Previa",
+    "messages": "Mensajes",
+    "eventStream": "Flujo de Eventos",
+    "event-stream": "Flujo de Eventos",
+    "response": "Respuesta",
+    "initiator": "Iniciador",
+    "timing": "Tiempo"
+  },
+  "table": {
+    "name": "Nombre",
+    "status": "Estado",
+    "type": "Tipo",
+    "size": "Tamaño",
+    "time": "Tiempo",
+    "waterfall": "Cascada"
+  },
+  "filter": {
+    "invert": "Invertir",
+    "preserveLog": "Preservar registro",
+    "type": "Tipo",
+    "search": "Buscar",
+    "placeholder": "Filtrar",
+    "all": "Todos",
+    "fetch": "Fetch"
+  },
+  "payload": {
+    "query": "Consulta",
+    "variables": "Variables",
+    "extensions": "Extensiones",
+    "files": "Archivos",
+    "viewSource": "Ver fuente",
+    "viewParsed": "Ver parseado"
+  },
+  "preview": {
+    "failedToLoad": "No se pudo cargar los datos de respuesta"
+  },
+  "sse": {
+    "noData": "Ningún dato de flujo de eventos recibido aún"
+  },
+  "initiator": {
+    "noData": "Sin datos de iniciador"
+  },
+  "buttons": {
+    "clear": "Limpiar registro de red",
+    "reload": "Recargar página",
+    "reportIssue": "Reportar un problema"
+  },
+  "appHeader": {
+    "recordNetwork": "Grabar registro de red - ⌘ E",
+    "stopRecording": "Detener grabación del registro de red - ⌘ E"
+  },
+  "keyboard": {
+    "clear": "Ctrl L",
+    "reload": "⌘ R"
+  },
+  "tooltips": {
+    "clear": "Limpiar registro de red  - Ctrl L - ⌘ K",
+    "preserveLog": "No limpiar registro al recargar la página / navegar",
+    "filter": "Filtrar"
+  },
+  "graphql": {
+    "query": "Query",
+    "mutation": "Mutation",
+    "subscription": "Subscription"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "appearance": "Apariencia",
+    "language": "Idioma"
+  }
+}

@@ -32,14 +32,14 @@ watch(
 <template>
   <div class="flex gap-1 items-center">
     <FilterTypeButton :selected="types.length === 0" @select="types.splice(0, types.length)">
-      All
+      {{ $t('filter.all') }}
     </FilterTypeButton>
 
     <FilterTypeButton
       :selected="fetchSelected"
       @select="types.splice(0, types.length, 'query', 'mutation', 'subscription')"
     >
-      Fetch
+      {{ $t('filter.fetch') }}
     </FilterTypeButton>
 
     <SharedHorizontalDivider class="h-3.5!" />
@@ -48,21 +48,21 @@ watch(
       :selected="types.includes('query') && !fetchSelected"
       @select="handleSelect('query', $event)"
     >
-      Query
+      {{ $t('graphql.query') }}
     </FilterTypeButton>
 
     <FilterTypeButton
       :selected="types.includes('mutation') && !fetchSelected"
       @select="handleSelect('mutation', $event)"
     >
-      Mutation
+      {{ $t('graphql.mutation') }}
     </FilterTypeButton>
 
     <FilterTypeButton
       :selected="types.includes('subscription') && !fetchSelected"
       @select="handleSelect('subscription', $event)"
     >
-      Subscription
+      {{ $t('graphql.subscription') }}
     </FilterTypeButton>
   </div>
 </template>

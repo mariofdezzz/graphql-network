@@ -19,7 +19,7 @@ import RequestDetailTiming from './app-aside/request-detail-timing.vue'
 const requestDetailStore = useRequestDetailStore()
 const { requestDetail } = storeToRefs(requestDetailStore)
 
-const selectedTab = ref('Headers')
+const selectedTab = ref('headers')
 
 useEventListener(document, 'keydown', (event: KeyboardEvent) => {
   if (event.key === 'Escape') closeDetail()
@@ -48,61 +48,61 @@ function closeDetail() {
     </div>
 
     <div
-      v-show="selectedTab === 'Headers'"
+      v-show="selectedTab === 'headers'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
       <RequestDetailHeaders :request="requestDetail" />
     </div>
 
     <div
-      v-show="selectedTab === 'Payload'"
+      v-show="selectedTab === 'payload'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
-      <RequestDetailPayload :request="requestDetail" :enabled="selectedTab === 'Payload'" />
+      <RequestDetailPayload :request="requestDetail" :enabled="selectedTab === 'payload'" />
     </div>
 
     <div
-      v-show="selectedTab === 'Preview'"
+      v-show="selectedTab === 'preview'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
       <RequestDetailPreview :request="requestDetail as GraphQLNetworkRequest" />
     </div>
 
     <div
-      v-show="selectedTab === 'Messages'"
+      v-show="selectedTab === 'messages'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
       <RequestDetailMessages :request="requestDetail as GraphQLSubscriptionRequest" />
     </div>
 
-    <div v-show="selectedTab === 'EventStream'" class="flex-1 min-h-0 overflow-hidden">
+    <div v-show="selectedTab === 'event-stream'" class="flex-1 min-h-0 overflow-hidden">
       <RequestDetailEventStream :request="requestDetail as GraphQLSubscriptionRequest" />
     </div>
 
     <div
-      v-show="selectedTab === 'Response'"
+      v-show="selectedTab === 'response'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
       <RequestDetailSseResponse
         v-if="requestDetail.operation === 'subscription' && requestDetail.transport === 'sse'"
         :request="requestDetail as GraphQLSubscriptionRequest"
-        :enabled="selectedTab === 'Response'"
+        :enabled="selectedTab === 'response'"
       />
       <RequestDetailResponse
         v-else
         :request="requestDetail as GraphQLNetworkRequest"
-        :enabled="selectedTab === 'Response'"
+        :enabled="selectedTab === 'response'"
       />
     </div>
 
     <div
-      v-show="selectedTab === 'Initiator'"
+      v-show="selectedTab === 'initiator'"
       class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
     >
-      <RequestDetailInitiator v-show="selectedTab === 'Initiator'" :request="requestDetail" />
+      <RequestDetailInitiator v-show="selectedTab === 'initiator'" :request="requestDetail" />
     </div>
 
-    <div v-show="selectedTab === 'Timing'" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+    <div v-show="selectedTab === 'timing'" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
       <RequestDetailTiming :request="requestDetail" />
     </div>
   </aside>

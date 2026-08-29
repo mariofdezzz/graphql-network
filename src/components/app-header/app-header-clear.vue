@@ -8,7 +8,7 @@ defineEmits<{
 
 <template>
   <button
-    title="Clear network log  - Ctrl L - ⌘ K"
+    :title="$t('tooltips.clear')"
     class="h-6.5 w-6.5 grid place-items-center rounded-full hover:bg-on-base-hover active:bg-on-base-active"
     @click="$emit('clear')"
   >
