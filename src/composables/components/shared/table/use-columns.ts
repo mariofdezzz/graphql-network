@@ -25,6 +25,7 @@ export function useColumns() {
           slot: (vnode.children as any)?.default,
           onClick: vnode.props?.onClick,
           sizeUnit: vnode.props?.sizeUnit,
+          class: vnode.props?.class,
         })),
     )
   }

@@ -1,58 +1,26 @@
 <script setup lang="ts">
+import { useTableRows } from '@/composables/components/app-main/use-table-rows.ts'
 import { DEFAULT_NETWORK_ORDER } from '@/constants/default-network-order'
-import { REQUEST_COLUMNS_TO_KEYS } from '@/constants/request-columns-to-keys'
+import { HTTP_STATUS_SUCCESS_THRESHOLD } from '@/constants/http-status-success-threshold.ts'
 import { REQUESTS_TABLE_ID } from '@/constants/tables.ts'
-import { formatBytes } from '@/logic/contexts/size/format-bytes'
-import { formatTime } from '@/logic/contexts/time/format-time'
 import { useRequestDetailStore } from '@/stores/request-detail'
-import type { GraphQLNetworkRequestStatus, GraphQLRequest } from '@/types/graphql-request'
-import { computed, unref } from 'vue'
+import type { GraphQLRequest } from '@/types/graphql-request'
+import { computed, toRefs } from 'vue'
 import SharedColumn from '../shared/table/shared-column.vue'
 import SharedTable from '../shared/table/shared-table.vue'
 import RequestTableRowWaterfall from './request-table-row-waterfall.vue'
 
 const props = defineProps<{
-  rows: GraphQLRequest[]
+  requests: GraphQLRequest[]
 }>()
 
-const HTTP_STATUS_SUCCESS_THRESHOLD = 400
+const { requests } = toRefs(props)
+
+const { rows } = useTableRows(requests)
 
 const requestDetailStore = useRequestDetailStore()
 
-const processedRows = computed(() =>
-  props.rows.map((row) => ({
-    ...row,
-    hasErrors:
-      row.status >= HTTP_STATUS_SUCCESS_THRESHOLD ||
-      (typeof row.errors === 'number' ? row.errors : row.errors.value) > 0 ||
-      (row as any).corsError,
-  })),
-)
-
 const hideColumns = computed(() => Boolean(requestDetailStore.requestDetail))
-
-const times = computed(() => {
-  return Object.fromEntries(props.rows.map((row) => [row.id, getTime(row)]))
-})
-
-function getTime(row: GraphQLRequest) {
-  const total = unref(row.timings.total)
-
-  // For WebSocket subscriptions, show Pending if not closed
-  if (row.operation === 'subscription' && row.transport === 'websocket' && 'closedAt' in row) {
-    if (!unref(row.closedAt)) {
-      return undefined
-    }
-  }
-
-  return '_blocked_queueing' in row.timings
-    ? (total as number) - Math.max(row.timings._blocked_queueing ?? 0, 0)
-    : total
-}
-
-function getRequestStatus(row: GraphQLRequest): GraphQLNetworkRequestStatus | undefined {
-  return '_status' in row ? (row._status as GraphQLNetworkRequestStatus) : undefined
-}
 
 function focusChange(row: GraphQLRequest) {
   if (requestDetailStore.requestDetail) {
@@ -64,16 +32,16 @@ function focusChange(row: GraphQLRequest) {
 <template>
   <SharedTable
     :id="REQUESTS_TABLE_ID"
-    :rows="processedRows"
+    :rows
     :sort="DEFAULT_NETWORK_ORDER"
-    @enter="requestDetailStore.requestDetail = $event"
-    @focusChange="focusChange($event)"
+    @enter="requestDetailStore.requestDetail = $event.request"
+    @focusChange="focusChange($event.request)"
   >
     <SharedColumn
-      :field="REQUEST_COLUMNS_TO_KEYS.name"
+      field="name"
       :header="$t('table.name')"
       sortable
-      @click="requestDetailStore.requestDetail = $event"
+      @click="requestDetailStore.requestDetail = $event.request"
     >
       <template #default="{ row }">
         <span :class="{ italic: row.operation === 'preflight' }">
@@ -82,116 +50,79 @@ function focusChange(row: GraphQLRequest) {
       </template>
     </SharedColumn>
 
-    <SharedColumn
-      v-if="!hideColumns"
-      :field="REQUEST_COLUMNS_TO_KEYS.status"
-      :header="$t('table.status')"
-      sortable
-    >
+    <SharedColumn v-if="!hideColumns" field="status" :header="$t('table.status')" sortable>
       <template #default="{ row }">
-        <template v-if="getRequestStatus(row) === 'pending'">
+        <template v-if="row.status === 'pending'">
           <span class="text-pending">{{ $t('status.pending') }}</span>
         </template>
-        <template v-else-if="getRequestStatus(row) === 'cancelled'">
+        <template v-else-if="row.status === 'cancelled'">
           {{ $t('status.cancelled') }}
         </template>
-        <template v-else-if="row.status >= HTTP_STATUS_SUCCESS_THRESHOLD">
-          (http:{{ row.status }})
+        <template v-else-if="row.httpStatus >= HTTP_STATUS_SUCCESS_THRESHOLD">
+          (http:{{ row.httpStatus }})
         </template>
         <template v-else-if="row.corsError"> {{ $t('status.corsError') }} </template>
-        <template v-else-if="unref(row.errors) > 0">
-          {{ row.errors }} {{ $t('status.errors') }}
-        </template>
+        <template v-else-if="row.errors > 0"> {{ row.errors }} {{ $t('status.errors') }} </template>
         <template v-else> {{ $t('status.ok') }} </template>
       </template>
     </SharedColumn>
 
-    <SharedColumn
-      v-if="!hideColumns"
-      :field="REQUEST_COLUMNS_TO_KEYS.operation"
-      :header="$t('table.type')"
-      sortable
-    />
+    <SharedColumn v-if="!hideColumns" field="operation" :header="$t('table.type')" sortable />
 
     <SharedColumn
       v-if="!hideColumns"
-      :field="REQUEST_COLUMNS_TO_KEYS.size"
+      field="size"
       :header="$t('table.size')"
       sortable
+      class="text-end"
     >
       <template #default="{ row }">
-        <template v-if="getRequestStatus(row) === 'pending'">
+        <template v-if="row.status === 'pending'">
           <span class="text-pending">{{ $t('status.pending') }}</span>
         </template>
-        <template v-else-if="getRequestStatus(row) === 'cancelled'"> — </template>
+        <template v-else-if="row.status === 'cancelled'"> — </template>
         <template v-else>
-          {{ formatBytes(unref(row.size)) }}
+          {{ row.size }}
         </template>
       </template>
     </SharedColumn>
 
     <SharedColumn
       v-if="!hideColumns"
-      :field="REQUEST_COLUMNS_TO_KEYS.time"
+      field="time"
       :header="$t('table.time')"
       sortable
+      class="text-end"
     >
       <template #default="{ row }">
-        <template v-if="getRequestStatus(row) === 'pending'">
+        <template v-if="row.status === 'pending'">
           <span class="text-pending"> {{ $t('status.pending') }} </span>
         </template>
-        <template v-else-if="getRequestStatus(row) === 'cancelled'">
+        <template v-else-if="row.status === 'cancelled'">
           {{ $t('status.cancelled') }}
         </template>
-        <template v-else-if="times[row.id] === undefined">
+        <template v-else-if="row.time === undefined">
           <span class="text-pending"> {{ $t('status.pending') }} </span>
         </template>
         <template v-else>
-          {{ formatTime(times[row.id]!, times[row.id]! >= 1000 ? 2 : 0) }}
+          {{ row.time }}
         </template>
       </template>
     </SharedColumn>
 
     <SharedColumn
       v-if="!hideColumns"
-      :field="REQUEST_COLUMNS_TO_KEYS.waterfall"
+      field="waterfall"
       :header="$t('table.waterfall')"
       sortable
       sizeUnit="px"
     >
       <template #default="{ row }">
-        <template
-          v-if="getRequestStatus(row) === 'pending' || getRequestStatus(row) === 'cancelled'"
-        />
+        <template v-if="row.status === 'pending' || row.status === 'cancelled'" />
         <template v-else>
-          <RequestTableRowWaterfall :request="row" />
+          <RequestTableRowWaterfall :request="row.request" />
         </template>
       </template>
     </SharedColumn>
   </SharedTable>
-  <!-- <div class="h-full flex flex-col">
-    <div
-      class="grid gap-px bg-on-base-disabled *:bg-table-base"
-      :class="[requestDetailStore.requestDetail ? 'grid-cols-1' : 'grid-cols-6']"
-    >
-      <RequestsTableColumn :columns />
-    </div>
-
-    <RequestsTableRow
-      v-for="(row, index) in rows"
-      :key="row.id"
-      :row
-      :columns
-      :selected="selectedRow === row.id"
-      :class="[index % 2 === 1 ? '*:bg-table-alternate-row' : '*:bg-table-base']"
-      @click="selectedRow = row.id"
-    />
-
-    <div
-      class="flex-1 grid gap-px bg-on-base-disabled *:bg-base-color"
-      :class="[requestDetailStore.requestDetail ? 'grid-cols-1' : 'grid-cols-6']"
-    >
-      <div v-for="(column, index) in columns" :key="index" class="first:pl-px last:pr-px"></div>
-    </div>
-  </div> -->
 </template>

@@ -1,0 +1,1 @@
+export const HTTP_STATUS_SUCCESS_THRESHOLD = 400

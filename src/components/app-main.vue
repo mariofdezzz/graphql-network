@@ -9,6 +9,6 @@ defineProps<{
 
 <template>
   <main class="min-h-0">
-    <RequestsTable :rows="requests" />
+    <RequestsTable :requests="requests" />
   </main>
 </template>

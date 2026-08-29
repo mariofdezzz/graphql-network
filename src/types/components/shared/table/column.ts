@@ -4,4 +4,5 @@ export type Column = {
   sortable?: boolean
   width?: number
   sizeUnit?: '%' | 'px'
+  class?: any
 }

@@ -10,6 +10,7 @@ defineProps<{
 <template>
   <div
     class="px-1 py-0.5 select-none first:pl-[5px] last:pr-[5px] line-clamp-1 text-ellipsis"
+    :class="column.class"
     @click="column.onClick?.(row)"
   >
     <component v-if="column.slot" :is="() => column.slot!({ row })" />
