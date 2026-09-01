@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { AVAILABLE_LANGUAGES } from '@/constants/available-languages'
+import { SETTINGS_DIALOG_CLOSED_EVENT, SETTINGS_DIALOG_OPENED_EVENT } from '@/constants/events.ts'
 import { useSettingsStore } from '@/stores/settings.ts'
+import { useEventBus } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { useTemplateRef, watch } from 'vue'
 import CloseIcon from './icons/close-icon.vue'
@@ -10,12 +12,24 @@ const open = defineModel<boolean>('open')
 const settingsStore = useSettingsStore()
 const { language } = storeToRefs(settingsStore)
 
+const openedSettingsEvent = useEventBus(SETTINGS_DIALOG_OPENED_EVENT)
+const closedSettingsEvent = useEventBus(SETTINGS_DIALOG_CLOSED_EVENT)
+
 const dialog = useTemplateRef('dialog')
 
-watch(open, (open) => {
-  if (open) dialog.value?.showModal()
-  else dialog.value?.close()
-})
+watch(
+  open,
+  (open) => {
+    if (open) {
+      dialog.value?.showModal()
+      openedSettingsEvent.emit()
+    } else {
+      dialog.value?.close()
+      closedSettingsEvent.emit()
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

@@ -5,8 +5,10 @@
 >
 import { useColumns } from '@/composables/components/shared/table/use-columns'
 import { useSorted } from '@/composables/components/shared/table/use-sorted'
+import { SETTINGS_DIALOG_CLOSED_EVENT, SETTINGS_DIALOG_OPENED_EVENT } from '@/constants/events.ts'
 import { MIN_TABLE_COL_WIDTH } from '@/constants/shared/table/min-table-col-width'
 import type { Sort } from '@/types/components/shared/table/sort'
+import { useEventBus } from '@vueuse/core'
 import { SplitterGroup, SplitterPanel, SplitterResizeHandle } from 'reka-ui'
 import { computed, ref, toRefs } from 'vue'
 import SharedTableHeader from './shared-table-header.vue'
@@ -28,8 +30,12 @@ const { columns } = useColumns()
 const sortModel = ref(props.sort)
 const selectedRow = ref<T>()
 const layout = ref<number[]>([])
+const resizeDisabled = ref(false)
 
 const { result: sortedRows } = useSorted(rows, sortModel)
+
+const openedSettingsEvent = useEventBus(SETTINGS_DIALOG_OPENED_EVENT)
+const closedSettingsEvent = useEventBus(SETTINGS_DIALOG_CLOSED_EVENT)
 
 const gridTemplateCols = computed(
   () =>
@@ -70,6 +76,13 @@ function focusNext(event: KeyboardEvent, row: T, index: number) {
     emit('focusChange', newRow)
   }
 }
+
+openedSettingsEvent.on(() => {
+  resizeDisabled.value = true
+})
+closedSettingsEvent.on(() => {
+  resizeDisabled.value = false
+})
 </script>
 
 <template>
@@ -124,7 +137,11 @@ function focusNext(event: KeyboardEvent, row: T, index: number) {
       @layout="layout = $event"
     >
       <template v-for="(column, index) in columns" :key="column.field">
-        <SplitterResizeHandle v-if="index > 0" :id="column.field + '-resize-handle'" />
+        <SplitterResizeHandle
+          v-if="index > 0"
+          :id="column.field + '-resize-handle'"
+          :disabled="resizeDisabled"
+        />
 
         <SplitterPanel
           :id="column.field"
